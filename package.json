@@ -4,5 +4,9 @@
   },
   "scripts": {
     "prepare": "husky"
+  },
+  "dependencies": {
+    "primeicons": "^7.0.0",
+    "primeng": "^19.1.2"
   }
 }
