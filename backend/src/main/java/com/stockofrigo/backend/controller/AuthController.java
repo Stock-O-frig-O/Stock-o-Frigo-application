@@ -14,21 +14,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final UserService userService;
+  private final UserService userService;
 
-    public AuthController(UserService userService) {
-        this.userService = userService;
-    }
+  public AuthController(UserService userService) {
+    this.userService = userService;
+  }
 
-    @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody UserRegistrationDTO userRegistrationDTO) {
-        User savedUser = userService.registerUser(
-                userRegistrationDTO.getFirstname(),
-                userRegistrationDTO.getLastname(),
-                userRegistrationDTO.getEmail(),
-                userRegistrationDTO.getPassword()
-        );
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
-    }
-
+  @PostMapping("/register")
+  public ResponseEntity<User> register(@RequestBody UserRegistrationDTO userRegistrationDTO) {
+    User savedUser =
+        userService.registerUser(
+            userRegistrationDTO.getFirstname(),
+            userRegistrationDTO.getLastname(),
+            userRegistrationDTO.getEmail(),
+            userRegistrationDTO.getPassword());
+    return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+  }
 }
