@@ -2,9 +2,16 @@ package com.stockofrigo.backend.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
-public class User {
+public class User implements UserDetails {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,20 +29,23 @@ public class User {
   @Column(nullable = false)
   private String password;
 
-  @Column(nullable = false)
+  @Column(nullable = true)
   private LocalDateTime createdAt;
 
-  @Column(nullable = false)
+  @Column(nullable = true)
   private LocalDateTime modifiedAt;
 
-  @Column(nullable = false)
+  @Column(nullable = true)
   private LocalDateTime lastLoginAt;
 
-  @Column(nullable = false)
+  @Column(nullable = true)
   private Boolean isActive;
 
-  @Column(nullable = false)
+  @Column(nullable = true)
   private Boolean is_superuser;
+
+  @ElementCollection(fetch = FetchType.EAGER)
+  private Set<String> roles = new HashSet<>();
 
   public Long getId() {
     return id;
@@ -115,5 +125,35 @@ public class User {
 
   public void setIs_superuser(Boolean is_superuser) {
     this.is_superuser = is_superuser;
+  }
+
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toSet());
+  }
+
+  @Override
+  public String getUsername() {
+    return email;
+  }
+
+  @Override
+  public boolean isAccountNonExpired() {
+    return true;
+  }
+
+  @Override
+  public boolean isAccountNonLocked() {
+    return true;
+  }
+
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return true;
+  }
+
+  @Override
+  public boolean isEnabled() {
+    return true;
   }
 }
