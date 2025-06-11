@@ -11,11 +11,11 @@ import jakarta.persistence.Table;
 @Table(name = "unit")
 public class Unit {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false, updatable = false)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id", nullable = false, updatable = false)
+  private Long id;
 
-    @Column(name = "unit", nullable = false, length = 100)
-    private String unit;
+  @Column(name = "unit", nullable = false, length = 100)
+  private String unit;
 }
