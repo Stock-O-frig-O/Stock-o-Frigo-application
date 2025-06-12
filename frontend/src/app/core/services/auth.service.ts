@@ -10,10 +10,15 @@ export class AuthService {
   private apiUrl = environment.apiUrl;
   private http = inject(HttpClient);
 
-  register(email: string, password: string): Observable<string> {
+  register(
+    firstname: string,
+    lastname: string,
+    email: string,
+    password: string,
+  ): Observable<string> {
     return this.http.post(
       `${this.apiUrl}/auth/register`,
-      { email, password },
+      { firstname, lastname, email, password },
       { responseType: 'text' },
     );
   }
