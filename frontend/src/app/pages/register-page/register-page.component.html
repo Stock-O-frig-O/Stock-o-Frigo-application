@@ -41,26 +41,30 @@
     </p-floatlabel>
 
     <span formGroupName="passwords">
-      <p-floatlabel variant="in">
+      <p-floatlabel variant="in" class="input-full-width">
         <p-password
           formControlName="password"
-          class="test"
-          styleClass="test"
           id="password"
+          inputStyleClass="input-full-width"
         />
         <label for="password">Mot de passe</label>
       </p-floatlabel>
 
-      <p-floatlabel variant="in">
-        <p-password formControlName="confirmPassword" id="confirm-password" />
+      <p-floatlabel variant="in" class="input-full-width">
+        <p-password
+          formControlName="confirmPassword"
+          id="confirm-password"
+          inputStyleClass="input-full-width"
+        />
         <label for="confirm-password">Confirmation du mot de passe</label>
       </p-floatlabel>
     </span>
 
     <p-checkbox formControlName="legals" [binary]="true" inputId="ny" />
     <label for="ny" class="ml-2">
-      Je déclare accepter les <u>Conditions d'Utilisation</u> et
-      <u>Politique de Confidentialité</u></label
+      Je déclare accepter les
+      <a routerLink="/legals">Conditions d'Utilisation</a> et
+      <a routerLink="/legals">Politique de Confidentialité</a></label
     >
 
     <p-button
@@ -72,5 +76,5 @@
     />
   </form>
 
-  <p>Vous avez déjà un compte ? <u>Se connecter</u></p>
+  <p>Vous avez déjà un compte ? <a routerLink="/login">Se connecter</a></p>
 </div>

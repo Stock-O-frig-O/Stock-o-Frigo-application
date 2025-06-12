@@ -15,6 +15,7 @@ import { Checkbox } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
 import { PasswordModule } from 'primeng/password';
 import { AuthService } from '../../core/services/auth.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-register-page',
@@ -26,6 +27,7 @@ import { AuthService } from '../../core/services/auth.service';
     Checkbox,
     ButtonModule,
     PasswordModule,
+    RouterModule,
   ],
   templateUrl: './register-page.component.html',
   styleUrl: './register-page.component.scss',
