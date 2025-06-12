@@ -1,5 +1,6 @@
 package com.stockofrigo.backend.security;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,8 +12,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 
-import java.util.List;
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -23,16 +22,17 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http.csrf(AbstractHttpConfigurer::disable)
-            .cors(cors -> cors
-                    .configurationSource(request -> {
+        .cors(
+            cors ->
+                cors.configurationSource(
+                    request -> {
                       CorsConfiguration config = new CorsConfiguration();
                       config.setAllowedOrigins(List.of(allowedOrigin));
                       config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                       config.setAllowedHeaders(List.of("*"));
                       config.setAllowCredentials(true);
                       return config;
-                    })
-            )
+                    }))
         .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
 
     return http.build();
