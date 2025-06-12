@@ -29,7 +29,7 @@ public class Product {
   private String imageUrl;
 
   @ManyToOne
-  @JoinColumn(name = "unit_id", nullable = true)
+  @JoinColumn(name = "unit_id", nullable = false)
   private Unit unitId;
 
   @Column(name = "is_ingredient", nullable = false)
