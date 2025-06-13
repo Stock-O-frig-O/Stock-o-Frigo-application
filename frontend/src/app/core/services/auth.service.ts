@@ -22,4 +22,12 @@ export class AuthService {
       { responseType: 'text' },
     );
   }
+
+  login(email: string, password: string): Observable<string> {
+    return this.http.post(
+      `${this.apiUrl}/auth/login`,
+      { email, password },
+      { responseType: 'text' },
+    );
+  }
 }
