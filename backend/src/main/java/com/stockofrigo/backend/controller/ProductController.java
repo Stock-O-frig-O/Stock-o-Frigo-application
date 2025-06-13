@@ -46,13 +46,6 @@ public class ProductController {
 
   @PostMapping
   public ResponseEntity<ProductDTO> createProduct(@RequestBody Product newProduct) {
-    System.out.println("product " + newProduct.getImageUrl());
-    System.out.println("product " + newProduct.getBrand());
-    System.out.println("product " + newProduct.getName());
-    System.out.println("product" + newProduct.getId());
-    System.out.println("product" + newProduct.getUnit());
-
-    System.out.println("toto" + newProduct.getUnit());
     ProductDTO savedProduct = this.productService.createProduct(newProduct);
     return ResponseEntity.status(HttpStatus.CREATED).body(savedProduct);
   }
