@@ -1,0 +1,30 @@
+.page-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 10px;
+
+  h2 {
+    font-size: 2.4rem;
+    font-weight: 400;
+  }
+
+  form {
+    width: 100%;
+  }
+}
+.fieldset,
+.p-password {
+  width: 100%;
+  margin: 6px 0;
+}
+
+.input-full-width {
+  width: 100%;
+  display: block;
+}
+
+.p-button {
+  width: 100%;
+  margin-top: 30px;
+}
