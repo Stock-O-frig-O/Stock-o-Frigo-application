@@ -41,6 +41,7 @@ public class ProductService {
 
   public ProductDTO createProduct(Product product) {
     Product savedProduct = new Product();
+    savedProduct.setName(product.getName());
     savedProduct.setBarcode(product.getBarcode());
     savedProduct.setBrand(product.getBrand());
     savedProduct.setCreatedAt(LocalDateTime.now());
