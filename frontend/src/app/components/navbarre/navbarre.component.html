@@ -1,0 +1,52 @@
+<nav id="navbare">
+  <li class="navbare_link">
+    <button
+      class="navbare_button"
+      [ngClass]="{ active: isRouteActive === '/' }"
+      (click)="goToPage('/')"
+    >
+      <i class="pi pi-home" style="color: black"></i>
+      <h3>accueil</h3>
+    </button>
+  </li>
+  <li class="navbare_link">
+    <button
+      class="navbare_button"
+      [ngClass]="{ active: isRouteActive === '/favorites' }"
+      (click)="goToPage('/favorites')"
+    >
+      <i class="pi pi-heart-fill"></i>
+      <h3>favoris</h3>
+    </button>
+  </li>
+  <li class="navbare_link">
+    <button
+      class="navbare_button active"
+      [ngClass]="{ active: isRouteActive === '/scan' }"
+      (click)="goToPage('/scan')"
+    >
+      <i class="pi pi-barcode"></i>
+      <h3>Scan</h3>
+    </button>
+  </li>
+  <li class="navbare_link">
+    <button
+      class="navbare_button"
+      [ngClass]="{ active: isRouteActive === '/cart' }"
+      (click)="goToPage('/cart')"
+    >
+      <i class="pi pi-cart-arrow-down"></i>
+      <h3>Liste de course</h3>
+    </button>
+  </li>
+  <li class="navbare_link">
+    <button
+      class="navbare_button"
+      [ngClass]="{ active: isRouteActive === '/recipes' }"
+      (click)="goToPage('/recipes')"
+    >
+      <i class="pi pi-list-check"></i>
+      <h3>Recettes</h3>
+    </button>
+  </li>
+</nav>
