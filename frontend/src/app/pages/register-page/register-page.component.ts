@@ -1,4 +1,4 @@
-import { Component, inject, ViewEncapsulation } from '@angular/core';
+import { Component, inject, OnDestroy, ViewEncapsulation } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -34,7 +34,7 @@ import { Subscription } from 'rxjs';
   styleUrl: './register-page.component.scss',
   encapsulation: ViewEncapsulation.None,
 })
-export class RegisterPageComponent {
+export class RegisterPageComponent implements OnDestroy {
   private formBuilder = inject(FormBuilder);
   private authService = inject(AuthService);
   private subscription: Subscription = new Subscription();
@@ -101,7 +101,7 @@ export class RegisterPageComponent {
     };
   }
 
-  private ngOnDestroy() {
+  public ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 }
