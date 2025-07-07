@@ -4,8 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-scan-page',
   imports: [],
   templateUrl: './scan-page.component.html',
-  styleUrl: './scan-page.component.scss'
+  styleUrl: './scan-page.component.scss',
 })
-export class ScanPageComponent {
-
-}
+export class ScanPageComponent {}
