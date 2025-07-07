@@ -1,10 +1,14 @@
+// Angular
 import { Routes } from '@angular/router';
-import { RegisterPageComponent } from './pages/register-page/register-page.component';
-import { HomePageComponent } from './pages/home-page/home-page.component';
-import { FavoritPageComponent } from './pages/favorit-page/favorit-page.component';
-import { ScanPageComponent } from './pages/scan-page/scan-page.component';
-import { RecipePageComponent } from './pages/recipe-page/recipe-page.component';
+
+// Components
 import { CartPageComponent } from './pages/cart-page/cart-page.component';
+import { FavoritPageComponent } from './pages/favorit-page/favorit-page.component';
+import { HomePageComponent } from './pages/home-page/home-page.component';
+import { RecipePageComponent } from './pages/recipe-page/recipe-page.component';
+import { RegisterPageComponent } from './pages/register-page/register-page.component';
+import { ScanPageComponent } from './pages/scan-page/scan-page.component';
+import { StockPageComponent } from './pages/stock-page/stock-page.component';
 
 export const routes: Routes = [
   { path: '', component: HomePageComponent },
@@ -13,4 +17,6 @@ export const routes: Routes = [
   { path: 'recipes', component: RecipePageComponent },
   { path: 'register', component: RegisterPageComponent },
   { path: 'scan', component: ScanPageComponent },
+  { path: 'stock', component: StockPageComponent },
+  { path: '**', redirectTo: '' },
 ];
