@@ -1,4 +1,4 @@
-import { Component, inject, ViewEncapsulation } from '@angular/core';
+import { Component, inject, OnDestroy, ViewEncapsulation } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -15,8 +15,11 @@ import { Checkbox } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
 import { PasswordModule } from 'primeng/password';
 import { AuthService } from '../../core/services/auth.service';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
+
+import { MessageService } from 'primeng/api';
+import { Toast } from 'primeng/toast';
 
 @Component({
   selector: 'app-register-page',
@@ -29,17 +32,21 @@ import { Subscription } from 'rxjs';
     ButtonModule,
     PasswordModule,
     RouterModule,
+    Toast,
   ],
   templateUrl: './register-page.component.html',
   styleUrl: './register-page.component.scss',
   encapsulation: ViewEncapsulation.None,
+  providers: [MessageService],
 })
-export class RegisterPageComponent {
+export class RegisterPageComponent implements OnDestroy {
   private formBuilder = inject(FormBuilder);
   private authService = inject(AuthService);
   private subscription: Subscription = new Subscription();
+  private messageService = inject(MessageService);
+  private router = inject(Router);
 
-  public registerForm = this.formBuilder.group({
+  registerForm = this.formBuilder.group({
     firstname: ['', [Validators.required]],
     lastname: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.email]],
@@ -53,7 +60,7 @@ export class RegisterPageComponent {
     ),
   });
 
-  public onSubmit(): void {
+  onSubmit(): void {
     this.subscription = this.authService
       .register(
         this.registerForm.value.firstname!,
@@ -62,11 +69,17 @@ export class RegisterPageComponent {
         this.registerForm.value.passwords!.password!,
       )
       .subscribe({
-        next: (resp) => {
-          console.log(resp);
+        next: () => {
+          this.router.navigate(['/login']);
         },
         error: (err) => {
-          alert('Une erreur est survenue.');
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Erreur',
+            detail: err.message,
+            key: 'br',
+            life: 3000,
+          });
           console.error('Error: ', err);
         },
       });
@@ -101,7 +114,7 @@ export class RegisterPageComponent {
     };
   }
 
-  private ngOnDestroy() {
+  ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 }
