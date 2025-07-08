@@ -22,6 +22,6 @@ export const routes: Routes = [
   { path: 'recipes', component: RecipePageComponent },
   { path: 'scan', component: ScanPageComponent },
   { path: 'stock', component: StockPageComponent },
-  
+
   { path: '**', redirectTo: '' },
 ];
