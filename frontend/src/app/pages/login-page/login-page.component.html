@@ -1,0 +1,43 @@
+<app-logo />
+
+<div class="page-content">
+  <h2>Connectez-vous</h2>
+
+  <form [formGroup]="loginForm" (ngSubmit)="loginForm.valid && onSubmit()">
+    <p-floatlabel variant="in">
+      <input
+        pInputText
+        formControlName="email"
+        class="fieldset"
+        id="email"
+        autocomplete="off"
+      />
+      <label for="email">Email</label>
+    </p-floatlabel>
+
+    <p-floatlabel variant="in" class="input-full-width">
+      <p-password
+        formControlName="password"
+        id="password"
+        inputStyleClass="input-full-width"
+        [feedback]="false"
+      />
+      <label for="password">Mot de passe</label>
+    </p-floatlabel>
+
+    <p-button
+      label="Connexion"
+      [disabled]="loginForm.invalid"
+      [rounded]="true"
+      size="large"
+      type="submit"
+    />
+  </form>
+
+  <p>Vous n'avez pas de compte ? <a routerLink="/register">S'inscrire</a></p>
+</div>
+<p-toast
+  position="bottom-center"
+  key="br"
+  [breakpoints]="{ '920px': { width: '90%' } }"
+/>
