@@ -52,7 +52,7 @@ export class LoginPageComponent implements OnDestroy {
           this.messageService.add({
             severity: 'error',
             summary: 'Erreur',
-            detail: err.message,
+            detail: err.error,
             key: 'br',
             life: 3000,
           });
