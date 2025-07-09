@@ -3,7 +3,8 @@
   list-style: none;
   padding: 0;
   width: 100%;
-  position: absolute;
+  position: relative;
+  z-index: 5;
   bottom: 0;
   left: 0;
   justify-content: space-around;
