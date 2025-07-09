@@ -2,6 +2,7 @@ package com.stockofrigo.backend.security;
 
 import java.util.List;
 import java.util.Objects;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,8 +20,8 @@ import org.springframework.web.cors.CorsConfiguration;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-  private final JwtAuthenticationFilter jwtAuthenticationFilter;
-  private final CustomUserDetailsService customUserDetailsService;
+  @Autowired private final JwtAuthenticationFilter jwtAuthenticationFilter;
+  @Autowired private final CustomUserDetailsService customUserDetailsService;
 
   public SecurityConfig(
       JwtAuthenticationFilter jwtAuthenticationFilter,
@@ -33,6 +34,17 @@ public class SecurityConfig {
 
   @Value("${cors.allowed-origin}")
   private String allowedOrigin;
+
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
+
+  @Bean
+  public AuthenticationManager authenticationManager(
+      AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    return authenticationConfiguration.getAuthenticationManager();
+  }
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -53,16 +65,5 @@ public class SecurityConfig {
         .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
-  }
-
-  @Bean
-  public AuthenticationManager authenticationManager(
-      AuthenticationConfiguration authenticationConfiguration) throws Exception {
-    return authenticationConfiguration.getAuthenticationManager();
-  }
-
-  @Bean
-  public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
   }
 }

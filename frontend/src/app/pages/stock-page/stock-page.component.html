@@ -1,1 +1,26 @@
-<p>stock-page works!</p>
+<header>
+  <div class="header-move-to">
+    <a [routerLink]="['/']"><i class="pi pi-arrow-left"></i></a>
+    <a [routerLink]="['/profile']"><i class="pi pi-user"></i></a>
+  </div>
+  <div class="header-title">
+    <h1>Stock'O Frig'O</h1>
+    <img src="/imgs/logo.png" alt="Logo stock'o frig'o" />
+  </div>
+
+  <div class="header-action">
+
+      <p-autoComplete
+       class="test"
+        [(ngModel)]="selectedProduct"
+        [suggestions]="filteredProducts"
+        [delay]="1000"
+        (completeMethod)="findProduct($event)"
+        field="name"
+        autocomplete="off"
+        placeholder="Rechercher un produit"
+      />
+    <button><i class="pi pi-ellipsis-v"></i></button>
+  </div>
+
+</header>
