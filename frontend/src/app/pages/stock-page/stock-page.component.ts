@@ -2,7 +2,7 @@
 import { Subscription } from 'rxjs';
 
 // Angular imports
-import { Component, inject, OnDestroy } from '@angular/core';
+import { Component, inject, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
@@ -27,6 +27,7 @@ import Product from '../../core/model/Product.model';
     InputGroupModule,
     InputGroupAddonModule,
   ],
+  encapsulation: ViewEncapsulation.None,
   templateUrl: './stock-page.component.html',
   styleUrl: './stock-page.component.scss',
 })
