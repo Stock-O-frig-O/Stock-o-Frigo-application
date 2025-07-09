@@ -18,7 +18,15 @@ import Product from '../../core/model/Product.model';
 
 @Component({
   selector: 'app-stock-page',
-  imports: [RouterModule, InputTextModule, FormsModule, AutoComplete, AutoCompleteModule, InputGroupModule, InputGroupAddonModule],
+  imports: [
+    RouterModule,
+    InputTextModule,
+    FormsModule,
+    AutoComplete,
+    AutoCompleteModule,
+    InputGroupModule,
+    InputGroupAddonModule,
+  ],
   templateUrl: './stock-page.component.html',
   styleUrl: './stock-page.component.scss',
 })
@@ -35,7 +43,9 @@ export class StockPageComponent implements OnDestroy {
   findProduct(event: { query: string }) {
     const query = event.query.toLowerCase();
     this.apiProduct.getProducts().subscribe((products: Product[]) => {
-      this.filteredProducts = products.filter((product: Product) => product.name?.toLowerCase().includes(query));
+      this.filteredProducts = products.filter((product: Product) =>
+        product.name?.toLowerCase().includes(query),
+      );
     });
   }
 

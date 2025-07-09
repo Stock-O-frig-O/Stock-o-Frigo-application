@@ -9,18 +9,16 @@
   </div>
 
   <div class="header-action">
-
-      <p-autoComplete
-       class="test"
-        [(ngModel)]="selectedProduct"
-        [suggestions]="filteredProducts"
-        [delay]="1000"
-        (completeMethod)="findProduct($event)"
-        field="name"
-        autocomplete="off"
-        placeholder="Rechercher un produit"
-      />
+    <p-autoComplete
+      class="test"
+      [(ngModel)]="selectedProduct"
+      [suggestions]="filteredProducts"
+      [delay]="1000"
+      (completeMethod)="findProduct($event)"
+      field="name"
+      autocomplete="off"
+      placeholder="Rechercher un produit"
+    />
     <button><i class="pi pi-ellipsis-v"></i></button>
   </div>
-
 </header>
