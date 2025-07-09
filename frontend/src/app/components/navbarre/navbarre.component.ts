@@ -2,6 +2,7 @@ import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-navbarre',
@@ -12,6 +13,7 @@ import { Router } from '@angular/router';
 export class NavbarreComponent implements OnInit, OnDestroy {
   private subscription: Subscription = new Subscription();
   private route: Router = inject(Router);
+  public authService: AuthService = inject(AuthService);
 
   isRouteActive = '/';
 
