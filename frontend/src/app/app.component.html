@@ -1,7 +1,11 @@
 <main>
-  <app-logo />
-  <div>
+  @if (authService.isLoggedIn()) {
+    <app-logo />
+    <div>
+      <router-outlet />
+    </div>
+    <app-navbarre />
+  } @else {
     <router-outlet />
-  </div>
-  <app-navbarre />
+  }
 </main>

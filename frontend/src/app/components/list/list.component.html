@@ -1,15 +1,31 @@
-<p-accordion value="0">
+<p-accordion value="0" [multiple]="true" class="accordion">
   @for (category of categoryList; track $index) {
     <p-accordion-panel [value]="category">
-      <p-accordion-header> {{ category }} </p-accordion-header>
+      <p-accordion-header class="panel-category">
+        {{ category }}
+      </p-accordion-header>
       <p-accordion-content>
         <p-table [value]="products">
           <ng-template #body let-product>
             @if (product.category === category) {
               <tr>
+                <td>
+                  <p-checkbox [(ngModel)]="product.checked" [binary]="true" />
+                </td>
                 <td>{{ product.name }}</td>
+                <td class="btn-change-stock">
+                  <button class="btn-minus">-</button>
+                  {{ product.quantity }}
+                  <button class="btn-plus">+</button>
+                </td>
                 <td>{{ product.unit }}</td>
-                <td>{{ product.createdAt }}</td>
+                <td>
+                  @if (product.isFavorit) {
+                    <i class="pi pi-heart-fill"></i>
+                  } @else {
+                    <i class="pi pi-heart"></i>
+                  }
+                </td>
               </tr>
             }
           </ng-template>

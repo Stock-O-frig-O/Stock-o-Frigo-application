@@ -1,0 +1,36 @@
+.accordion {
+  margin-top: 10px;
+}
+.panel-category {
+  background-color: #b8de70;
+  height: 10px;
+}
+
+.p-accordionpanel:not(.p-disabled).p-accordionpanel-active
+  > .p-accordionheader {
+  background-color: #b8de70;
+}
+.p-accordioncontent-content {
+  padding: 0 !important;
+}
+
+tr {
+  display: flex;
+  align-item: center;
+}
+
+button {
+  border: none;
+  background-color: unset;
+}
+
+.btn-change-stock {
+  width: 100px;
+  display: flex;
+  height: 30px;
+  background-color: #ede8d8;
+  padding: 0 !important;
+  border: 1px solid black;
+  justify-content: space-around;
+  align-items: center;
+}
