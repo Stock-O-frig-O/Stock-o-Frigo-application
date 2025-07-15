@@ -37,7 +37,7 @@ public class UnitController {
   }
 
   @PostMapping
-  public ResponseEntity<UnitDTO> createUnit(@RequestBody Unit unit){
+  public ResponseEntity<UnitDTO> createUnit(@RequestBody Unit unit) {
     UnitDTO savedUnit = unitService.createUnit(unit);
     return ResponseEntity.ok(savedUnit);
   }

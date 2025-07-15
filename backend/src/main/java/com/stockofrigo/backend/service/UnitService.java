@@ -37,7 +37,7 @@ public class UnitService {
     return UnitMapper.INSTANCE.convertToUnitDto(unit);
   }
 
-  public UnitDTO createUnit(Unit unit){
+  public UnitDTO createUnit(Unit unit) {
     Unit newUnit = new Unit();
     newUnit.setUnit(unit.getUnit());
 

@@ -17,10 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthController {
 
-  @Autowired
-  private final UserService userService;
-  @Autowired
-  private final AuthenticationService authenticationService;
+  @Autowired private final UserService userService;
+  @Autowired private final AuthenticationService authenticationService;
 
   public AuthController(UserService userService, AuthenticationService authenticationService) {
     this.userService = userService;

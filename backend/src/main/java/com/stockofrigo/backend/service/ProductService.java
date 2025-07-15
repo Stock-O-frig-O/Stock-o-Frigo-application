@@ -39,14 +39,16 @@ public class ProductService {
     return ProductMapper.INSTANCE.convertToDto(product);
   }
 
-  public List<ProductDTO> getProductsFiltered(String query){
+  public List<ProductDTO> getProductsFiltered(String query) {
     List<Product> products = this.productRepository.findAll();
-    List<Product> filterdedPoducts = products.stream()
-            .filter(product -> product.getName().contains(query)).toList();
-    if (products.isEmpty()){
+    List<Product> filterdedPoducts =
+        products.stream().filter(product -> product.getName().contains(query)).toList();
+    if (products.isEmpty()) {
       return Collections.emptyList();
     }
-    return filterdedPoducts.stream().map(ProductMapper.INSTANCE::convertToDto).collect((Collectors.toList()));
+    return filterdedPoducts.stream()
+        .map(ProductMapper.INSTANCE::convertToDto)
+        .collect(Collectors.toList());
   }
 
   public ProductDTO createProduct(Product product) {

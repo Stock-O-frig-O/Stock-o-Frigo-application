@@ -41,13 +41,13 @@ public class ProductController {
 
   @GetMapping("/query")
   public ResponseEntity<List<ProductDTO>> getProductByQuery(@RequestParam String search) {
-      List<ProductDTO> products = this.productService.getProductsFiltered(search);
+    List<ProductDTO> products = this.productService.getProductsFiltered(search);
 
-      if (products.isEmpty()){
-        return ResponseEntity.notFound().build();
-      }
+    if (products.isEmpty()) {
+      return ResponseEntity.notFound().build();
+    }
 
-      return ResponseEntity.ok(products);
+    return ResponseEntity.ok(products);
   }
 
   @PostMapping
