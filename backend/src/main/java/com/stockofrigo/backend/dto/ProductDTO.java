@@ -1,6 +1,7 @@
 package com.stockofrigo.backend.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class ProductDTO {
 
@@ -13,6 +14,7 @@ public class ProductDTO {
   private boolean isIngredient;
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
+  private Long categoryId;
 
   public Long getId() {
     return id;
@@ -84,5 +86,13 @@ public class ProductDTO {
 
   public void setUpdatedAt(LocalDateTime updatedAt) {
     this.updatedAt = updatedAt;
+  }
+
+  public Long getCategoryId() {
+    return categoryId;
+  }
+
+  public void setCategoryId(Long categoryId) {
+    this.categoryId = categoryId;
   }
 }

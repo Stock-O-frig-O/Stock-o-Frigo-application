@@ -12,6 +12,7 @@ public interface ProductMapper {
   ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
 
   @Mapping(target = "unitId", source = "unit.id")
+  @Mapping(target = "categoryId", source = "category.id")
   ProductDTO convertToDto(Product product);
 
   @Mapping(target = "unit", ignore = true)
