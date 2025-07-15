@@ -7,7 +7,6 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { LogoComponent } from '../../components/logo/logo.component';
 
 import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabel } from 'primeng/floatlabel';
@@ -25,7 +24,6 @@ import { Toast } from 'primeng/toast';
   selector: 'app-register-page',
   imports: [
     ReactiveFormsModule,
-    LogoComponent,
     InputTextModule,
     FloatLabel,
     Checkbox,
