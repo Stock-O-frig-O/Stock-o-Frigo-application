@@ -9,7 +9,6 @@ import com.stockofrigo.backend.repository.CategoryRepository;
 import com.stockofrigo.backend.repository.ProductRepository;
 import com.stockofrigo.backend.repository.UnitRepository;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
