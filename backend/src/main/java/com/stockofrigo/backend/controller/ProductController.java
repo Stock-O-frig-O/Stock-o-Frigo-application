@@ -55,4 +55,14 @@ public class ProductController {
     ProductDTO savedProduct = this.productService.createProduct(newProduct);
     return ResponseEntity.status(HttpStatus.CREATED).body(savedProduct);
   }
+
+  @PutMapping("/{id}")
+  public ResponseEntity<ProductDTO> updateProduct(
+      @PathVariable Long id, @RequestBody Product product) {
+    ProductDTO updatedProduct = this.productService.updateProduct(id, product);
+    if (updatedProduct == null) {
+      return ResponseEntity.notFound().build();
+    }
+    return ResponseEntity.ok(updatedProduct);
+  }
 }

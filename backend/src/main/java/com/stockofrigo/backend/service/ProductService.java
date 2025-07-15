@@ -2,8 +2,10 @@ package com.stockofrigo.backend.service;
 
 import com.stockofrigo.backend.dto.ProductDTO;
 import com.stockofrigo.backend.mapper.ProductMapper;
+import com.stockofrigo.backend.model.Category;
 import com.stockofrigo.backend.model.Product;
 import com.stockofrigo.backend.model.Unit;
+import com.stockofrigo.backend.repository.CategoryRepository;
 import com.stockofrigo.backend.repository.ProductRepository;
 import com.stockofrigo.backend.repository.UnitRepository;
 import java.time.LocalDateTime;
@@ -17,10 +19,15 @@ public class ProductService {
 
   private ProductRepository productRepository;
   private UnitRepository unitRepository;
+  private CategoryRepository categoryRepository;
 
-  public ProductService(ProductRepository productRepository, UnitRepository unitRepository) {
+  public ProductService(
+      ProductRepository productRepository,
+      UnitRepository unitRepository,
+      CategoryRepository categoryRepository) {
     this.productRepository = productRepository;
     this.unitRepository = unitRepository;
+    this.categoryRepository = categoryRepository;
   }
 
   public List<ProductDTO> getAllProduct() {
@@ -51,6 +58,35 @@ public class ProductService {
         .collect(Collectors.toList());
   }
 
+  public ProductDTO updateProduct(Long id, Product product) {
+    Product updatedProduct = productRepository.findById(id).orElse(null);
+    if (updatedProduct == null) {
+      return null;
+    }
+    updatedProduct.setName(product.getName());
+    updatedProduct.setBarcode(product.getBarcode());
+    updatedProduct.setBrand(product.getBrand());
+    updatedProduct.setImageUrl(product.getImageUrl());
+    updatedProduct.setIngredient(product.isIngredient());
+    updatedProduct.setUpdatedAt(LocalDateTime.now());
+    if (product.getCategory() != null) {
+      Category category = categoryRepository.findById(product.getCategory().getId()).orElse(null);
+      if (category == null) {
+        return null;
+      }
+      updatedProduct.setCategory(category);
+    }
+    if (product.getUnit() != null) {
+      Unit unit = unitRepository.findById(product.getUnit().getId()).orElse(null);
+      if (unit == null) {
+        return null;
+      }
+      updatedProduct.setUnit(unit);
+    }
+    Product savedProduct = productRepository.save(updatedProduct);
+    return ProductMapper.INSTANCE.convertToDto(savedProduct);
+  }
+
   public ProductDTO createProduct(Product product) {
     Product savedProduct = new Product();
     savedProduct.setName(product.getName());
@@ -59,6 +95,14 @@ public class ProductService {
     savedProduct.setCreatedAt(LocalDateTime.now());
     savedProduct.setImageUrl(product.getImageUrl());
     savedProduct.setIngredient(product.isIngredient());
+
+    if (product.getCategory() != null) {
+      Category category = categoryRepository.findById(product.getCategory().getId()).orElse(null);
+      if (category == null) {
+        return null;
+      }
+      savedProduct.setCategory(category);
+    }
 
     if (product.getUnit() != null) {
       Unit unit = unitRepository.findById(product.getUnit().getId()).orElse(null);
