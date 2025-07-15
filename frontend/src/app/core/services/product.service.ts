@@ -19,4 +19,12 @@ export class ProductService {
     // It uses the HttpClient to make a GET request to the products endpoint.
     return this.http.get<Product[]>(`${this.apiUrl}/products`);
   }
+
+  getFilteredProducts(query: string): Observable<Product[]> {
+    // This method retrieves products filtered by a search query.
+    // It uses the HttpClient to make a GET request to the products endpoint with a query parameter.
+    return this.http.get<Product[]>(
+      `${this.apiUrl}/products/query?search=${query}`,
+    );
+  }
 }

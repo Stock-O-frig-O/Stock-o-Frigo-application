@@ -45,12 +45,11 @@ export class LogoComponent implements OnDestroy {
   // fetch product data on autocomplete component
   findProduct(event: { query: string }) {
     const query = event.query.toLowerCase();
-    this.apiProduct.getProducts().subscribe((products: Product[]) => {
-      this.filteredProducts = products.filter((product: Product) =>
-        product.name?.toLowerCase().includes(query),
-      );
+    this.apiProduct.getFilteredProducts(query).subscribe({
+      next: (products) => {
+        this.filteredProducts = products;
+      },
     });
-    console.log('produit choisit : ', this.selectedProduct);
   }
 
   // handle product selection
