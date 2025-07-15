@@ -9,22 +9,37 @@
           <ng-template #body let-product>
             @if (product.category === category) {
               <tr>
-                <td>
+                <td class="td-small-item">
                   <p-checkbox [(ngModel)]="product.checked" [binary]="true" />
                 </td>
-                <td>{{ product.name }}</td>
+                <td class="td-designation">{{ product.name }}</td>
                 <td class="btn-change-stock">
-                  <button class="btn-minus">-</button>
-                  {{ product.quantity }}
-                  <button class="btn-plus">+</button>
+                  <p-inputnumber
+                    class="test-but"
+                    [(ngModel)]="product.quantity"
+                    [showButtons]="true"
+                    buttonLayout="horizontal"
+                    spinnerMode="horizontal"
+                    inputId="horizontal"
+                    [inputStyle]="{ width: '2rem' }"
+                  >
+                    <ng-template #incrementbuttonicon>
+                      <span class="pi pi-plus"></span>
+                    </ng-template>
+                    <ng-template #decrementbuttonicon>
+                      <span class="pi pi-minus"></span>
+                    </ng-template>
+                  </p-inputnumber>
                 </td>
-                <td>{{ product.unit }}</td>
-                <td>
-                  @if (product.isFavorit) {
-                    <i class="pi pi-heart-fill"></i>
-                  } @else {
-                    <i class="pi pi-heart"></i>
-                  }
+                <td class="td-small-item">{{ product.unit }}</td>
+                <td class="td-small-item">
+                  <button (click)="toggleFavorit(product)" class="btn-favorit">
+                    @if (product.isFavorit) {
+                      <i class="pi pi-heart-fill"></i>
+                    } @else {
+                      <i class="pi pi-heart"></i>
+                    }
+                  </button>
                 </td>
               </tr>
             }

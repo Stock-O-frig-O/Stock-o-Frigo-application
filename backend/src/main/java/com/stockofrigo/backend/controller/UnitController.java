@@ -1,16 +1,14 @@
 package com.stockofrigo.backend.controller;
 
 import com.stockofrigo.backend.dto.UnitDTO;
+import com.stockofrigo.backend.model.Unit;
 import com.stockofrigo.backend.service.UnitService;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/unit")
+@RequestMapping("/units")
 public class UnitController {
 
   private UnitService unitService;
@@ -36,5 +34,11 @@ public class UnitController {
     }
 
     return ResponseEntity.ok(unit);
+  }
+
+  @PostMapping
+  public ResponseEntity<UnitDTO> createUnit(@RequestBody Unit unit){
+    UnitDTO savedUnit = unitService.createUnit(unit);
+    return ResponseEntity.ok(savedUnit);
   }
 }

@@ -15,6 +15,7 @@
         [suggestions]="filteredProducts"
         [delay]="1000"
         (completeMethod)="findProduct($event)"
+        (onSelect)="onProductSelected($event)"
         field="name"
         autocomplete="off"
         placeholder="Rechercher un produit"

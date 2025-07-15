@@ -7,6 +7,7 @@ import { AccordionModule } from 'primeng/accordion';
 import { TableModule } from 'primeng/table';
 import { CheckboxModule } from 'primeng/checkbox';
 import { FormsModule } from '@angular/forms';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 // import local
 // import Product from '../../core/model/Product.model';
@@ -22,7 +23,13 @@ interface ProductData {
 
 @Component({
   selector: 'app-list',
-  imports: [AccordionModule, TableModule, CheckboxModule, FormsModule],
+  imports: [
+    AccordionModule,
+    TableModule,
+    CheckboxModule,
+    FormsModule,
+    InputNumberModule,
+  ],
   encapsulation: ViewEncapsulation.None,
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss',
@@ -443,5 +450,9 @@ export class ListComponent implements OnInit {
         this.categoryList.push(product.category);
       }
     }
+  }
+
+  toggleFavorit(product: ProductData) {
+    product.isFavorit = !product.isFavorit;
   }
 }

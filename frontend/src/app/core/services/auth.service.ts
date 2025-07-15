@@ -54,6 +54,8 @@ export class AuthService {
   }
 
   clearToken(): void {
+    console.log('Clearing token');
+
     localStorage.removeItem('token');
   }
 

@@ -50,6 +50,16 @@ export class LogoComponent implements OnDestroy {
         product.name?.toLowerCase().includes(query),
       );
     });
+    console.log('produit choisit : ', this.selectedProduct);
+  }
+
+  // handle product selection
+  onProductSelected(event: { value: Product }) {
+    const selectedProduct = event.value;
+    console.log("Produit sélectionné par l'utilisateur :", selectedProduct);
+    // Je dois maintenant dire si le produit par dans la liste de course ou dans le stock
+    // en fonction de la ou se trouve l'utilisateur
+    // Je vais devoir faire un appel à l'API pour ajouter le produit au bon endroit
   }
 
   ngOnDestroy() {
