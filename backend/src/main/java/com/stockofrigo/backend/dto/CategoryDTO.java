@@ -1,7 +1,5 @@
 package com.stockofrigo.backend.dto;
 
-import java.util.List;
-
 public class CategoryDTO {
     private Long id;
     private String name;
