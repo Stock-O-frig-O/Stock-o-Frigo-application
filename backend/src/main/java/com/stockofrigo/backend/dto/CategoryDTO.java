@@ -5,7 +5,6 @@ import java.util.List;
 public class CategoryDTO {
     private Long id;
     private String name;
-    private Long productId;
 
     public Long getId() {
         return id;
@@ -21,13 +20,5 @@ public class CategoryDTO {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Long productId) {
-        this.productId = productId;
     }
 }

@@ -36,7 +36,7 @@ public class CategoryService {
         return CategoryMapper.INSTANCE.convertToDTO(category);
     }
 
-    public CategoryDTO updateCategory(Long id, Category category){
+    public CategoryDTO updateCategory(Long id, CategoryDTO category){
         Category updatedCategory = categoryRepository.findById(id).orElse(null);
         if (updatedCategory == null) {
             return null;
@@ -45,7 +45,7 @@ public class CategoryService {
         return CategoryMapper.INSTANCE.convertToDTO(categoryRepository.save(updatedCategory));
     }
 
-    public CategoryDTO createCategory(Category category){
+    public CategoryDTO createCategory(CategoryDTO category){
         Category newCategory = new Category();
         newCategory.setName(category.getName());
 
