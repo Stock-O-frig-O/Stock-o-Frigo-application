@@ -30,7 +30,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<CategoryDTO> getCategoryById(@PathVariable Long id){
+    public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable Long id){
         CategoryDTO category = this.categoryService.getCategoryById(id);
         if (category == null){
             return ResponseEntity.noContent().build();
