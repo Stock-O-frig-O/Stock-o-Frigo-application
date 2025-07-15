@@ -1,5 +1,6 @@
 package com.stockofrigo.backend.exception;
 
+import jakarta.persistence.EntityNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,16 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(InvalidCredentialsException.class)
   public ResponseEntity<?> handleInvalidCredentials(InvalidCredentialsException ex) {
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
+  }
+
+  @ExceptionHandler(UserAlreadyInHomeException.class)
+  public ResponseEntity<String> handleUserAlreadyInHome(UserAlreadyInHomeException ex) {
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+  }
+
+  @ExceptionHandler(EntityNotFoundException.class)
+  public ResponseEntity<String> handleNotFound(EntityNotFoundException ex) {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
   }
 
   @ExceptionHandler(Exception.class)
