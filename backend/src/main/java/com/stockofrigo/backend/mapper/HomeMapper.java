@@ -1,7 +1,10 @@
 package com.stockofrigo.backend.mapper;
 
 import com.stockofrigo.backend.dto.HomeDTO;
+import com.stockofrigo.backend.dto.StockProductDTO;
+import com.stockofrigo.backend.dto.UserSimpleDTO;
 import com.stockofrigo.backend.model.Home;
+import com.stockofrigo.backend.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -19,8 +22,8 @@ public interface HomeMapper {
           home.getUserHomes().stream()
               .map(
                   uh -> {
-                    var user = uh.getUser();
-                    var userDto = new com.stockofrigo.backend.dto.UserSimpleDTO();
+                    User user = uh.getUser();
+                    UserSimpleDTO userDto = new UserSimpleDTO();
                     userDto.setId(user.getId());
                     userDto.setFirstName(user.getFirstName());
                     userDto.setLastName(user.getLastName());
@@ -34,7 +37,7 @@ public interface HomeMapper {
           home.getStockProducts().stream()
               .map(
                   sp -> {
-                    var prodDto = new com.stockofrigo.backend.dto.StockProductDTO();
+                    StockProductDTO prodDto = new StockProductDTO();
                     prodDto.setId(sp.getId());
                     prodDto.setQuantity(sp.getQuantity());
                     if (sp.getProduct() != null) {

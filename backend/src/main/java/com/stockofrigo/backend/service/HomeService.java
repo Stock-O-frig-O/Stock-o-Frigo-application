@@ -1,15 +1,13 @@
 package com.stockofrigo.backend.service;
 
+import com.stockofrigo.backend.dto.AddProductHomeDTO;
 import com.stockofrigo.backend.dto.HomeDTO;
 import com.stockofrigo.backend.exception.UserAlreadyInHomeException;
 import com.stockofrigo.backend.mapper.HomeMapper;
-import com.stockofrigo.backend.model.Home;
-import com.stockofrigo.backend.model.User;
-import com.stockofrigo.backend.model.UserHome;
-import com.stockofrigo.backend.repository.HomeRepository;
-import com.stockofrigo.backend.repository.UserHomeRepository;
-import com.stockofrigo.backend.repository.UserRepository;
+import com.stockofrigo.backend.model.*;
+import com.stockofrigo.backend.repository.*;
 import jakarta.persistence.EntityNotFoundException;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -23,6 +21,8 @@ public class HomeService {
   @Autowired HomeRepository homeRepository;
   @Autowired UserHomeRepository userHomeRepository;
   @Autowired UserRepository userRepository;
+  @Autowired ProductRepository productRepository;
+  @Autowired StockProductRepository stockProductRepository;
 
   @Autowired HomeMapper homeMapper;
 
@@ -92,35 +92,65 @@ public class HomeService {
     return homeMapper.convertToHomeDto(home);
   }
 
-  // Met à jour la quantité d'un produit stocké dans un home
-  public HomeDTO updateProductQuantity(
-      Long homeId, Long stockProductId, java.math.BigDecimal quantity) {
+  public HomeDTO updateProductQuantity(Long homeId, Long stockProductId, BigDecimal quantity) {
     Home home =
         homeRepository
             .findById(homeId)
             .orElseThrow(() -> new EntityNotFoundException("Ce home est introuvable."));
-    var stockProductOpt =
-        home.getStockProducts().stream()
-            .filter(sp -> sp.getId().equals(stockProductId))
-            .findFirst();
-    if (stockProductOpt.isEmpty())
-      throw new EntityNotFoundException("Produit stocké introuvable dans ce home.");
-    var stockProduct = stockProductOpt.get();
+    StockProduct stockProduct =
+        stockProductRepository
+            .findById(stockProductId)
+            .orElseThrow(() -> new EntityNotFoundException("Ce produit stocké est introuvable."));
+
     stockProduct.setQuantity(quantity);
-    homeRepository.save(home);
+    stockProductRepository.save(stockProduct);
+
     return homeMapper.convertToHomeDto(home);
   }
 
-  // Supprime un produit du stock d'un home
   public HomeDTO deleteProductFromStock(Long homeId, Long stockProductId) {
     Home home =
         homeRepository
             .findById(homeId)
             .orElseThrow(() -> new EntityNotFoundException("Ce home est introuvable."));
-    var stockProducts = home.getStockProducts();
-    boolean removed = stockProducts.removeIf(sp -> sp.getId().equals(stockProductId));
-    if (!removed) throw new EntityNotFoundException("Produit stocké introuvable dans ce home.");
-    homeRepository.save(home);
+
+    StockProduct stockProduct =
+        stockProductRepository
+            .findById(stockProductId)
+            .orElseThrow(() -> new EntityNotFoundException("Ce produit stocké est introuvable."));
+
+    stockProductRepository.delete(stockProduct);
+    return homeMapper.convertToHomeDto(home);
+  }
+
+  public HomeDTO addProductToStock(Long homeId, AddProductHomeDTO addProductHomeDTO) {
+    Home home =
+        homeRepository
+            .findById(homeId)
+            .orElseThrow(() -> new EntityNotFoundException("Ce home est introuvable."));
+    Product product =
+        productRepository
+            .findById(addProductHomeDTO.getProductId())
+            .orElseThrow(() -> new EntityNotFoundException("Ce produit est introuvable."));
+
+    // Vérifier si la relation existe déjà
+    StockProduct existing =
+        home.getStockProducts().stream()
+            .filter(sp -> sp.getProduct().getId().equals(product.getId()))
+            .findFirst()
+            .orElse(null);
+    if (existing != null) {
+      // Met à jour la quantité
+      existing.setQuantity(addProductHomeDTO.getQuantity());
+      stockProductRepository.save(existing);
+    } else {
+      // Crée la relation
+      StockProduct stockProduct = new StockProduct();
+      stockProduct.setProduct(product);
+      stockProduct.setQuantity(addProductHomeDTO.getQuantity());
+      stockProduct.setHome(home);
+      stockProductRepository.save(stockProduct);
+    }
     return homeMapper.convertToHomeDto(home);
   }
 }

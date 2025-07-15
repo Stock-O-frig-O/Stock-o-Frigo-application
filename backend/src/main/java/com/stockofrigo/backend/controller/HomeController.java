@@ -1,14 +1,9 @@
 package com.stockofrigo.backend.controller;
 
-import com.stockofrigo.backend.dto.HomeCreateDTO;
-import com.stockofrigo.backend.dto.HomeDTO;
-import com.stockofrigo.backend.dto.StockProductDTO;
-import com.stockofrigo.backend.dto.UserIdDTO;
+import com.stockofrigo.backend.dto.*;
 import com.stockofrigo.backend.model.Home;
-import com.stockofrigo.backend.model.Product;
 import com.stockofrigo.backend.model.User;
 import com.stockofrigo.backend.service.HomeService;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -50,20 +45,14 @@ public class HomeController {
   }
 
   // Stocked products CRUD
-  @GetMapping("/{id}/products")
-  public ResponseEntity<List<Product>> getStockedProducts(
-      @AuthenticationPrincipal User currentUser, @PathVariable Long id) {
-    List<Product> products = new ArrayList<Product>();
-    return ResponseEntity.ok(products);
-  }
-
   @PutMapping("/{homeId}/products/{stockProductId}")
   public ResponseEntity<HomeDTO> updateProductQuantity(
       @PathVariable Long homeId,
       @PathVariable Long stockProductId,
-      @RequestBody StockProductDTO stockProductDTO) {
+      @RequestBody ChangeQuantityProductHomeDTO changeQuantityProductHomeDTO) {
     HomeDTO homeDTO =
-        homeService.updateProductQuantity(homeId, stockProductId, stockProductDTO.getQuantity());
+        homeService.updateProductQuantity(
+            homeId, stockProductId, changeQuantityProductHomeDTO.getQuantity());
     return ResponseEntity.ok(homeDTO);
   }
 
@@ -72,5 +61,13 @@ public class HomeController {
       @PathVariable Long homeId, @PathVariable Long stockProductId) {
     HomeDTO homeDTO = homeService.deleteProductFromStock(homeId, stockProductId);
     return ResponseEntity.ok(homeDTO);
+  }
+
+  // Ajoute un produit au stock d'un home
+  @PostMapping("/{homeId}/products")
+  public ResponseEntity<HomeDTO> addProductToStock(
+      @PathVariable Long homeId, @RequestBody AddProductHomeDTO addProductHomeDTO) {
+    HomeDTO homeDTO = homeService.addProductToStock(homeId, addProductHomeDTO);
+    return ResponseEntity.status(HttpStatus.CREATED).body(homeDTO);
   }
 }
