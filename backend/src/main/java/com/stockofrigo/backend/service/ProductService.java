@@ -24,11 +24,11 @@ public class ProductService {
   }
 
   public List<ProductDTO> getAllProduct() {
-    List<Product> Products = this.productRepository.findAll();
-    if (Products.isEmpty()) {
+    List<Product> products = this.productRepository.findAll();
+    if (products.isEmpty()) {
       return Collections.emptyList();
     }
-    return Products.stream().map(ProductMapper.INSTANCE::convertToDto).collect(Collectors.toList());
+    return products.stream().map(ProductMapper.INSTANCE::convertToDto).collect(Collectors.toList());
   }
 
   public ProductDTO getProductById(Long id) {
@@ -37,6 +37,16 @@ public class ProductService {
       return null;
     }
     return ProductMapper.INSTANCE.convertToDto(product);
+  }
+
+  public List<ProductDTO> getProductsFiltered(String query){
+    List<Product> products = this.productRepository.findAll();
+    List<Product> filterdedPoducts = products.stream()
+            .filter(product -> product.getName().contains(query)).toList();
+    if (products.isEmpty()){
+      return Collections.emptyList();
+    }
+    return filterdedPoducts.stream().map(ProductMapper.INSTANCE::convertToDto).collect((Collectors.toList()));
   }
 
   public ProductDTO createProduct(Product product) {

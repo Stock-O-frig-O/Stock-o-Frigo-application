@@ -3,14 +3,11 @@
   list-style: none;
   padding: 0;
   width: 100%;
-  position: absolute;
-  bottom: 0;
-  left: 0;
+  z-index: 5;
   justify-content: space-around;
   align-items: center;
   height: 50px;
   background-color: #ede8d8;
-  border-radius: 20px 20px 0 0;
 }
 
 .navbare_button {

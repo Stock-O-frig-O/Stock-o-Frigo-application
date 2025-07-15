@@ -2,7 +2,6 @@ import { Component, inject, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
-import { LogoComponent } from '../../components/logo/logo.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabel } from 'primeng/floatlabel';
 import { ButtonModule } from 'primeng/button';
@@ -15,7 +14,6 @@ import { Toast } from 'primeng/toast';
   selector: 'app-login-page',
   imports: [
     ReactiveFormsModule,
-    LogoComponent,
     InputTextModule,
     FloatLabel,
     ButtonModule,

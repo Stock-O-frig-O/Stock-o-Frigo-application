@@ -1,0 +1,51 @@
+<p-accordion value="0" [multiple]="true" class="accordion">
+  @for (category of categoryList; track $index) {
+    <p-accordion-panel [value]="category">
+      <p-accordion-header class="panel-category">
+        {{ category }}
+      </p-accordion-header>
+      <p-accordion-content>
+        <p-table [value]="products">
+          <ng-template #body let-product>
+            @if (product.category === category) {
+              <tr>
+                <td class="td-small-item">
+                  <p-checkbox [(ngModel)]="product.checked" [binary]="true" />
+                </td>
+                <td class="td-designation">{{ product.name }}</td>
+                <td class="btn-change-stock">
+                  <p-inputnumber
+                    class="test-but"
+                    [(ngModel)]="product.quantity"
+                    [showButtons]="true"
+                    buttonLayout="horizontal"
+                    spinnerMode="horizontal"
+                    inputId="horizontal"
+                    [inputStyle]="{ width: '2rem' }"
+                  >
+                    <ng-template #incrementbuttonicon>
+                      <span class="pi pi-plus"></span>
+                    </ng-template>
+                    <ng-template #decrementbuttonicon>
+                      <span class="pi pi-minus"></span>
+                    </ng-template>
+                  </p-inputnumber>
+                </td>
+                <td class="td-small-item">{{ product.unit }}</td>
+                <td class="td-small-item">
+                  <button (click)="toggleFavorit(product)" class="btn-favorit">
+                    @if (product.isFavorit) {
+                      <i class="pi pi-heart-fill"></i>
+                    } @else {
+                      <i class="pi pi-heart"></i>
+                    }
+                  </button>
+                </td>
+              </tr>
+            }
+          </ng-template>
+        </p-table>
+      </p-accordion-content>
+    </p-accordion-panel>
+  }
+</p-accordion>

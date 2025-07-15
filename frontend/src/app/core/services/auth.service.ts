@@ -54,7 +54,7 @@ export class AuthService {
   }
 
   clearToken(): void {
-    localStorage.removeItem('token');
+      localStorage.removeItem('token');
   }
 
   verifyToken(): void {

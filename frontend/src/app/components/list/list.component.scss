@@ -1,0 +1,61 @@
+.accordion {
+  margin-top: 10px;
+}
+.panel-category {
+  background-color: #b8de70 !important;
+  height: 10px;
+}
+
+.p-accordioncontent-content {
+  padding: 0 !important;
+}
+
+.td-small-item {
+  padding: 0.5rem !important;
+}
+
+.td-designation {
+  padding: 0.5rem !important;
+  width: 10rem !important;
+}
+
+.btn-change-stock {
+  padding: 0.5rem !important;
+}
+
+.tb-btn {
+  padding: 0.5rem !important;
+  width: unset !important;
+}
+
+.btn-change-stock {
+  .test-but {
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: #ede8d8;
+
+    input {
+      padding: 5px 5px;
+      border-left: 1px solid black !important;
+      border-right: 1px solid black !important;
+      text-align: center;
+    }
+  }
+  .p-inputText {
+    padding: 0 !important;
+    background-color: unset !important;
+    border: none !important;
+  }
+  .p-inputnumber-button {
+    width: 25px !important;
+    background-color: unset !important;
+    border: none !important;
+    color: black !important;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+  }
+}
+.btn-favorit {
+  border: none;
+  background-color: unset;
+}
