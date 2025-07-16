@@ -2,8 +2,10 @@ package com.stockofrigo.backend.service;
 
 import com.stockofrigo.backend.dto.AddProductHomeDTO;
 import com.stockofrigo.backend.dto.HomeDTO;
+import com.stockofrigo.backend.dto.StockProductDTO;
 import com.stockofrigo.backend.exception.UserAlreadyInHomeException;
 import com.stockofrigo.backend.mapper.HomeMapper;
+import com.stockofrigo.backend.mapper.StockProductMapper;
 import com.stockofrigo.backend.model.*;
 import com.stockofrigo.backend.repository.*;
 import jakarta.persistence.EntityNotFoundException;
@@ -17,13 +19,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class HomeService {
 
-  private HomeRepository homeRepository;
-  private UserHomeRepository userHomeRepository;
-  private UserRepository userRepository;
-  private ProductRepository productRepository;
-  private StockProductRepository stockProductRepository;
+  private final HomeRepository homeRepository;
+  private final UserHomeRepository userHomeRepository;
+  private final UserRepository userRepository;
+  private final ProductRepository productRepository;
+  private final StockProductRepository stockProductRepository;
 
-  private HomeMapper homeMapper;
+  private final HomeMapper homeMapper;
 
   public HomeService(
       HomeRepository homeRepository,
@@ -166,5 +168,19 @@ public class HomeService {
       stockProductRepository.save(stockProduct);
     }
     return homeMapper.convertToHomeDto(home);
+  }
+
+  public List<StockProductDTO> getHomeProductsList(Long homeId) {
+    Home home =
+        homeRepository
+            .findById(homeId)
+            .orElseThrow(() -> new EntityNotFoundException("Ce home est introuvable."));
+    List<StockProduct> stockProducts = stockProductRepository.findAllByHome(home);
+    if (stockProducts.isEmpty()) {
+      return Collections.emptyList();
+    }
+    return stockProducts.stream()
+        .map(StockProductMapper::convertToStockProductDto)
+        .collect(Collectors.toList());
   }
 }

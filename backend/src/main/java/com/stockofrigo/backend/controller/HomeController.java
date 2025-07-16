@@ -70,4 +70,10 @@ public class HomeController {
     HomeDTO homeDTO = homeService.addProductToStock(homeId, addProductHomeDTO);
     return ResponseEntity.status(HttpStatus.CREATED).body(homeDTO);
   }
+
+  @GetMapping("/{homeId}/products")
+  public ResponseEntity<List<StockProductDTO>> getHomeProductsList(@PathVariable Long homeId) {
+    List<StockProductDTO> producs = homeService.getHomeProductsList(homeId);
+    return ResponseEntity.status(HttpStatus.CREATED).body(producs);
+  }
 }
