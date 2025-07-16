@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,7 +21,10 @@ public class ProductService {
   private UnitRepository unitRepository;
   private CategoryRepository categoryRepository;
 
-  public ProductService(ProductRepository productRepository, UnitRepository unitRepository, CategoryRepository categoryRepository) {
+  public ProductService(
+      ProductRepository productRepository,
+      UnitRepository unitRepository,
+      CategoryRepository categoryRepository) {
     this.productRepository = productRepository;
     this.unitRepository = unitRepository;
     this.categoryRepository = categoryRepository;
@@ -44,14 +46,16 @@ public class ProductService {
     return ProductMapper.INSTANCE.convertToDto(product);
   }
 
-  public List<ProductDTO> getProductsFiltered(String query){
+  public List<ProductDTO> getProductsFiltered(String query) {
     List<Product> products = this.productRepository.findAll();
-    List<Product> filterdedPoducts = products.stream()
-            .filter(product -> product.getName().contains(query)).toList();
-    if (products.isEmpty()){
+    List<Product> filterdedPoducts =
+        products.stream().filter(product -> product.getName().contains(query)).toList();
+    if (filterdedPoducts.isEmpty()) {
       return Collections.emptyList();
     }
-    return filterdedPoducts.stream().map(ProductMapper.INSTANCE::convertToDto).collect((Collectors.toList()));
+    return filterdedPoducts.stream()
+        .map(ProductMapper.INSTANCE::convertToDto)
+        .collect(Collectors.toList());
   }
 
   public ProductDTO updateProduct(Long id, Product product) {
@@ -65,7 +69,7 @@ public class ProductService {
     updatedProduct.setImageUrl(product.getImageUrl());
     updatedProduct.setIngredient(product.isIngredient());
     updatedProduct.setUpdatedAt(LocalDateTime.now());
-    if(product.getCategory() != null){
+    if (product.getCategory() != null) {
       Category category = categoryRepository.findById(product.getCategory().getId()).orElse(null);
       if (category == null) {
         return null;
@@ -92,7 +96,7 @@ public class ProductService {
     savedProduct.setImageUrl(product.getImageUrl());
     savedProduct.setIngredient(product.isIngredient());
 
-    if(product.getCategory() != null){
+    if (product.getCategory() != null) {
       Category category = categoryRepository.findById(product.getCategory().getId()).orElse(null);
       if (category == null) {
         return null;

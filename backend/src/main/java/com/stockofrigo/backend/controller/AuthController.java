@@ -5,7 +5,6 @@ import com.stockofrigo.backend.dto.UserRegistrationDTO;
 import com.stockofrigo.backend.model.User;
 import com.stockofrigo.backend.security.AuthenticationService;
 import com.stockofrigo.backend.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,9 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthController {
 
-  @Autowired
   private final UserService userService;
-  @Autowired
   private final AuthenticationService authenticationService;
 
   public AuthController(UserService userService, AuthenticationService authenticationService) {

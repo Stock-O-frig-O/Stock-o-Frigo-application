@@ -1,10 +1,7 @@
 package com.stockofrigo.backend.model;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
-import java.util.List;
-
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -45,9 +42,8 @@ public class Product {
   private LocalDateTime updatedAt;
 
   @ManyToOne
-  @JoinColumn(name= "category_id")
+  @JoinColumn(name = "category_id")
   private Category category;
-
 
   public Long getId() {
     return id;
@@ -128,5 +124,4 @@ public class Product {
   public void setCategory(Category category) {
     this.category = category;
   }
-
 }
