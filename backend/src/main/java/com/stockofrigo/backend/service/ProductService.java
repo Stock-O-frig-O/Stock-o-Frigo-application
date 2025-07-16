@@ -50,7 +50,7 @@ public class ProductService {
     List<Product> products = this.productRepository.findAll();
     List<Product> filterdedPoducts =
         products.stream().filter(product -> product.getName().contains(query)).toList();
-    if (products.isEmpty()) {
+    if (filterdedPoducts.isEmpty()) {
       return Collections.emptyList();
     }
     return filterdedPoducts.stream()
