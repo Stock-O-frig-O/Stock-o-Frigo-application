@@ -1,15 +1,13 @@
 package com.stockofrigo.backend.mapper;
 
 import com.stockofrigo.backend.dto.HomeDTO;
-import com.stockofrigo.backend.dto.UserSimpleDTO;
 import com.stockofrigo.backend.model.Home;
-import com.stockofrigo.backend.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(
     componentModel = "spring",
-    uses = {StockProductMapper.class})
+    uses = {StockProductMapper.class, UserHomeMapper.class})
 public interface HomeMapper {
   HomeMapper INSTANCE = Mappers.getMapper(HomeMapper.class);
 
@@ -20,18 +18,7 @@ public interface HomeMapper {
     dto.setName(home.getName());
     if (home.getUserHomes() != null) {
       dto.setUsers(
-          home.getUserHomes().stream()
-              .map(
-                  uh -> {
-                    User user = uh.getUser();
-                    UserSimpleDTO userDto = new UserSimpleDTO();
-                    userDto.setId(user.getId());
-                    userDto.setFirstName(user.getFirstName());
-                    userDto.setLastName(user.getLastName());
-                    userDto.setEmail(user.getEmail());
-                    return userDto;
-                  })
-              .toList());
+          home.getUserHomes().stream().map(UserHomeMapper::convertToUserSimpleDto).toList());
     }
     if (home.getStockProducts() != null) {
       dto.setStockedProducts(

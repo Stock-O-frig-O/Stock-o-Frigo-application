@@ -30,6 +30,15 @@ public class HomeController {
     return ResponseEntity.status(HttpStatus.CREATED).body(createdHome);
   }
 
+  @GetMapping("/{homeId}/users")
+  public ResponseEntity<List<UserSimpleDTO>> getUsersHomeList(@PathVariable Long homeId) {
+    List<UserSimpleDTO> users = homeService.getUsersHomeList(homeId);
+    if (users.isEmpty()) {
+      return ResponseEntity.noContent().build();
+    }
+    return ResponseEntity.status(HttpStatus.OK).body(users);
+  }
+
   @PostMapping("/{homeId}/users")
   public ResponseEntity<HomeDTO> addUserInHome(
       @RequestBody UserIdDTO userId, @PathVariable Long homeId) {
@@ -74,6 +83,9 @@ public class HomeController {
   @GetMapping("/{homeId}/products")
   public ResponseEntity<List<StockProductDTO>> getHomeProductsList(@PathVariable Long homeId) {
     List<StockProductDTO> producs = homeService.getHomeProductsList(homeId);
+    if (producs.isEmpty()) {
+      return ResponseEntity.noContent().build();
+    }
     return ResponseEntity.status(HttpStatus.OK).body(producs);
   }
 }

@@ -3,9 +3,11 @@ package com.stockofrigo.backend.service;
 import com.stockofrigo.backend.dto.AddProductHomeDTO;
 import com.stockofrigo.backend.dto.HomeDTO;
 import com.stockofrigo.backend.dto.StockProductDTO;
+import com.stockofrigo.backend.dto.UserSimpleDTO;
 import com.stockofrigo.backend.exception.UserAlreadyInHomeException;
 import com.stockofrigo.backend.mapper.HomeMapper;
 import com.stockofrigo.backend.mapper.StockProductMapper;
+import com.stockofrigo.backend.mapper.UserHomeMapper;
 import com.stockofrigo.backend.model.*;
 import com.stockofrigo.backend.repository.*;
 import jakarta.persistence.EntityNotFoundException;
@@ -88,6 +90,18 @@ public class HomeService {
     userHomeRepository.save(userHome);
 
     return homeMapper.convertToHomeDto(home);
+  }
+
+  public List<UserSimpleDTO> getUsersHomeList(Long homeId) {
+    Home home =
+        homeRepository
+            .findById(homeId)
+            .orElseThrow(() -> new EntityNotFoundException("Ce home est introuvable."));
+    List<UserHome> users = userHomeRepository.findAllByHome(home);
+    if (users.isEmpty()) {
+      return Collections.emptyList();
+    }
+    return users.stream().map(UserHomeMapper::convertToUserSimpleDto).collect(Collectors.toList());
   }
 
   public HomeDTO deleteUserFromHome(Long homeId, Long userId) {
