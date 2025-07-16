@@ -12,19 +12,33 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class HomeService {
 
-  @Autowired HomeRepository homeRepository;
-  @Autowired UserHomeRepository userHomeRepository;
-  @Autowired UserRepository userRepository;
-  @Autowired ProductRepository productRepository;
-  @Autowired StockProductRepository stockProductRepository;
+  private HomeRepository homeRepository;
+  private UserHomeRepository userHomeRepository;
+  private UserRepository userRepository;
+  private ProductRepository productRepository;
+  private StockProductRepository stockProductRepository;
 
-  @Autowired HomeMapper homeMapper;
+  private HomeMapper homeMapper;
+
+  public HomeService(
+      HomeRepository homeRepository,
+      UserHomeRepository userHomeRepository,
+      UserRepository userRepository,
+      ProductRepository productRepository,
+      StockProductRepository stockProductRepository,
+      HomeMapper homeMapper) {
+    this.homeRepository = homeRepository;
+    this.userHomeRepository = userHomeRepository;
+    this.userRepository = userRepository;
+    this.productRepository = productRepository;
+    this.stockProductRepository = stockProductRepository;
+    this.homeMapper = homeMapper;
+  }
 
   public List<HomeDTO> getHomesForUser(User user) {
     List<Home> homes = homeRepository.findHomesByUser(user);
