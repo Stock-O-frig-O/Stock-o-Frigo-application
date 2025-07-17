@@ -28,7 +28,7 @@ export class SettingsHomePageComponent implements OnInit {
   }
 
   save() {
-    this.homeService.createHome(this.choosenName).subscribe({
+    this.homeService.createHome(this.chosenName).subscribe({
       next: () => {
         this.visible = false;
       },
