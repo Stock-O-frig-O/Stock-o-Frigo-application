@@ -5,7 +5,6 @@ import com.stockofrigo.backend.model.Home;
 import com.stockofrigo.backend.model.User;
 import com.stockofrigo.backend.service.HomeService;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,10 +14,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/home")
 public class HomeController {
 
-  @Autowired private HomeService homeService;
+  private final HomeService homeService;
+
+  public HomeController(HomeService homeService) {
+    this.homeService = homeService;
+  }
 
   @GetMapping
-  public ResponseEntity<HomeDTO> getUserHomes(@AuthenticationPrincipal User currentUser) {
+  public ResponseEntity<HomeDTO> getUserHome(@AuthenticationPrincipal User currentUser) {
     HomeDTO home = homeService.getHomeForUser(currentUser);
     return ResponseEntity.ok(home);
   }
@@ -41,16 +44,16 @@ public class HomeController {
 
   @PostMapping("/{homeId}/users")
   public ResponseEntity<HomeDTO> addUserInHome(
-      @RequestBody UserIdDTO userId, @PathVariable Long homeId) {
-    HomeDTO homeDTO = homeService.addUserInHome(homeId, userId.getUserId());
-    return ResponseEntity.status(HttpStatus.OK).body(homeDTO);
+      @RequestBody UserEmailDTO userEmail, @PathVariable Long homeId) {
+    HomeDTO homeDTO = homeService.addUserInHome(homeId, userEmail.getUserEmail());
+    return ResponseEntity.status(HttpStatus.CREATED).body(homeDTO);
   }
 
   @DeleteMapping("/{homeId}/users/{userId}")
   public ResponseEntity<HomeDTO> deleteUserFromHome(
       @PathVariable Long homeId, @PathVariable Long userId) {
     HomeDTO homeDTO = homeService.deleteUserFromHome(homeId, userId);
-    return ResponseEntity.status(HttpStatus.OK).body(homeDTO);
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(homeDTO);
   }
 
   // Stocked products CRUD
@@ -72,7 +75,6 @@ public class HomeController {
     return ResponseEntity.ok(homeDTO);
   }
 
-  // Ajoute un produit au stock d'un home
   @PostMapping("/{homeId}/products")
   public ResponseEntity<HomeDTO> addProductToStock(
       @PathVariable Long homeId, @RequestBody AddProductHomeDTO addProductHomeDTO) {
