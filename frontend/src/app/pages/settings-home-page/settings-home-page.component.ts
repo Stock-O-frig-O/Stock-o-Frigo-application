@@ -15,7 +15,7 @@ export class SettingsHomePageComponent implements OnInit {
   private homeService = inject(HomeService);
   public homeData!: string[];
   public visible = false;
-  public choosenName!: string;
+  public chosenName!: string;
 
   ngOnInit() {
     this.homeService.getHome().subscribe((data) => {
