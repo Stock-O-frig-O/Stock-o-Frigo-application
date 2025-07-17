@@ -48,12 +48,14 @@ public class ProductService {
 
   public List<ProductDTO> getProductsFiltered(String query) {
     List<Product> products = this.productRepository.findAll();
-    List<Product> filterdedPoducts =
-        products.stream().filter(product -> product.getName().contains(query)).toList();
-    if (filterdedPoducts.isEmpty()) {
+    List<Product> filteredProducts = products.stream()
+        .filter(product -> product.getName().toLowerCase().contains(query.toLowerCase().trim())).toList();
+
+    if (filteredProducts.isEmpty()) {
       return Collections.emptyList();
     }
-    return filterdedPoducts.stream()
+
+    return filteredProducts.stream()
         .map(ProductMapper.INSTANCE::convertToDto)
         .collect(Collectors.toList());
   }
