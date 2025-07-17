@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
@@ -48,17 +49,20 @@ public class HomeService {
     Home home =
         homeRepository
             .findFirstByUser(user)
-            .orElseThrow(() -> new EntityNotFoundException("Ce home est introuvable."));
+            .orElseThrow(() -> new EntityNotFoundException("Vous n'êtes dans aucun foyer."));
     return homeMapper.convertToHomeDto(home);
   }
 
   public Home createHomeForUser(String homeName, User user) {
-    // 1. Créer le Home
+    Optional<Home> checkHomeExist = homeRepository.findFirstByUser(user);
+    if (checkHomeExist.isPresent()) {
+      throw new UserAlreadyInHomeException("Vous êtes déjà dans un foyer.");
+    }
+
     Home home = new Home();
     home.setName(homeName);
     home = homeRepository.save(home);
 
-    // 2. Créer le lien UserHome
     UserHome userHome = new UserHome();
     userHome.setHome(home);
     userHome.setUser(user);
@@ -68,19 +72,19 @@ public class HomeService {
     return home;
   }
 
-  public HomeDTO addUserInHome(Long homeId, Long userId) {
+  public HomeDTO addUserInHome(Long homeId, String userEmail) {
     Home home =
         homeRepository
             .findById(homeId)
             .orElseThrow(() -> new EntityNotFoundException("Ce home est introuvable."));
     User user =
         userRepository
-            .findById(userId)
+            .findByEmail(userEmail)
             .orElseThrow(() -> new EntityNotFoundException("Cet utilisateur est introuvable."));
 
-    UserHome checkUserHomeExist = userHomeRepository.findByUserAndHome(user, home);
-    if (checkUserHomeExist != null) {
-      throw new UserAlreadyInHomeException("Cet utilisateur est déjà associé à ce home.");
+    Optional<Home> checkHomeExist = homeRepository.findFirstByUser(user);
+    if (checkHomeExist.isPresent()) {
+      throw new UserAlreadyInHomeException("Cet utilisateur est déjà dans un foyer.");
     }
 
     UserHome userHome = new UserHome();
