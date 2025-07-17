@@ -17,7 +17,6 @@ export class HomeService {
   }
 
   createHome(homeName: string): Observable<string> {
-
     return this.http.post<string>(`${this.apiUrl}/home`, {
       name: homeName,
     });
