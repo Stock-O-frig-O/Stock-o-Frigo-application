@@ -11,6 +11,7 @@ import { ScanPageComponent } from './pages/scan-page/scan-page.component';
 import { StockPageComponent } from './pages/stock-page/stock-page.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { authGuard } from './core/guard/auth.guard';
+import { SettingsHomePageComponent } from './pages/settings-home-page/settings-home-page.component';
 
 export const routes: Routes = [
   { path: '', component: HomePageComponent, canActivate: [authGuard] },
@@ -42,6 +43,11 @@ export const routes: Routes = [
   {
     path: 'scan',
     component: ScanPageComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'settings-home',
+    component: SettingsHomePageComponent,
     canActivate: [authGuard],
   },
   {

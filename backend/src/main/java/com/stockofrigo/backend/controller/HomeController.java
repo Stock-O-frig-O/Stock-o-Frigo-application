@@ -20,6 +20,11 @@ public class HomeController {
   @GetMapping
   public ResponseEntity<List<HomeDTO>> getUserHomes(@AuthenticationPrincipal User currentUser) {
     List<HomeDTO> homes = homeService.getHomesForUser(currentUser);
+
+    if (homes.isEmpty()) {
+      return ResponseEntity.noContent().build();
+    }
+
     return ResponseEntity.ok(homes);
   }
 
