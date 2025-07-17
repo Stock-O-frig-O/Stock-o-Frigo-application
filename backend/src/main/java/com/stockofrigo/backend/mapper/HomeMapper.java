@@ -16,17 +16,6 @@ public interface HomeMapper {
     HomeDTO dto = new HomeDTO();
     dto.setId(home.getId());
     dto.setName(home.getName());
-    if (home.getUserHomes() != null) {
-      dto.setUsers(
-          home.getUserHomes().stream().map(UserHomeMapper::convertToUserSimpleDto).toList());
-    }
-    if (home.getStockProducts() != null) {
-      dto.setStockedProducts(
-          home.getStockProducts().stream()
-              .map(StockProductMapper::convertToStockProductDto)
-              .toList());
-    }
-
     return dto;
   }
 

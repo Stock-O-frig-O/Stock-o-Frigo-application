@@ -1,20 +1,8 @@
 package com.stockofrigo.backend.dto;
 
-import java.util.List;
-
 public class HomeDTO {
   private Long id;
   private String name;
-  private List<UserSimpleDTO> users;
-  private List<StockProductDTO> stockedProducts;
-
-  public List<StockProductDTO> getStockedProducts() {
-    return stockedProducts;
-  }
-
-  public void setStockedProducts(List<StockProductDTO> stockedProducts) {
-    this.stockedProducts = stockedProducts;
-  }
 
   public Long getId() {
     return id;
@@ -30,13 +18,5 @@ public class HomeDTO {
 
   public void setName(String name) {
     this.name = name;
-  }
-
-  public List<UserSimpleDTO> getUsers() {
-    return users;
-  }
-
-  public void setUsers(List<UserSimpleDTO> users) {
-    this.users = users;
   }
 }

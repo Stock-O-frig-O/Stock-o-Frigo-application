@@ -48,8 +48,10 @@ public class ProductService {
 
   public List<ProductDTO> getProductsFiltered(String query) {
     List<Product> products = this.productRepository.findAll();
-    List<Product> filteredProducts = products.stream()
-        .filter(product -> product.getName().toLowerCase().contains(query.toLowerCase().trim())).toList();
+    List<Product> filteredProducts =
+        products.stream()
+            .filter(product -> product.getName().toLowerCase().contains(query.toLowerCase().trim()))
+            .toList();
 
     if (filteredProducts.isEmpty()) {
       return Collections.emptyList();
