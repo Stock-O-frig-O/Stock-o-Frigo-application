@@ -18,9 +18,9 @@ public class HomeController {
   @Autowired private HomeService homeService;
 
   @GetMapping
-  public ResponseEntity<List<HomeDTO>> getUserHomes(@AuthenticationPrincipal User currentUser) {
-    List<HomeDTO> homes = homeService.getHomesForUser(currentUser);
-    return ResponseEntity.ok(homes);
+  public ResponseEntity<HomeDTO> getUserHomes(@AuthenticationPrincipal User currentUser) {
+    HomeDTO home = homeService.getHomeForUser(currentUser);
+    return ResponseEntity.ok(home);
   }
 
   @PostMapping

@@ -44,12 +44,12 @@ public class HomeService {
     this.homeMapper = homeMapper;
   }
 
-  public List<HomeDTO> getHomesForUser(User user) {
-    List<Home> homes = homeRepository.findHomesByUser(user);
-    if (homes.isEmpty()) {
-      return Collections.emptyList();
-    }
-    return homes.stream().map(HomeMapper.INSTANCE::convertToHomeDto).collect(Collectors.toList());
+  public HomeDTO getHomeForUser(User user) {
+    Home home =
+        homeRepository
+            .findFirstByUser(user)
+            .orElseThrow(() -> new EntityNotFoundException("Ce home est introuvable."));
+    return homeMapper.convertToHomeDto(home);
   }
 
   public Home createHomeForUser(String homeName, User user) {
