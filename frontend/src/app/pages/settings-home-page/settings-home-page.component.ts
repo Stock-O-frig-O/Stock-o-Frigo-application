@@ -24,7 +24,7 @@ export class SettingsHomePageComponent implements OnInit, OnDestroy {
   // Service injection
   private homeService = inject(HomeService);
 
-  // use to unsubscibe
+  // use to unsubscribe
   destroy$ = new Subject<void>();
 
   homeData!: Home;
