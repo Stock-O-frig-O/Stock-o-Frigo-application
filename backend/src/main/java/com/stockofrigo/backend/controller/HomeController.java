@@ -76,9 +76,6 @@ public class HomeController {
   @PostMapping("/{homeId}/products")
   public ResponseEntity<HomeDTO> addProductToStock(
       @PathVariable Long homeId, @RequestBody AddProductHomeDTO addProductHomeDTO) {
-    System.out.println("tu es au bon endroit !");
-    System.out.println("homeID : " + homeId);
-    System.out.println("product : " + addProductHomeDTO);
     HomeDTO homeDTO = homeService.addProductToStock(homeId, addProductHomeDTO);
     return ResponseEntity.status(HttpStatus.CREATED).body(homeDTO);
   }

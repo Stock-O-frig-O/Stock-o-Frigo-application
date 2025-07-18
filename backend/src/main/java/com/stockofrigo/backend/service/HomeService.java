@@ -154,8 +154,6 @@ public class HomeService {
   }
 
   public HomeDTO addProductToStock(Long homeId, AddProductHomeDTO addProductHomeDTO) {
-    System.out.println("homeID : " + homeId);
-    System.out.println("product : " + addProductHomeDTO);
     Home home =
         homeRepository
             .findById(homeId)
