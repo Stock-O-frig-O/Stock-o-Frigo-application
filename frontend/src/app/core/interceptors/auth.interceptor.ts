@@ -9,7 +9,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   // Service injections
   const authService = inject(AuthService);
 
-  // Verify if the tocken is still active
+  // Verify if the token is still active
   authService.verifyToken();
 
   // Get the tocken
