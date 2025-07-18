@@ -52,8 +52,12 @@ export class LogoComponent implements OnDestroy {
 
   // add product to stock
   addProductToStock(productId: number) {
+    if (!this.home) {
+      console.error('Home ID is not set. Cannot add product to stock.');
+      return;
+    }
     this.homeService
-      .addHomeProduct(this.home!, productId, 1)
+      .addHomeProduct(this.home, productId, 1)
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         this.homeService.notifyProductAdded();
