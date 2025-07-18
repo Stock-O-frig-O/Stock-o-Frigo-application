@@ -42,7 +42,6 @@ export class StockPageComponent implements OnInit, OnDestroy {
       .getHomeProduct(this.homeId!)
       .pipe(takeUntil(this.destroy$))
       .subscribe((data) => {
-        console.log('product : ', data);
         this.products = data;
       });
   }
