@@ -1,4 +1,4 @@
-@if (homeData === null) {
+@if (!homeData) {
   <div class="setting-content">
     <button (click)="showDialog()" class="create-home">
       <i class="pi pi-plus"></i> Créer un groupe

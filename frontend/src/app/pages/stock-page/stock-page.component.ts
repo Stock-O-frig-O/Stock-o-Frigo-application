@@ -39,7 +39,6 @@ export class StockPageComponent implements OnInit, OnDestroy {
 
   loadProduct() {
     if (this.homeId === null) {
-      console.warn('homeId is null. Cannot load products.');
       return;
     }
     this.homeService

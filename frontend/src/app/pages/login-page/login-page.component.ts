@@ -1,5 +1,11 @@
 // Angular imports
-import { Component, inject, OnDestroy, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+  ViewEncapsulation,
+} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 
@@ -16,6 +22,7 @@ import { Toast } from 'primeng/toast';
 
 // local imports
 import { AuthService } from '../../core/services/auth.service';
+import { HomeService } from '../../core/services/home.service';
 @Component({
   selector: 'app-login-page',
   imports: [
@@ -32,12 +39,13 @@ import { AuthService } from '../../core/services/auth.service';
   encapsulation: ViewEncapsulation.None,
   providers: [MessageService],
 })
-export class LoginPageComponent implements OnDestroy {
+export class LoginPageComponent implements OnInit, OnDestroy {
   // Service injections
   private formBuilder = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
   private messageService = inject(MessageService);
+  private readonly homeService = inject(HomeService);
 
   // Use to unsubscribe
   destroy$ = new Subject<void>();
@@ -46,6 +54,11 @@ export class LoginPageComponent implements OnDestroy {
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required]],
   });
+
+  ngOnInit(): void {
+    this.authService.getToken();
+    this.homeService.removeHomeId();
+  }
 
   public onSubmit(): void {
     this.authService

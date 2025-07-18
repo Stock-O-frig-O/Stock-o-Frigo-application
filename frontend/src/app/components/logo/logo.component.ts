@@ -2,7 +2,13 @@
 import { Subject, takeUntil } from 'rxjs';
 
 // Angular imports
-import { Component, inject, OnDestroy, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+  ViewEncapsulation,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
@@ -34,7 +40,7 @@ import Product from '../../core/model/Product.model';
   templateUrl: './logo.component.html',
   styleUrl: './logo.component.scss',
 })
-export class LogoComponent implements OnDestroy {
+export class LogoComponent implements OnInit, OnDestroy {
   // service injection
   private readonly apiProduct = inject(ProductService);
   private readonly homeService = inject(HomeService);
@@ -43,12 +49,16 @@ export class LogoComponent implements OnDestroy {
   destroy$ = new Subject<void>();
 
   // get home id
-  home = this.homeService.getHomeId();
+  home!: string | null;
 
   // properties for product management
   product: Product[] = [];
   selectedProduct!: Product;
   filteredProducts: Product[] = [];
+
+  ngOnInit(): void {
+    this.home = this.homeService.getHomeId();
+  }
 
   // add product to stock
   addProductToStock(productId: number) {
@@ -67,6 +77,7 @@ export class LogoComponent implements OnDestroy {
   // fetch product data on autocomplete component
   findProduct(event: { query: string }) {
     const query = event.query.toLowerCase();
+    this.home = this.homeService.getHomeId();
     this.apiProduct
       .getFilteredProducts(query)
       .pipe(takeUntil(this.destroy$))
