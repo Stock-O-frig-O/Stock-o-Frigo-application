@@ -13,6 +13,7 @@ import { Home } from '../../core/model/Home.model';
 
 // RXJS import
 import { Subject, takeUntil } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-settings-home-page',
@@ -22,7 +23,8 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class SettingsHomePageComponent implements OnInit, OnDestroy {
   // Service injection
-  private homeService = inject(HomeService);
+  private readonly homeService = inject(HomeService);
+  private readonly router = inject(Router);
 
   // use to unsubscribe
   destroy$ = new Subject<void>();
@@ -49,8 +51,10 @@ export class SettingsHomePageComponent implements OnInit, OnDestroy {
       .createHome(this.chosenName)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: () => {
+        next: (data: Home) => {
           this.visible = false;
+          this.router.navigate(['stock']);
+          this.homeService.saveHomeId(data.id);
         },
         error: (error) => {
           console.error('Erreur lors de la création du home:', error);
