@@ -15,8 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/home")
 public class HomeController {
 
-  @Autowired
-  private HomeService homeService;
+  @Autowired private HomeService homeService;
 
   @GetMapping
   public ResponseEntity<HomeDTO> getUserHomes(@AuthenticationPrincipal User currentUser) {
@@ -60,8 +59,9 @@ public class HomeController {
       @PathVariable Long homeId,
       @PathVariable Long stockProductId,
       @RequestBody ChangeQuantityProductHomeDTO changeQuantityProductHomeDTO) {
-    HomeDTO homeDTO = homeService.updateProductQuantity(
-        homeId, stockProductId, changeQuantityProductHomeDTO.getQuantity());
+    HomeDTO homeDTO =
+        homeService.updateProductQuantity(
+            homeId, stockProductId, changeQuantityProductHomeDTO.getQuantity());
     return ResponseEntity.ok(homeDTO);
   }
 
