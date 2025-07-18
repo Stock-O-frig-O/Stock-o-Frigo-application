@@ -57,7 +57,7 @@ export class HomeService {
   }
 
   removeHomeId(): void {
-    localStorage.removeItem('homeId');
+    localStorage.removeItem('homeID');
   }
 
   // notification product added
