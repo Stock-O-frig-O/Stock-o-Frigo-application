@@ -12,7 +12,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   // Verify if the token is still active
   authService.verifyToken();
 
-  // Get the tocken
+  // Get the token
   const token = authService.getToken();
 
   if (token) {
