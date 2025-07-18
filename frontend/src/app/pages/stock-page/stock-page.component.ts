@@ -38,8 +38,12 @@ export class StockPageComponent implements OnInit, OnDestroy {
   }
 
   loadProduct() {
+    if (this.homeId === null) {
+      console.warn('homeId is null. Cannot load products.');
+      return;
+    }
     this.homeService
-      .getHomeProduct(this.homeId!)
+      .getHomeProduct(this.homeId)
       .pipe(takeUntil(this.destroy$))
       .subscribe((data) => {
         this.products = data;
