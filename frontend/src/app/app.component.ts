@@ -16,6 +16,6 @@ import { AuthService } from './core/services/auth.service';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  // sercice injection
+  // service injection
   public authService: AuthService = inject(AuthService);
 }
