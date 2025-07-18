@@ -1,5 +1,5 @@
 // rxjs imports
-import { Subscription } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 
 // Angular imports
 import { Component, inject, OnDestroy, ViewEncapsulation } from '@angular/core';
@@ -14,7 +14,11 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 
 // Local imports
 import { ProductService } from '../../core/services/product.service';
+import { HomeService } from '../../core/services/home.service';
+
+// Model imports
 import Product from '../../core/model/Product.model';
+
 @Component({
   selector: 'app-logo',
   imports: [
@@ -33,36 +37,54 @@ import Product from '../../core/model/Product.model';
 export class LogoComponent implements OnDestroy {
   // service injection
   private readonly apiProduct = inject(ProductService);
+  private readonly homeService = inject(HomeService);
 
-  // subscription to manage product data
-  productSubscription = new Subscription();
+  // Use to unsubscribe
+  destroy$ = new Subject<void>();
+
+  // get home id
+  home = this.homeService.getHomeId();
 
   // properties for product management
   product: Product[] = [];
   selectedProduct!: Product;
   filteredProducts: Product[] = [];
 
+  // add product to stock
+  addProductToStock(productId: number) {
+    if (!this.home) {
+      console.error('Home ID is not set. Cannot add product to stock.');
+      return;
+    }
+    this.homeService
+      .addHomeProduct(this.home, productId, 1)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.homeService.notifyProductAdded();
+      });
+  }
+
   // fetch product data on autocomplete component
   findProduct(event: { query: string }) {
     const query = event.query.toLowerCase();
-    this.apiProduct.getFilteredProducts(query).subscribe({
-      next: (products) => {
-        this.filteredProducts = products;
-      },
-    });
+    this.apiProduct
+      .getFilteredProducts(query)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (products) => {
+          this.filteredProducts = products;
+        },
+      });
   }
 
   // handle product selection
   onProductSelected(event: { value: Product }) {
-    const selectedProduct = event.value;
-    console.log("Produit sélectionné par l'utilisateur :", selectedProduct);
-    // Je dois maintenant dire si le produit par dans la liste de course ou dans le stock
-    // en fonction de la ou se trouve l'utilisateur
-    // Je vais devoir faire un appel à l'API pour ajouter le produit au bon endroit
+    this.addProductToStock(event.value.id);
   }
 
   ngOnDestroy() {
     // Unsubscribe from the product subscription to prevent memory leaks
-    this.productSubscription.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

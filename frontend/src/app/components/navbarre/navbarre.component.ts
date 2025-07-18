@@ -1,7 +1,12 @@
-import { Subscription } from 'rxjs';
+// rxjs imports
+import { Subject, takeUntil } from 'rxjs';
+
+// Angular imports
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+
+// Local imports
 import { AuthService } from '../../core/services/auth.service';
 
 @Component({
@@ -11,31 +16,32 @@ import { AuthService } from '../../core/services/auth.service';
   styleUrl: './navbarre.component.scss',
 })
 export class NavbarreComponent implements OnInit, OnDestroy {
-  private subscription: Subscription = new Subscription();
+  // Service injection
   private route: Router = inject(Router);
   public authService: AuthService = inject(AuthService);
 
+  // Use to unsubscribe
+  destroy$ = new Subject<void>();
+
+  // use to follow the active route
   isRouteActive = '/';
 
   ngOnInit() {
-    this.route.events.subscribe(() => {
+    this.route.events.pipe(takeUntil(this.destroy$)).subscribe(() => {
       // Update the isRouteActive property whenever the route changes
       // This will allow us to highlight the active route in the template
       this.isRouteActive = this.route.url;
     });
   }
 
+  // Navigate to the specified route
   public goToPage(route: string) {
-    // Navigate to the specified route
-    // This will update the URL and the view accordingly
     this.route.navigate([`${route}`]);
   }
 
   ngOnDestroy() {
     // Clean up the subscription to avoid memory leaks
-    // This is important to ensure that we do not keep listening to route changes
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

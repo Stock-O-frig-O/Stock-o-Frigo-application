@@ -1,3 +1,4 @@
+// Angular imports
 import { Component, inject, OnDestroy, ViewEncapsulation } from '@angular/core';
 import {
   AbstractControl,
@@ -7,18 +8,22 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 
+// Prime ng imports
 import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabel } from 'primeng/floatlabel';
 import { Checkbox } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
 import { PasswordModule } from 'primeng/password';
-import { AuthService } from '../../core/services/auth.service';
-import { Router, RouterModule } from '@angular/router';
-import { Subscription } from 'rxjs';
-
 import { MessageService } from 'primeng/api';
 import { Toast } from 'primeng/toast';
+
+// Local imports
+import { AuthService } from '../../core/services/auth.service';
+
+// RXJS imports
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-register-page',
@@ -38,11 +43,14 @@ import { Toast } from 'primeng/toast';
   providers: [MessageService],
 })
 export class RegisterPageComponent implements OnDestroy {
+  // Service injection
   private formBuilder = inject(FormBuilder);
   private authService = inject(AuthService);
-  private subscription: Subscription = new Subscription();
   private messageService = inject(MessageService);
   private router = inject(Router);
+
+  // use to unsubscribe
+  private subscription: Subscription = new Subscription();
 
   registerForm = this.formBuilder.group({
     firstname: ['', [Validators.required]],

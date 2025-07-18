@@ -1,18 +1,29 @@
-import { HttpClient } from '@angular/common/http';
+// Angular imports
 import { inject, Injectable } from '@angular/core';
-import { Observable, tap } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+
+// RXJS imports
+import { Observable, tap } from 'rxjs';
+
+// Local imports
+import { environment } from '../../../environments/environment';
 import { jwtDecode } from 'jwt-decode';
+import { HomeService } from './home.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = environment.apiUrl;
+  // Service injections
   private http = inject(HttpClient);
   private router = inject(Router);
+  private homeService = inject(HomeService);
 
+  // Api URL
+  private apiUrl = environment.apiUrl;
+
+  // Use to register the user
   register(
     firstname: string,
     lastname: string,
@@ -26,6 +37,7 @@ export class AuthService {
     );
   }
 
+  // use to log in the user
   login(email: string, password: string): Observable<string> {
     return this.http
       .post(
@@ -38,6 +50,12 @@ export class AuthService {
           this.saveToken(token);
         }),
       );
+  }
+
+  saveHomeId() {
+    this.homeService.getHome().subscribe((data) => {
+      this.homeService.saveHomeId(data.id);
+    });
   }
 
   logout() {
