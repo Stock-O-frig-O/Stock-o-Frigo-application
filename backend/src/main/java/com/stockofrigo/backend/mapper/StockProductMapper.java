@@ -20,6 +20,7 @@ public interface StockProductMapper {
       prodDto.setName(sp.getProduct().getName());
       prodDto.setBrand(sp.getProduct().getBrand());
       prodDto.setUnit(sp.getProduct().getUnit().getUnit());
+      prodDto.setCategory(sp.getProduct().getCategory().getName());
     }
     return prodDto;
   }

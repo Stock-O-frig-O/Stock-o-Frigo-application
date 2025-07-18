@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/home")
 public class HomeController {
 
-  @Autowired private HomeService homeService;
+  @Autowired
+  private HomeService homeService;
 
   @GetMapping
   public ResponseEntity<HomeDTO> getUserHomes(@AuthenticationPrincipal User currentUser) {
@@ -59,9 +60,8 @@ public class HomeController {
       @PathVariable Long homeId,
       @PathVariable Long stockProductId,
       @RequestBody ChangeQuantityProductHomeDTO changeQuantityProductHomeDTO) {
-    HomeDTO homeDTO =
-        homeService.updateProductQuantity(
-            homeId, stockProductId, changeQuantityProductHomeDTO.getQuantity());
+    HomeDTO homeDTO = homeService.updateProductQuantity(
+        homeId, stockProductId, changeQuantityProductHomeDTO.getQuantity());
     return ResponseEntity.ok(homeDTO);
   }
 
@@ -76,6 +76,9 @@ public class HomeController {
   @PostMapping("/{homeId}/products")
   public ResponseEntity<HomeDTO> addProductToStock(
       @PathVariable Long homeId, @RequestBody AddProductHomeDTO addProductHomeDTO) {
+    System.out.println("tu es au bon endroit !");
+    System.out.println("homeID : " + homeId);
+    System.out.println("product : " + addProductHomeDTO);
     HomeDTO homeDTO = homeService.addProductToStock(homeId, addProductHomeDTO);
     return ResponseEntity.status(HttpStatus.CREATED).body(homeDTO);
   }

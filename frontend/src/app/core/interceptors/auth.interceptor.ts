@@ -1,12 +1,18 @@
+// Angular imports
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
+
+// Service imports
 import { AuthService } from '../services/auth.service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  // Service injections
   const authService = inject(AuthService);
 
+  // Verify if the tocken is still active
   authService.verifyToken();
 
+  // Get the tocken
   const token = authService.getToken();
 
   if (token) {

@@ -45,10 +45,9 @@ public class HomeService {
   }
 
   public HomeDTO getHomeForUser(User user) {
-    Home home =
-        homeRepository
-            .findFirstByUser(user)
-            .orElseThrow(() -> new EntityNotFoundException("Ce home est introuvable."));
+    Home home = homeRepository
+        .findFirstByUser(user)
+        .orElseThrow(() -> new EntityNotFoundException("Ce home est introuvable."));
     return homeMapper.convertToHomeDto(home);
   }
 
@@ -69,14 +68,12 @@ public class HomeService {
   }
 
   public HomeDTO addUserInHome(Long homeId, Long userId) {
-    Home home =
-        homeRepository
-            .findById(homeId)
-            .orElseThrow(() -> new EntityNotFoundException("Ce home est introuvable."));
-    User user =
-        userRepository
-            .findById(userId)
-            .orElseThrow(() -> new EntityNotFoundException("Cet utilisateur est introuvable."));
+    Home home = homeRepository
+        .findById(homeId)
+        .orElseThrow(() -> new EntityNotFoundException("Ce home est introuvable."));
+    User user = userRepository
+        .findById(userId)
+        .orElseThrow(() -> new EntityNotFoundException("Cet utilisateur est introuvable."));
 
     UserHome checkUserHomeExist = userHomeRepository.findByUserAndHome(user, home);
     if (checkUserHomeExist != null) {
@@ -93,10 +90,9 @@ public class HomeService {
   }
 
   public List<UserSimpleDTO> getUsersHomeList(Long homeId) {
-    Home home =
-        homeRepository
-            .findById(homeId)
-            .orElseThrow(() -> new EntityNotFoundException("Ce home est introuvable."));
+    Home home = homeRepository
+        .findById(homeId)
+        .orElseThrow(() -> new EntityNotFoundException("Ce home est introuvable."));
     List<UserHome> users = userHomeRepository.findAllByHome(home);
     if (users.isEmpty()) {
       return Collections.emptyList();
@@ -105,14 +101,12 @@ public class HomeService {
   }
 
   public HomeDTO deleteUserFromHome(Long homeId, Long userId) {
-    Home home =
-        homeRepository
-            .findById(homeId)
-            .orElseThrow(() -> new EntityNotFoundException("Ce home est introuvable."));
-    User user =
-        userRepository
-            .findById(userId)
-            .orElseThrow(() -> new EntityNotFoundException("Cet utilisateur est introuvable."));
+    Home home = homeRepository
+        .findById(homeId)
+        .orElseThrow(() -> new EntityNotFoundException("Ce home est introuvable."));
+    User user = userRepository
+        .findById(userId)
+        .orElseThrow(() -> new EntityNotFoundException("Cet utilisateur est introuvable."));
 
     UserHome userHome = userHomeRepository.findByUserAndHome(user, home);
     if (userHome != null) {
@@ -123,14 +117,12 @@ public class HomeService {
   }
 
   public HomeDTO updateProductQuantity(Long homeId, Long stockProductId, BigDecimal quantity) {
-    Home home =
-        homeRepository
-            .findById(homeId)
-            .orElseThrow(() -> new EntityNotFoundException("Ce home est introuvable."));
-    StockProduct stockProduct =
-        stockProductRepository
-            .findById(stockProductId)
-            .orElseThrow(() -> new EntityNotFoundException("Ce produit stocké est introuvable."));
+    Home home = homeRepository
+        .findById(homeId)
+        .orElseThrow(() -> new EntityNotFoundException("Ce home est introuvable."));
+    StockProduct stockProduct = stockProductRepository
+        .findById(stockProductId)
+        .orElseThrow(() -> new EntityNotFoundException("Ce produit stocké est introuvable."));
 
     stockProduct.setQuantity(quantity);
     stockProductRepository.save(stockProduct);
@@ -139,36 +131,33 @@ public class HomeService {
   }
 
   public HomeDTO deleteProductFromStock(Long homeId, Long stockProductId) {
-    Home home =
-        homeRepository
-            .findById(homeId)
-            .orElseThrow(() -> new EntityNotFoundException("Ce home est introuvable."));
+    Home home = homeRepository
+        .findById(homeId)
+        .orElseThrow(() -> new EntityNotFoundException("Ce home est introuvable."));
 
-    StockProduct stockProduct =
-        stockProductRepository
-            .findById(stockProductId)
-            .orElseThrow(() -> new EntityNotFoundException("Ce produit stocké est introuvable."));
+    StockProduct stockProduct = stockProductRepository
+        .findById(stockProductId)
+        .orElseThrow(() -> new EntityNotFoundException("Ce produit stocké est introuvable."));
 
     stockProductRepository.delete(stockProduct);
     return homeMapper.convertToHomeDto(home);
   }
 
   public HomeDTO addProductToStock(Long homeId, AddProductHomeDTO addProductHomeDTO) {
-    Home home =
-        homeRepository
-            .findById(homeId)
-            .orElseThrow(() -> new EntityNotFoundException("Ce home est introuvable."));
-    Product product =
-        productRepository
-            .findById(addProductHomeDTO.getProductId())
-            .orElseThrow(() -> new EntityNotFoundException("Ce produit est introuvable."));
+    System.out.println("homeID : " + homeId);
+    System.out.println("product : " + addProductHomeDTO);
+    Home home = homeRepository
+        .findById(homeId)
+        .orElseThrow(() -> new EntityNotFoundException("Ce home est introuvable."));
+    Product product = productRepository
+        .findById(addProductHomeDTO.getProductId())
+        .orElseThrow(() -> new EntityNotFoundException("Ce produit est introuvable."));
 
     // Vérifier si la relation existe déjà
-    StockProduct existing =
-        home.getStockProducts().stream()
-            .filter(sp -> sp.getProduct().getId().equals(product.getId()))
-            .findFirst()
-            .orElse(null);
+    StockProduct existing = home.getStockProducts().stream()
+        .filter(sp -> sp.getProduct().getId().equals(product.getId()))
+        .findFirst()
+        .orElse(null);
     if (existing != null) {
       // Met à jour la quantité
       existing.setQuantity(addProductHomeDTO.getQuantity());
@@ -185,10 +174,9 @@ public class HomeService {
   }
 
   public List<StockProductDTO> getHomeProductsList(Long homeId) {
-    Home home =
-        homeRepository
-            .findById(homeId)
-            .orElseThrow(() -> new EntityNotFoundException("Ce home est introuvable."));
+    Home home = homeRepository
+        .findById(homeId)
+        .orElseThrow(() -> new EntityNotFoundException("Ce home est introuvable."));
     List<StockProduct> stockProducts = stockProductRepository.findAllByHome(home);
     if (stockProducts.isEmpty()) {
       return Collections.emptyList();

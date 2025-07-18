@@ -1,11 +1,10 @@
 export default interface Product {
-  id: number;
+  id: 0;
+  quantity: 0;
+  productId: 0;
   name: string;
   brand: string;
-  barcode: number;
-  img_url: string;
   unit: string;
-  isIngredient: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  category: string;
+  isFavorit: false;
 }

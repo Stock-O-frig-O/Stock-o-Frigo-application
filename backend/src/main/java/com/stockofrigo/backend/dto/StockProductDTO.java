@@ -9,6 +9,7 @@ public class StockProductDTO {
   private String name;
   private String brand;
   private String unit;
+  private String category;
 
   public Long getId() {
     return id;
@@ -56,5 +57,13 @@ public class StockProductDTO {
 
   public void setUnit(String unit) {
     this.unit = unit;
+  }
+
+  public String getCategory() {
+    return category;
+  }
+
+  public void setCategory(String category) {
+    this.category = category;
   }
 }

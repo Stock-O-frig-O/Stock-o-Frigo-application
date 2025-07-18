@@ -1,1 +1,5 @@
-<app-list />
+@if (products) {
+  <app-list [products]="products" />
+} @else {
+  <p>Vous n'avez pas de produit en stock.</p>
+}
