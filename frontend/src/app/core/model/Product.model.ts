@@ -6,5 +6,5 @@ export default interface Product {
   brand: string;
   unit: string;
   category: string;
-  isFavorit: false;
+  isFavorit: boolean;
 }
