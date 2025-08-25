@@ -18,7 +18,7 @@ import { AuthService } from '../../core/services/auth.service';
 export class NavbarreComponent implements OnInit, OnDestroy {
   // Service injection
   private route: Router = inject(Router);
-  public authService: AuthService = inject(AuthService);
+  private authService: AuthService = inject(AuthService);
 
   // Use to unsubscribe
   destroy$ = new Subject<void>();

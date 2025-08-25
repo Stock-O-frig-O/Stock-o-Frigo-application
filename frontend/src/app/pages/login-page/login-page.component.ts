@@ -66,7 +66,6 @@ export class LoginPageComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
-          this.authService.saveHomeId();
           this.router.navigate(['/']);
         },
         error: (err) => {
