@@ -72,7 +72,11 @@ export class AuthService {
   }
 
   clearToken(): void {
+    console.log('clear tokent');
+
     localStorage.removeItem('token');
+
+    console.log('tocken : ', localStorage.getItem('token'));
   }
 
   verifyToken(): void {

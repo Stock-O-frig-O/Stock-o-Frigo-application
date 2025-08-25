@@ -1,7 +1,7 @@
 <header>
   <div class="header-move-to">
     <a [routerLink]="['/']"><i class="pi pi-arrow-left"></i></a>
-    <a [routerLink]="['/profile']"><i class="pi pi-user"></i></a>
+    <button (click)="logout()"><i class="pi pi-user"></i></button>
   </div>
   <div class="header-title">
     <h1>Stock'O Frig'O</h1>

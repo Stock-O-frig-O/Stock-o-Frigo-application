@@ -2,15 +2,9 @@
 import { Subject, takeUntil } from 'rxjs';
 
 // Angular imports
-import {
-  Component,
-  inject,
-  OnDestroy,
-  OnInit,
-  ViewEncapsulation,
-} from '@angular/core';
+import { Component, inject, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 // Primeng imports
 import { AutoCompleteModule, AutoComplete } from 'primeng/autocomplete';
@@ -24,6 +18,7 @@ import { HomeService } from '../../core/services/home.service';
 
 // Model imports
 import Product from '../../core/model/Product.model';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-logo',
@@ -40,10 +35,12 @@ import Product from '../../core/model/Product.model';
   templateUrl: './logo.component.html',
   styleUrl: './logo.component.scss',
 })
-export class LogoComponent implements OnInit, OnDestroy {
+export class LogoComponent implements OnDestroy {
   // service injection
-  private readonly apiProduct = inject(ProductService);
-  private readonly homeService = inject(HomeService);
+  private readonly apiProduct: ProductService = inject(ProductService);
+  private readonly homeService: HomeService = inject(HomeService);
+  private readonly authService: AuthService = inject(AuthService);
+  private readonly router: Router = inject(Router);
 
   // Use to unsubscribe
   destroy$ = new Subject<void>();
@@ -55,10 +52,6 @@ export class LogoComponent implements OnInit, OnDestroy {
   product: Product[] = [];
   selectedProduct!: Product;
   filteredProducts: Product[] = [];
-
-  ngOnInit(): void {
-    this.home = this.homeService.getHomeId();
-  }
 
   // add product to stock
   addProductToStock(productId: number) {
@@ -86,6 +79,12 @@ export class LogoComponent implements OnInit, OnDestroy {
           this.filteredProducts = products;
         },
       });
+  }
+
+  logout() {
+    this.homeService.removeHomeId();
+    this.authService.clearToken();
+    this.router.navigate(['/login']);
   }
 
   // handle product selection

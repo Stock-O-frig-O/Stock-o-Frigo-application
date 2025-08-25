@@ -18,15 +18,12 @@ export class HomePageComponent implements OnInit {
   ngOnInit(): void {
     this.homeService.getHome().subscribe({
       next: (data) => {
-        console.log(data);
-
         this.homeData = data;
         this.homeService.saveHomeId(data.id);
       },
+      error: () => {
+        this.router.navigate(['settings-home']);
+      },
     });
-
-    if (!this.homeService.getHomeId()) {
-      this.router.navigate(['settings-home']);
-    }
   }
 }
