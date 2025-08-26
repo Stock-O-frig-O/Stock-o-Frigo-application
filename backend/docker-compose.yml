@@ -11,7 +11,7 @@ services:
             DB_USER: ${DB_USER}
             DB_PASSWORD: ${DB_PASSWORD}
             DB_NAME: ${DB_NAME}
-            SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/${DB_NAME}?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false
+            SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
             SPRING_JPA_HIBERNATE_DDL_AUTO: update
             JWT_SECRET_KEY: ${JWT_SECRET_KEY}
             JWT_EXPIRATION_TIME: ${JWT_EXPIRATION_TIME:-86400000}
