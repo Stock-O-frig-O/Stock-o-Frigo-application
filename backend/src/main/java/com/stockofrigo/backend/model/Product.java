@@ -21,7 +21,7 @@ public class Product {
   private String brand;
 
   @Column(name = "barcode", length = 20, unique = true, nullable = true)
-  private Integer barcode;
+  private String barcode;
 
   @Column(name = "image_url", length = 500, nullable = true)
   private String imageUrl;
@@ -69,11 +69,11 @@ public class Product {
     this.brand = brand;
   }
 
-  public Integer getBarcode() {
+  public String getBarcode() {
     return barcode;
   }
 
-  public void setBarcode(Integer barcode) {
+  public void setBarcode(String barcode) {
     this.barcode = barcode;
   }
 
