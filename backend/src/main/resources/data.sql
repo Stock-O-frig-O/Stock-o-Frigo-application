@@ -15,6 +15,6 @@ INSERT INTO product (id, name, brand, barcode, image_url, unit_id, is_ingredient
 (8, 'Thym', 'Brand H', '1234567890130', 'http://example.com/image8.jpg', 2, true, NOW(), NOW(), 7),
 (9, 'Ail', 'Brand I', '1234567890131', 'http://example.com/image9.jpg', 5, true, NOW(), NOW(), 2),
 (10, 'Oignon', 'Brand J', '1234567890132', 'http://example.com/image10.jpg', 5, true, NOW(), NOW(), 2),
-(11, 'Piment', 'Brand K', '1234567890133', 'http://example.com/image11.jpg', 6, true, NOW(), NOW(), 2),
+(11, 'Piment', 'Brand K', '1234567890133', 'http://example.com/image11.jpg', 5, true, NOW(), NOW(), 2),
 (12, 'Coriandre', 'Brand L', '1234567890134', 'http://example.com/image12.jpg', 6, true, NOW(), NOW(), 7),
 (13, 'Paprika', 'Brand M', '1234567890135', 'http://example.com/image13.jpg', 6, true, NOW(), NOW(), 6);
