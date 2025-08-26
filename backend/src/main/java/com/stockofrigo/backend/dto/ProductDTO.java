@@ -7,7 +7,7 @@ public class ProductDTO {
   private Long id;
   private String name;
   private String brand;
-  private Integer barcode;
+  private String barcode;
   private String imageUrl;
   private Long unitId;
   private boolean isIngredient;
@@ -39,11 +39,11 @@ public class ProductDTO {
     this.brand = brand;
   }
 
-  public Integer getBarcode() {
+  public String getBarcode() {
     return barcode;
   }
 
-  public void setBarcode(Integer barcode) {
+  public void setBarcode(String barcode) {
     this.barcode = barcode;
   }
 
