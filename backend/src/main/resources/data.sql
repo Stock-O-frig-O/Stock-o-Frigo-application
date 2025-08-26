@@ -2,7 +2,7 @@
 INSERT INTO category (id, name) VALUES (1, 'Fruits'), (2, 'Légumes'), (3, 'Produits laitiers'), (4, 'Viandes'), (5, 'Céréales'), (6, 'Épices'), (7, 'Condiments'), (8, 'Produits de boulangerie');
 
 -- ajout des unités
-INSERT INTO unit (id, unit) VALUES (1, 'kg'), (2, 'g'), (3, 'l'), (4, 'ml'), (5, 'pièce'), (6, 'CàC'), (7, 'CàS'), (8, 'pincé');
+INSERT INTO unit (id, unit) VALUES (1, 'kg'), (2, 'g'), (3, 'l'), (4, 'ml'), (5, 'pièce'), (6, 'CàC'), (7, 'CàS'), (8, 'pincée');
 
 INSERT INTO product (id, name, brand, barcode, image_url, unit_id, is_ingredient, created_at, updated_at, category_id) VALUES
 (1, 'Pomme', 'Brand A', '1234567890123', 'http://example.com/image1.jpg', 1, true, NOW(), NOW(), 1),
