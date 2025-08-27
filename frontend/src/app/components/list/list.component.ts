@@ -43,7 +43,7 @@ import { MessageService } from 'primeng/api';
 export class ListComponent implements OnInit, OnChanges {
   // Service injection
   private productService = inject(ProductService);
-  private homeServie = inject(HomeService);
+  private homeService = inject(HomeService);
   private messageService = inject(MessageService);
 
   private homeId!: string | null;
