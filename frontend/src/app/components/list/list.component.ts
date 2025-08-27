@@ -42,7 +42,7 @@ import { MessageService } from 'primeng/api';
 })
 export class ListComponent implements OnInit, OnChanges {
   // Service injection
-  private productServive = inject(ProductService);
+  private productService = inject(ProductService);
   private homeServie = inject(HomeService);
   private messageService = inject(MessageService);
 
@@ -56,7 +56,7 @@ export class ListComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.findCategory();
-    this.homeId = localStorage.getItem('homeID');
+    this.homeId = this.homeServie.getHomeId();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -74,7 +74,7 @@ export class ListComponent implements OnInit, OnChanges {
   }
 
   updateStockQuantity(product: Product) {
-    this.productServive
+    this.productService
       .updateStockQuantity(this.homeId!, product.id, product.quantity)
       .subscribe({
         next: () =>
