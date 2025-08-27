@@ -1,0 +1,49 @@
+spring:
+    application:
+        name: backend
+
+    # Import des variables depuis env.local.properties
+    config:
+        import: 'optional:file:environment/env.local.properties'
+
+    # Database configuration pour le développement local
+    datasource:
+        url: ${SPRING_DATASOURCE_URL}
+        username: ${DB_USER}
+        password: ${DB_PASSWORD}
+
+    # JPA and Hibernate configuration
+    jpa:
+        hibernate:
+            ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
+        show-sql: true
+        properties:
+            hibernate:
+                format_sql: true
+        defer-datasource-initialization: true
+
+    # SQL script initialization
+    sql:
+        init:
+            data-locations: 'classpath:data.sql'
+            mode: always
+            continue-on-error: true
+
+# JWT Security configuration pour le développement local
+security:
+    jwt:
+        secret-key: ${JWT_SECRET_KEY}
+        expiration-time: ${JWT_EXPIRATION_TIME}
+
+# OpenAPI/Swagger documentation configuration
+springdoc:
+    api-docs:
+        path: /docs
+        enabled: true
+    swagger-ui:
+        path: /docs/swagger.html
+        enabled: true
+
+# CORS configuration pour le développement local
+cors:
+    allowed-origin: ${CORS_ALLOWED_ORIGIN}
