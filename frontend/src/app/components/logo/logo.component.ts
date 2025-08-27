@@ -11,6 +11,7 @@ import { AutoCompleteModule, AutoComplete } from 'primeng/autocomplete';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { MessageService } from 'primeng/api';
 
 // Local imports
 import { ProductService } from '../../core/services/product.service';
@@ -34,6 +35,7 @@ import { AuthService } from '../../core/services/auth.service';
   encapsulation: ViewEncapsulation.None,
   templateUrl: './logo.component.html',
   styleUrl: './logo.component.scss',
+  providers: [MessageService],
 })
 export class LogoComponent implements OnDestroy {
   // service injection
@@ -41,6 +43,7 @@ export class LogoComponent implements OnDestroy {
   private readonly homeService: HomeService = inject(HomeService);
   private readonly authService: AuthService = inject(AuthService);
   private readonly router: Router = inject(Router);
+  private messageService = inject(MessageService);
 
   // Use to unsubscribe
   destroy$ = new Subject<void>();
