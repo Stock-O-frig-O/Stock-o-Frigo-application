@@ -68,7 +68,11 @@ export class LogoComponent implements OnDestroy {
         },
         error: (error) => {
           console.error('Failed to add product:', error);
-          // Handle error - show user feedback
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to add product to stock. Please try again.',
+          });
         },
       });
   }
