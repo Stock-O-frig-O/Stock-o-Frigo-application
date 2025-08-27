@@ -57,7 +57,6 @@ export class LoginPageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.authService.getToken();
-    this.homeService.removeHomeId();
   }
 
   public onSubmit(): void {

@@ -1,5 +1,13 @@
 // Angular imports
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  inject,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewEncapsulation,
+} from '@angular/core';
 
 // Primeng imports
 import { AccordionModule } from 'primeng/accordion';
@@ -7,9 +15,15 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { FormsModule } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { TableModule } from 'primeng/table';
+import { Toast } from 'primeng/toast';
 
 // Model imports
 import Product from '../../core/model/Product.model';
+
+// Services imports
+import { ProductService } from '../../core/services/product.service';
+import { HomeService } from '../../core/services/home.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-list',
@@ -19,12 +33,21 @@ import Product from '../../core/model/Product.model';
     CheckboxModule,
     FormsModule,
     InputNumberModule,
+    Toast,
   ],
   encapsulation: ViewEncapsulation.None,
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss',
+  providers: [MessageService],
 })
-export class ListComponent implements OnInit {
+export class ListComponent implements OnInit, OnChanges {
+  // Service injection
+  private productService = inject(ProductService);
+  private homeService = inject(HomeService);
+  private messageService = inject(MessageService);
+
+  private homeId!: string | null;
+
   // Receive the product from parent
   @Input() products!: Product[];
 
@@ -33,6 +56,13 @@ export class ListComponent implements OnInit {
 
   ngOnInit(): void {
     this.findCategory();
+    this.homeId = this.homeService.getHomeId();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['products']) {
+      this.findCategory();
+    }
   }
 
   findCategory() {
@@ -41,5 +71,25 @@ export class ListComponent implements OnInit {
         this.categoryList.push(product.category);
       }
     }
+  }
+
+  updateStockQuantity(product: Product) {
+    this.productService
+      .updateStockQuantity(this.homeId!, product.id, product.quantity)
+      .subscribe({
+        next: () =>
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'La quantité a bien été ajoutée',
+          }),
+        error: () =>
+          this.messageService.add({
+            severity: 'error',
+            summary: 'error',
+            detail:
+              "Un problème est survenu, la quantité n'a pas pu être mis-à-jour",
+          }),
+      });
   }
 }

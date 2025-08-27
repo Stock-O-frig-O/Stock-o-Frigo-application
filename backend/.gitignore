@@ -5,6 +5,7 @@ target/
 !**/src/test/**/target/
 /environment/env.local.properties
 /environment/env.prod.properties
+.env
 
 ### STS ###
 .apt_generated
@@ -32,4 +33,4 @@ build/
 !**/src/test/**/build/
 
 ### VS Code ###
-.vscode/
+.vscode
