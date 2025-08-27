@@ -56,7 +56,7 @@ export class ListComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.findCategory();
-    this.homeId = this.homeServie.getHomeId();
+    this.homeId = this.homeService.getHomeId();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
