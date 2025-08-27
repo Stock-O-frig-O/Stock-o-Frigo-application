@@ -1,5 +1,12 @@
 // Angular imports
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewEncapsulation,
+} from '@angular/core';
 
 // Primeng imports
 import { AccordionModule } from 'primeng/accordion';
@@ -24,7 +31,7 @@ import Product from '../../core/model/Product.model';
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss',
 })
-export class ListComponent implements OnInit {
+export class ListComponent implements OnInit, OnChanges {
   // Receive the product from parent
   @Input() products!: Product[];
 
@@ -33,6 +40,11 @@ export class ListComponent implements OnInit {
 
   ngOnInit(): void {
     this.findCategory();
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['products']) {
+      this.findCategory();
+    }
   }
 
   findCategory() {

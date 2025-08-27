@@ -62,8 +62,14 @@ export class LogoComponent implements OnDestroy {
     this.homeService
       .addHomeProduct(this.home, productId, 1)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.homeService.notifyProductAdded();
+      .subscribe({
+        next: () => {
+          this.homeService.notifyProductAdded();
+        },
+        error: (error) => {
+          console.error('Failed to add product:', error);
+          // Handle error - show user feedback
+        },
       });
   }
 
