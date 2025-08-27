@@ -27,4 +27,17 @@ export class ProductService {
       `${this.apiUrl}/products/query?search=${query}`,
     );
   }
+
+  updateStockQuantity(
+    homeId: string,
+    productId: number,
+    quantity: number,
+  ): Observable<Product> {
+    return this.http.put<Product>(
+      `${this.apiUrl}/home/${homeId}/products/${productId}`,
+      {
+        quantity,
+      },
+    );
+  }
 }
