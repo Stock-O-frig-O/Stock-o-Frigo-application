@@ -31,12 +31,17 @@ public class FavoriteProductService {
   }
 
   public FavoriteProductDTO addFavoriteProduct(Long homeId, Long productId, BigDecimal limit) {
-    if (favoriteProductRepository.existsByHomeIdAndProductId(homeId, productId)) {
-      return null;
-    }
     Optional<Home> home = homeRepository.findById(homeId);
     Optional<Product> product = productRepository.findById(productId);
     if (home.isPresent() && product.isPresent()) {
+      List<FavoriteProduct> existingFavorites = favoriteProductRepository.findByHomeId(homeId);
+      for (FavoriteProduct fav : existingFavorites) {
+        if (fav.getProduct().getId().equals(productId)) {
+          fav.setLimit(limit);
+          FavoriteProduct updated = favoriteProductRepository.save(fav);
+          return FavoriteProductMapper.convertToFavoriteProductDto(updated);
+        }
+      }
       FavoriteProduct favoriteProduct = new FavoriteProduct();
       favoriteProduct.setHome(home.get());
       favoriteProduct.setProduct(product.get());
