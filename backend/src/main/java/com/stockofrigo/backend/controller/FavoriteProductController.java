@@ -19,10 +19,10 @@ public class FavoriteProductController {
   }
 
   // Supprimer un favori
-  @DeleteMapping("/{homeId}/favorites/{Id}")
+  @DeleteMapping("/{homeId}/favorites/{productId}")
   public ResponseEntity<Void> removeFavoriteProduct(
-      @PathVariable Long homeId, @PathVariable Long Id) {
-    favoriteProductService.removeFavoriteProduct(Id);
+      @PathVariable Long homeId, @PathVariable Long productId) {
+    favoriteProductService.removeFavoriteProductByHomeAndProduct(homeId, productId);
     return ResponseEntity.noContent().build();
   }
 

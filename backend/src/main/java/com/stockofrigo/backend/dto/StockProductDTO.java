@@ -10,6 +10,15 @@ public class StockProductDTO {
   private String brand;
   private String unit;
   private String category;
+  private Boolean isFavorite;
+
+  public Boolean getFavorite() {
+    return isFavorite;
+  }
+
+  public void setFavorite(Boolean favorite) {
+    isFavorite = favorite;
+  }
 
   public Long getId() {
     return id;

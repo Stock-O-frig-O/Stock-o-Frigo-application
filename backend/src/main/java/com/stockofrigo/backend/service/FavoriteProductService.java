@@ -8,9 +8,9 @@ import com.stockofrigo.backend.model.Product;
 import com.stockofrigo.backend.repository.FavoriteProductRepository;
 import com.stockofrigo.backend.repository.HomeRepository;
 import com.stockofrigo.backend.repository.ProductRepository;
+import jakarta.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
@@ -31,29 +31,36 @@ public class FavoriteProductService {
   }
 
   public FavoriteProductDTO addFavoriteProduct(Long homeId, Long productId, BigDecimal limit) {
-    Optional<Home> home = homeRepository.findById(homeId);
-    Optional<Product> product = productRepository.findById(productId);
-    if (home.isPresent() && product.isPresent()) {
-      List<FavoriteProduct> existingFavorites = favoriteProductRepository.findByHomeId(homeId);
-      for (FavoriteProduct fav : existingFavorites) {
-        if (fav.getProduct().getId().equals(productId)) {
-          fav.setLimit(limit);
-          FavoriteProduct updated = favoriteProductRepository.save(fav);
-          return FavoriteProductMapper.convertToFavoriteProductDto(updated);
-        }
+    Home home =
+        homeRepository
+            .findById(homeId)
+            .orElseThrow(() -> new EntityNotFoundException("Ce home est introuvable."));
+    Product product =
+        productRepository
+            .findById(productId)
+            .orElseThrow(() -> new EntityNotFoundException("Ce produit est introuvable."));
+    List<FavoriteProduct> existingFavorites = favoriteProductRepository.findByHomeId(homeId);
+    for (FavoriteProduct fav : existingFavorites) {
+      if (fav.getProduct().getId().equals(productId)) {
+        fav.setLimit(limit);
+        FavoriteProduct updated = favoriteProductRepository.save(fav);
+        return FavoriteProductMapper.convertToFavoriteProductDto(updated);
       }
-      FavoriteProduct favoriteProduct = new FavoriteProduct();
-      favoriteProduct.setHome(home.get());
-      favoriteProduct.setProduct(product.get());
-      favoriteProduct.setLimit(limit);
-      FavoriteProduct saved = favoriteProductRepository.save(favoriteProduct);
-      return FavoriteProductMapper.convertToFavoriteProductDto(saved);
     }
-    return null;
+    FavoriteProduct favoriteProduct = new FavoriteProduct();
+    favoriteProduct.setHome(home);
+    favoriteProduct.setProduct(product);
+    favoriteProduct.setLimit(limit);
+    FavoriteProduct saved = favoriteProductRepository.save(favoriteProduct);
+    return FavoriteProductMapper.convertToFavoriteProductDto(saved);
   }
 
-  public void removeFavoriteProduct(Long Id) {
-    favoriteProductRepository.deleteById(Id);
+  public void removeFavoriteProductByHomeAndProduct(Long homeId, Long productId) {
+    FavoriteProduct product = favoriteProductRepository.findByHomeIdAndProductId(homeId, productId);
+    if (product == null) {
+      throw new EntityNotFoundException("Ce favori n'existe pas pour ce home et ce produit.");
+    }
+    favoriteProductRepository.delete(product);
   }
 
   public List<FavoriteProductDTO> getFavoriteProducts(Long homeId) {
