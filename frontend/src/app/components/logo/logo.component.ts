@@ -1,20 +1,11 @@
 // rxjs imports
-import { Subject, takeUntil } from 'rxjs';
+import { Subject } from 'rxjs';
 
 // Angular imports
-import { Component, inject, OnDestroy, ViewEncapsulation } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, inject, ViewEncapsulation } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 
-// Primeng imports
-import { AutoCompleteModule, AutoComplete } from 'primeng/autocomplete';
-import { InputTextModule } from 'primeng/inputtext';
-import { InputGroupModule } from 'primeng/inputgroup';
-import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
-import { MessageService } from 'primeng/api';
-
 // Local imports
-import { ProductService } from '../../core/services/product.service';
 import { HomeService } from '../../core/services/home.service';
 
 // Model imports
@@ -23,27 +14,17 @@ import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-logo',
-  imports: [
-    RouterModule,
-    InputTextModule,
-    FormsModule,
-    AutoComplete,
-    AutoCompleteModule,
-    InputGroupModule,
-    InputGroupAddonModule,
-  ],
+  imports: [RouterModule],
   encapsulation: ViewEncapsulation.None,
   templateUrl: './logo.component.html',
   styleUrl: './logo.component.scss',
-  providers: [MessageService],
+  providers: [],
 })
-export class LogoComponent implements OnDestroy {
+export class LogoComponent {
   // service injection
-  private readonly apiProduct: ProductService = inject(ProductService);
   private readonly homeService: HomeService = inject(HomeService);
   private readonly authService: AuthService = inject(AuthService);
   private readonly router: Router = inject(Router);
-  private messageService = inject(MessageService);
 
   // Use to unsubscribe
   destroy$ = new Subject<void>();
@@ -56,58 +37,11 @@ export class LogoComponent implements OnDestroy {
   selectedProduct!: Product;
   filteredProducts: Product[] = [];
 
-  // add product to stock
-  addProductToStock(productId: number) {
-    if (!this.home) {
-      console.error('Home ID is not set. Cannot add product to stock.');
-      return;
-    }
-    this.homeService
-      .addHomeProduct(this.home, productId, 1)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: () => {
-          this.homeService.notifyProductAdded();
-        },
-        error: (error) => {
-          console.error('Failed to add product:', error);
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Failed to add product to stock. Please try again.',
-          });
-        },
-      });
-  }
-
-  // fetch product data on autocomplete component
-  findProduct(event: { query: string }) {
-    const query = event.query.toLowerCase();
-    this.home = this.homeService.getHomeId();
-    this.apiProduct
-      .getFilteredProducts(query)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (products) => {
-          this.filteredProducts = products;
-        },
-      });
-  }
+  currentProductPage: Product[] = [];
 
   logout() {
     this.homeService.removeHomeId();
     this.authService.clearToken();
     this.router.navigate(['/login']);
-  }
-
-  // handle product selection
-  onProductSelected(event: { value: Product }) {
-    this.addProductToStock(event.value.id);
-  }
-
-  ngOnDestroy() {
-    // Unsubscribe from the product subscription to prevent memory leaks
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 }

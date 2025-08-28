@@ -2,7 +2,7 @@
 import {
   Component,
   inject,
-  Input,
+  input,
   OnChanges,
   OnInit,
   SimpleChanges,
@@ -49,7 +49,13 @@ export class ListComponent implements OnInit, OnChanges {
   private homeId!: string | null;
 
   // Receive the product from parent
-  @Input() products!: Product[];
+  products = input<Product[]>({} as Product[]);
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['products']) {
+      this.findCategory();
+    }
+  }
 
   // Used to sort products when displaying the list
   categoryList: string[] = [];
@@ -59,14 +65,8 @@ export class ListComponent implements OnInit, OnChanges {
     this.homeId = this.homeService.getHomeId();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['products']) {
-      this.findCategory();
-    }
-  }
-
   findCategory() {
-    for (const product of this.products) {
+    for (const product of this.products()) {
       if (!this.categoryList.includes(product.category)) {
         this.categoryList.push(product.category);
       }

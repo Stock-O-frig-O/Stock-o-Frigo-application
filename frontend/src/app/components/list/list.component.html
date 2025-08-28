@@ -5,12 +5,12 @@
         {{ category }}
       </p-accordion-header>
       <p-accordion-content>
-        <p-table [value]="products">
-          <ng-template #body let-product>
+        <p-table [value]="products()">
+          <ng-template #body let-product of products>
             @if (product.category === category) {
               <tr>
                 <td class="td-small-item">
-                  <p-checkbox [(ngModel)]="product.checked" [binary]="true" />
+                  <p-checkbox [(ngModel)]="product.isChecked" [binary]="true" />
                 </td>
                 <td class="td-designation">{{ product.name }}</td>
                 <td class="btn-change-stock">

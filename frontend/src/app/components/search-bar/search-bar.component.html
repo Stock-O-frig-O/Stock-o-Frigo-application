@@ -1,0 +1,26 @@
+<section id="search-bar">
+  <div class="search-action">
+    <i class="pi pi-search search-bar">
+      <p-autoComplete
+        [(ngModel)]="selectedProduct"
+        [suggestions]="filteredProducts"
+        [delay]="1000"
+        (completeMethod)="findProduct($event)"
+        (onSelect)="onProductSelected($event)"
+        field="name"
+        autocomplete="off"
+        placeholder="Rechercher un produit"
+      />
+    </i>
+    <button class="search-button-action" (click)="displayMenu($event)">
+      <i class="pi pi-ellipsis-v"></i>
+    </button>
+  </div>
+  <p-popover #op>
+    <p-button>
+      <p-checkbox [binary]="true" />
+      coché tous les produits
+    </p-button>
+    <p>trop cool le popover</p>
+  </p-popover>
+</section>
