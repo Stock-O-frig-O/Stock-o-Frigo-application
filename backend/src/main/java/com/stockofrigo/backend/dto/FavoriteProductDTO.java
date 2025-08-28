@@ -2,22 +2,22 @@ package com.stockofrigo.backend.dto;
 
 import java.math.BigDecimal;
 
-public class StockProductDTO {
-  private Long id; // id de la relation stock
-  private BigDecimal quantity;
-  private Long productId; // id du produit d'origine
+public class FavoriteProductDTO {
+  private Long id;
+  private Long productId;
   private String name;
   private String brand;
   private String unit;
   private String category;
-  private Boolean isFavorite;
+  private BigDecimal limit;
+  private Long homeId;
 
-  public Boolean getFavorite() {
-    return isFavorite;
+  public BigDecimal getLimit() {
+    return limit;
   }
 
-  public void setFavorite(Boolean favorite) {
-    isFavorite = favorite;
+  public void setLimit(BigDecimal limit) {
+    this.limit = limit;
   }
 
   public Long getId() {
@@ -26,14 +26,6 @@ public class StockProductDTO {
 
   public void setId(Long id) {
     this.id = id;
-  }
-
-  public BigDecimal getQuantity() {
-    return quantity;
-  }
-
-  public void setQuantity(BigDecimal quantity) {
-    this.quantity = quantity;
   }
 
   public Long getProductId() {
@@ -74,5 +66,13 @@ public class StockProductDTO {
 
   public void setCategory(String category) {
     this.category = category;
+  }
+
+  public Long getHomeId() {
+    return homeId;
+  }
+
+  public void setHomeId(Long homeId) {
+    this.homeId = homeId;
   }
 }

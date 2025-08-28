@@ -22,6 +22,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class HomeService {
 
+  private final StockProductMapper stockProductMapper;
+  private final FavoriteProductRepository favoriteProductRepository;
   private final HomeRepository homeRepository;
   private final UserHomeRepository userHomeRepository;
   private final UserRepository userRepository;
@@ -36,13 +38,17 @@ public class HomeService {
       UserRepository userRepository,
       ProductRepository productRepository,
       StockProductRepository stockProductRepository,
-      HomeMapper homeMapper) {
+      HomeMapper homeMapper,
+      StockProductMapper stockProductMapper,
+      FavoriteProductRepository favoriteProductRepository) {
     this.homeRepository = homeRepository;
     this.userHomeRepository = userHomeRepository;
     this.userRepository = userRepository;
     this.productRepository = productRepository;
     this.stockProductRepository = stockProductRepository;
     this.homeMapper = homeMapper;
+    this.stockProductMapper = stockProductMapper;
+    this.favoriteProductRepository = favoriteProductRepository;
   }
 
   public HomeDTO getHomeForUser(User user) {
@@ -198,7 +204,7 @@ public class HomeService {
       return Collections.emptyList();
     }
     return stockProducts.stream()
-        .map(StockProductMapper::convertToStockProductDto)
+        .map(sp -> StockProductMapper.convertToStockProductDto(sp, favoriteProductRepository))
         .collect(Collectors.toList());
   }
 }
