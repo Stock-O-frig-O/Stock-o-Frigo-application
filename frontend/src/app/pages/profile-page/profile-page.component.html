@@ -1,0 +1,65 @@
+<div class="profile-wrapper">
+  <h2>Mon profil</h2>
+  <div class="profile-header">
+    <div class="avatar">
+      <img [src]="avatarUrl" alt="Avatar" (error)="avatarUrl='/imgs/logo.png'" />
+    </div>
+
+  </div>
+
+  <div class="profile-form">
+    <p-floatlabel variant="in">
+      <div class="p-inputgroup">
+        <input pInputText id="firstname" [readonly]="!isEditing.firstname" [formControl]="profileForm.controls.firstname" />
+        <button type="button" class="p-inputgroup-addon edit-btn" (click)="toggleEdit('firstname')" [attr.aria-label]="isEditing.firstname ? 'Terminer' : 'Éditer'" title="Éditer">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z M20.71 7.04c.39-.39.39-1.02 0-1.41L18.37 3.29c-.39-.39-1.02-.39-1.41 0L15.13 5.12l3.75 3.75 1.83-1.83z"></path>
+          </svg>
+        </button>
+      </div>
+      <label for="firstname">Prénom</label>
+    </p-floatlabel>
+
+    <p-floatlabel variant="in">
+      <div class="p-inputgroup">
+        <input pInputText id="lastname" [readonly]="!isEditing.lastname" [formControl]="profileForm.controls.lastname" />
+        <button type="button" class="p-inputgroup-addon edit-btn" (click)="toggleEdit('lastname')" [attr.aria-label]="isEditing.lastname ? 'Terminer' : 'Éditer'" title="Éditer">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z M20.71 7.04c.39-.39.39-1.02 0-1.41L18.37 3.29c-.39-.39-1.02-.39-1.41 0L15.13 5.12l3.75 3.75 1.83-1.83z"></path>
+          </svg>
+        </button>
+      </div>
+      <label for="lastname">Nom</label>
+    </p-floatlabel>
+
+    <p-floatlabel variant="in">
+      <div class="p-inputgroup">
+        <input pInputText id="email" [readonly]="!isEditing.email" [formControl]="profileForm.controls.email" />
+        <button type="button" class="p-inputgroup-addon edit-btn" (click)="toggleEdit('email')" [attr.aria-label]="isEditing.email ? 'Terminer' : 'Éditer'" title="Éditer">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z M20.71 7.04c.39-.39.39-1.02 0-1.41L18.37 3.29c-.39-.39-1.02-.39-1.41 0L15.13 5.12l3.75 3.75 1.83-1.83z"></path>
+          </svg>
+        </button>
+      </div>
+      <label for="email">Email</label>
+    </p-floatlabel>
+
+    <p-floatlabel variant="in">
+      <div class="p-inputgroup">
+        <input pInputText id="password" type="password" [readonly]="!isEditing.password" [formControl]="profileForm.controls.password" />
+        <button type="button" class="p-inputgroup-addon edit-btn" (click)="toggleEdit('password')" [attr.aria-label]="isEditing.password ? 'Terminer' : 'Éditer'" title="Éditer">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z M20.71 7.04c.39-.39.39-1.02 0-1.41L18.37 3.29c-.39-.39-1.02-.39-1.41 0L15.13 5.12l3.75 3.75 1.83-1.83z"></path>
+          </svg>
+        </button>
+      </div>
+      <label for="password">Mot de passe</label>
+    </p-floatlabel>
+  </div>
+
+  <div class="actions">
+    <button pButton type="button" class="manage-groups" [rounded]="true" (click)="navigateToGroups()">
+      Gérer le groupe
+    </button>
+  </div>
+</div>

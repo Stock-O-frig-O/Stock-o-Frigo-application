@@ -1,28 +1,46 @@
-<header>
-  <div class="header-move-to">
-    <a [routerLink]="['/']"><i class="pi pi-arrow-left"></i></a>
-    <button (click)="logout()"><i class="pi pi-user"></i></button>
-  </div>
-  <div class="header-title">
-    <h1>Stock'O Frig'O</h1>
-    <img src="/imgs/logo.png" alt="Logo stock'o frig'o" />
+@if (!hideControls) {
+<header [class.profile]="!showSearch">
+  <div class="top-bar">
+    @if (!hideControls) {
+      <a class="back-btn" [routerLink]="['/']"><i class="pi pi-arrow-left"></i></a>
+    }
+
+    <div class="title-wrap">
+      <div class="title-text">
+        <h1 class="line top">Stock'O</h1>
+        <h1 class="line bottom">Frig'O</h1>
+      </div>
+      <img src="/imgs/logo.png" alt="Logo stock'o frig'o" />
+    </div>
+
+    @if (!hideControls) {
+      @if (loggedIn) {
+        <button type="button" class="header-button-action user-button user-btn" (click)="userMenu.toggle($event)" aria-label="Menu utilisateur"><i class="pi pi-user"></i></button>
+        <p-menu #userMenu [model]="menuItems" [popup]="true"></p-menu>
+      } @else {
+        <a [routerLink]="['/login']" class="header-button-action user-button user-btn" aria-label="Se connecter"><i class="pi pi-user"></i></a>
+      }
+    }
   </div>
 
-  <div class="header-action">
-    <i class="pi pi-search search-bar">
-      <p-autoComplete
-        [(ngModel)]="selectedProduct"
-        [suggestions]="filteredProducts"
-        [delay]="1000"
-        (completeMethod)="findProduct($event)"
-        (onSelect)="onProductSelected($event)"
-        field="name"
-        autocomplete="off"
-        placeholder="Rechercher un produit"
-      />
-    </i>
-    <button class="header-button-action">
-      <i class="pi pi-ellipsis-v"></i>
-    </button>
-  </div>
+  @if (showSearch) {
+     <div class="header-action">
+      <i class="pi pi-search search-bar">
+        <p-autoComplete
+          [(ngModel)]="selectedProduct"
+          [suggestions]="filteredProducts"
+          [delay]="1000"
+          (completeMethod)="findProduct($event)"
+          (onSelect)="onProductSelected($event)"
+          field="name"
+          autocomplete="off"
+          placeholder="Rechercher un produit"
+        />
+      </i>
+      <button class="header-button-action">
+        <i class="pi pi-ellipsis-v"></i>
+      </button>
+    </div>
+  }
 </header>
+}

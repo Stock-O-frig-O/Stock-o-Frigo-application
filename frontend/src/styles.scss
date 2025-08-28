@@ -1,9 +1,507 @@
-/* You can add global styles to this file, and also import other style files */
+/*
+  Global stylesheet (styles.scss)
+  ------------------------------------------------------------------
+  Use this file ONLY for:
+  - Global resets and base layout rules (html/body, box-sizing, etc.).
+  - Typography baseline and app-wide font settings.
+  - Global variables/design tokens (CSS vars) used across the app.
+  - Shared utility classes reused by multiple components.
+  - Cross-application overrides for third-party libraries (e.g., PrimeNG),
+    with clear section comments.
+
+  Component-specific styling must live in the component’s own .scss file
+  (scoped to that component). If you find a selector that targets a single
+  component’s structure here, please move it to that component stylesheet.
+*/
+
+/* Third-party icons - globally available */
 @use "primeicons/primeicons.css";
 
+/* ==========================
+   Resets & Base
+   ========================== */
 * {
   font-family: "Inclusive Sans", Arial, Helvetica, sans-serif;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+/* Color scheme baseline */
+:root {
+  /* Force light color scheme to avoid auto dark backgrounds on some browsers/themes */
+  color-scheme: light;
+}
+
+/* Base elements */
+html,
+body {
+  min-height: 100%;
+  background-color: #ffffff !important;
+  color: #1a1a1a;
+}
+
+app-root,
+body > app-root,
+body > app-root > * {
+  /* Ensure app fills viewport and inherits background */
+  min-height: 100%;
+  background-color: transparent;
+}
+
+/* Readability overrides for text in inputs and PrimeNG controls on light backgrounds */
+/* Ensure input text is dark */
+.p-inputtext,
+input,
+textarea,
+select,
+.p-password input,
+.p-inputnumber input,
+.p-calendar input,
+.p-autocomplete input {
+  color: #1a1a1a !important;
+}
+
+/* PrimeNG specific labels inside dropdowns/multiselects */
+.p-dropdown,
+.p-dropdown .p-dropdown-label,
+.p-multiselect,
+.p-multiselect .p-multiselect-label {
+  color: #1a1a1a !important;
+}
+
+/* Placeholders should be visible (some themes make them too light/white) */
+::placeholder,
+.p-inputtext::placeholder,
+input::placeholder,
+textarea::placeholder {
+  color: #4a4a4a !important;
+  opacity: 1; /* Firefox */
+}
+
+/* ==========================
+   Design Tokens & Variables
+   (CSS custom properties available app-wide)
+   ========================== */
+:root {
+  /* PrimeNG/Aura design tokens to enforce dark text and light surfaces */
+  --p-text-color: #1a1a1a;
+  --p-text-muted-color: #4a4a4a;
+  --p-surface-0: #ffffff;
+  --p-surface-50: #f9fafb;
+  --p-surface-100: #f3f4f6;
+  --p-content-background: #ffffff;
+}
+
+/* Fallback: enforce dark text globally to avoid white-on-white issues */
+body, p, span, label, a, button, li, h1, h2, h3, h4, h5, h6, th, td {
+  color: #1a1a1a !important;
+}
+
+/* ==========================
+   Third-party library overrides (PrimeNG)
+   Keep all global PrimeNG overrides within this section.
+   ========================== */
+
+/* PrimeNG Menu (user dropdown) - ensure light surface and readable text */
+.p-menu,
+.p-menu .p-submenu-list {
+  background-color: #ffffff !important;
+  color: #1a1a1a !important;
+}
+.p-menu .p-menuitem-link,
+.p-menu .p-menuitem-text,
+.p-menu .p-menuitem-icon {
+  color: #1a1a1a !important;
+}
+.p-menu .p-menuitem-link:hover {
+  background-color: #f3f4f6 !important;
+}
+
+/* ==========================
+   PrimeNG Toast (Notification)
+   Customization to match Figma look
+   ========================== */
+.p-toast {
+  /* Ensure toast isn't too wide on desktop */
+  max-width: 520px;
+}
+
+/* Position tweak for bottom-center */
+.p-toast-bottom-center {
+  bottom: 24px; /* add breathing space from bottom edge */
+}
+
+/* Message container spacing */
+.p-toast-message {
+  margin: 8px 12px;
+}
+
+/* Card look */
+.p-toast-message .p-toast-message-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px; /* balanced space all around */
+  border-radius: 16px;
+  background: #FDF9F4; /* Figma notification background */
+  border: none;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  position: relative; /* allow precise close icon positioning */
+}
+
+/* Error toast: compact with translucent black background and red text */
+.p-toast-message-error .p-toast-message-content {
+  background: rgba(0, 0, 0, 0.82) !important; /* semi-transparent black */
+  border: 1px solid #ff5a5a; /* subtle red border */
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3); /* slightly stronger for contrast */
+  padding: 8px 40px 8px 12px; /* a bit more right space for our custom close icon */
+  border-radius: 12px; /* a bit tighter */
+}
+/* Compact width for error toasts */
+.p-toast .p-toast-message.p-toast-message-error {
+  max-width: 320px;
+}
+/* Red text and icon on dark surface */
+.p-toast-message-error .p-toast-summary,
+.p-toast-message-error .p-toast-detail,
+.p-toast-message-error .p-toast-message-icon {
+  color: #ff5a5a !important;
+}
+/* Hide built-in close icon on error variant; we'll render our own to ensure visibility and correct placement */
+.p-toast-message-error .p-toast-icon-close {
+  display: none !important;
+}
+
+/* ==========================
+   Shared utility classes (used across multiple components)
+   ========================== */
+/* Action buttons inside custom toast template */
+.sof-toast-actions {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 16px;
+  margin-left: 0;
+  margin-top: 8px;
+}
+.sof-btn {
+  background: #EDE8D8;
+  color: #1a1a1a;
+  border: none;
+  border-radius: 12px;
+  padding: 8px 12px;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+.sof-btn:focus {
+  outline: 2px solid rgba(0,0,0,0.2);
+  outline-offset: 2px;
+}
+.sof-btn:hover {
+  background: #F3EFE3;
+}
+.sof-btn:active {
+  background: #F7F3E8;
+}
+
+/* Icon size + color by severity */
+.p-toast-message .p-toast-message-icon {
+  font-size: 20px;
+}
+.p-toast-message-success .p-toast-message-icon { color: #2e7d32; }  /* green */
+.p-toast-message-error .p-toast-message-icon { color: #c62828; }    /* red */
+.p-toast-message-warn .p-toast-message-icon { color: #b26a00; }     /* orange */
+.p-toast-message-info .p-toast-message-icon { color: #1e88e5; }     /* blue */
+
+/* Text styles */
+.p-toast-message .p-toast-summary {
+  font-weight: 600;
+  color: #1a1a1a; /* enforce dark */
+}
+.p-toast-message .p-toast-detail {
+  color: #1a1a1a; /* enforce dark */
+  opacity: 0.9;
+}
+
+/* Make custom toast body clickable (for quick dismiss) */
+.p-toast .sof-toast {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  cursor: pointer;
+}
+
+/* Close button (built-in). Kept for non-error toasts; hidden on error via rule above */
+.p-toast .p-toast-icon-close {
+  color: #1a1a1a;
+  opacity: 0.9;
+  transition: opacity 0.2s ease-in-out;
+}
+.p-toast .p-toast-icon-close:hover {
+  opacity: 1;
+}
+
+/* Remove default left colored bar if theme adds it */
+.p-toast-message::before {
+  content: none !important;
+}
+
+/* Responsive: keep mobile width friendly (complements component [breakpoints]) */
+@media (max-width: 920px) {
+  .p-toast {
+    max-width: 92vw;
+  }
+}
+
+
+/* ==========================
+   PrimeNG Dialog - Light look & readable text
+   ========================== */
+.p-dialog {
+  border-radius: 16px;
+}
+.p-dialog .p-dialog-header,
+.p-dialog .p-dialog-content,
+.p-dialog .p-dialog-footer {
+  background: #ffffff;
+  color: #1a1a1a;
+}
+.p-dialog .p-dialog-header .p-dialog-title {
+  color: #1a1a1a;
+  font-weight: 600;
+}
+.p-dialog .p-dialog-header .p-dialog-header-icon {
+  color: #1a1a1a;
+  opacity: 0.8;
+}
+.p-dialog .p-dialog-header .p-dialog-header-icon:hover {
+  opacity: 1;
+}
+
+/* Center and space dialog footer buttons */
+.p-dialog .p-dialog-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Actions container inside our custom dialogs (when not using p-footer) */
+.sof-dialog-actions {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+/* Soft beige button variant for PrimeNG buttons (used in dialogs) */
+.p-button.sof-btn {
+  background: #EDE8D8;
+  color: #1a1a1a;
+  border: none;
+  border-radius: 12px;
+}
+.p-button.sof-btn .p-button-label {
+  color: #1a1a1a;
+}
+.p-button.sof-btn:enabled:hover {
+  background: #F3EFE3;
+}
+.p-button.sof-btn:enabled:active {
+  background: #F7F3E8;
+}
+.p-button.sof-btn:focus {
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.18);
+}
+
+
+/* ==========================
+   Form controls - ensure light backgrounds & visibility
+   ========================== */
+/* Inputs and common PrimeNG input hosts should have a white surface */
+.p-inputtext,
+input,
+textarea,
+select,
+.p-password input,
+.p-inputnumber input,
+.p-calendar input,
+.p-autocomplete input,
+.p-dropdown,
+.p-multiselect {
+  background-color: #ffffff !important;
+  color: #1a1a1a !important;
+  border-color: #d1d5db !important; /* light gray border for visibility */
+  caret-color: #1a1a1a;
+}
+
+/* Hover/Focus subtle feedback while keeping light surface */
+.p-inputtext:hover,
+input:hover,
+textarea:hover,
+select:hover,
+.p-password input:hover,
+.p-inputnumber input:hover,
+.p-calendar input:hover,
+.p-autocomplete input:hover,
+.p-dropdown:hover,
+.p-multiselect:hover {
+  border-color: #9ca3af !important; /* slightly darker gray on hover */
+}
+
+.p-inputtext:focus,
+input:focus,
+textarea:focus,
+select:focus,
+.p-password input:focus,
+.p-inputnumber input:focus,
+.p-calendar input:focus,
+.p-autocomplete input:focus,
+.p-dropdown:focus-within,
+.p-multiselect:focus-within {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.08);
+  border-color: #6b7280 !important;
+}
+
+/* PrimeNG overlay panels (dropdown list, multiselect panel, calendar) */
+.p-dropdown-panel,
+.p-multiselect-panel,
+.p-datepicker,
+.p-autocomplete-panel {
+  background-color: #ffffff !important;
+  color: #1a1a1a !important;
+}
+
+/* Items inside the panels */
+.p-dropdown-items,
+.p-multiselect-items,
+.p-autocomplete-items {
+  background-color: #ffffff !important;
+  color: #1a1a1a !important;
+}
+
+/* Disabled inputs remain readable on light background */
+.p-inputtext:disabled,
+input:disabled,
+textarea:disabled,
+select:disabled,
+.p-password input:disabled,
+.p-inputnumber input:disabled,
+.p-calendar input:disabled,
+.p-autocomplete input:disabled {
+  background-color: #f3f4f6 !important; /* light gray */
+  color: #6b7280 !important;          /* muted text */
+  opacity: 1; /* avoid overly faded look */
+}
+
+/* ==========================
+   PrimeNG Checkbox - ensure light look & readable contrast
+   ========================== */
+/* Native checkboxes baseline (in case any are used) */
+input[type="checkbox"] {
+  accent-color: #b8de70; /* app green */
+}
+
+/* PrimeNG checkbox container */
+.p-checkbox .p-checkbox-box {
+  background-color: #ffffff !important; /* light surface */
+  border-color: #d1d5db !important;     /* light gray border */
+  color: #1a1a1a !important;            /* icon default color (unchecked) */
+  transition: box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+/* Hover state when not focused */
+.p-checkbox:not(.p-disabled) .p-checkbox-box:hover {
+  border-color: #9ca3af !important; /* slightly darker gray on hover */
+}
+
+/* Focus ring */
+.p-checkbox:not(.p-disabled) .p-checkbox-box.p-focus {
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.08);
+  border-color: #6b7280 !important;
+}
+
+/* Checked (highlighted) */
+.p-checkbox .p-checkbox-box.p-highlight {
+  background-color: #b8de70 !important; /* app green */
+  border-color: #b8de70 !important;
+  color: #ffffff !important; /* ensure check icon is visible */
+}
+
+/* Hover while checked: slightly deepen the green */
+.p-checkbox:not(.p-disabled) .p-checkbox-box.p-highlight:hover {
+  background-color: #9cc85c !important;
+  border-color: #9cc85c !important;
+}
+
+/* Checkbox icon color */
+.p-checkbox .p-checkbox-box .p-checkbox-icon {
+  color: currentColor !important; /* inherits from .p-checkbox-box */
+}
+
+/* Disabled state */
+.p-checkbox.p-disabled .p-checkbox-box,
+.p-checkbox .p-checkbox-box.p-disabled {
+  background-color: #f3f4f6 !important;
+  border-color: #e5e7eb !important;
+  color: #9ca3af !important;
+  box-shadow: none !important;
+}
+
+
+/* ==========================
+   Toast outer container and close icon cleanup to avoid white corners
+   ========================== */
+/* Make the outer toast wrapper fully transparent so only our inner card shows */
+.p-toast .p-toast-message {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  position: relative; /* anchor close icon positioning */
+}
+
+/* Ensure the built-in close icon never draws a white box */
+.p-toast .p-toast-icon-close,
+.p-toast .p-toast-icon-close:enabled:hover,
+.p-toast .p-toast-icon-close:enabled:focus {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+/* Inherit color to inner icon element if present */
+.p-toast .p-toast-icon-close .pi,
+.p-toast .p-toast-icon-close .p-toast-close-icon {
+  color: inherit !important;
+  font-size: 1.05rem;
+}
+
+/* Explicit red X close button inside custom toast templates */
+.sof-toast-close-btn {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  color: #ff5a5a !important; /* force red X over global button color */
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  z-index: 3; /* make sure it's above content */
+}
+.sof-toast-close-btn .pi {
+  color: inherit !important;
+  font-size: 1.15rem;
+}
+.sof-toast-close-btn:focus {
+  outline: 2px solid rgba(255, 90, 90, 0.35);
+  outline-offset: 2px;
+  border-radius: 4px;
 }

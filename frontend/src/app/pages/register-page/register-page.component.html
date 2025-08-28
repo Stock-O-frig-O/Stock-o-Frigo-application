@@ -10,6 +10,7 @@
     [formGroup]="registerForm"
     (ngSubmit)="registerForm.valid && onSubmit()"
   >
+
     <p-floatlabel variant="in">
       <input
         pInputText
@@ -85,4 +86,19 @@
   position="bottom-center"
   key="br"
   [breakpoints]="{ '920px': { width: '90%' } }"
-/>
+>
+  <ng-template let-message pTemplate="message">
+    <div class="sof-toast" (click)="onToastClose()" role="button" tabindex="0" (keydown.enter)="onToastClose()" (keydown.space)="onToastClose()">
+      <button type="button" class="sof-toast-close-btn" (click)="$event.stopPropagation(); onToastClose()" aria-label="Fermer" title="Fermer">
+        <i class="pi pi-times"></i>
+      </button>
+      @if (message.icon) {
+        <i [class]="message.icon" class="p-toast-message-icon"></i>
+      }
+      <div class="sof-toast-text">
+        <div class="p-toast-summary">{{ message.summary }}</div>
+        <div class="p-toast-detail">{{ message.detail }}</div>
+      </div>
+    </div>
+  </ng-template>
+</p-toast>

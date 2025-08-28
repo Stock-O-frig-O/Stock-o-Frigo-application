@@ -79,16 +79,33 @@ export class RegisterPageComponent implements OnDestroy {
           this.router.navigate(['/login']);
         },
         error: (err) => {
+          const status = err?.status;
+          const serverMsg: string = err?.error || '';
+          // Map duplicate account conditions to a friendly French message
+          const duplicate =
+            status === 409 ||
+            /already\s*exists|existe\s*d[eé]j[aà]/i.test(String(serverMsg));
+          const detail = duplicate
+            ? "Ce compte existe déjà."
+            : (serverMsg || "Une erreur est survenue. Veuillez réessayer.");
+
           this.messageService.add({
             severity: 'error',
             summary: 'Erreur',
-            detail: err.error,
+            detail,
             key: 'br',
-            life: 3000,
+            life: 6000,
+            icon: 'pi pi-times-circle',
+            closable: true,
           });
           console.error('Error: ', err);
         },
       });
+  }
+
+  // Allow template button to dismiss the error toast explicitly
+  public onToastClose(): void {
+    this.messageService.clear('br');
   }
 
   private securePasswordValidator(): ValidatorFn {

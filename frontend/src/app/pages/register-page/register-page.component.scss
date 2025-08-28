@@ -1,18 +1,38 @@
 .page-content {
+  position: absolute; /* center content like on login */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) translateY(58px); /* moved further down (+10px more as requested) */
+
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+  max-width: 376px; /* target design width */
   padding: 0 10px;
 
   h2 {
     font-size: 2.4rem;
     font-weight: 400;
+    text-align: center;
+    transform: translateY(0); /* keep heading neutral; whole block is nudged down */
   }
 
   form {
     width: 100%;
     max-width: 500px;
+    margin-top: 16px; /* lower the form only by 16px */
   }
+}
+
+:host {
+  position: relative;          /* anchor absolute centering for .page-content */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* keep logo position unchanged at the top */
+  align-items: center;         /* center horizontally */
+  min-height: 100dvh;          /* center relative to viewport height */
+  padding: 0;                  /* avoid shifting vertical centering */
 }
 .fieldset,
 .p-password {
@@ -32,8 +52,10 @@
 .logo {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: center; /* center the title+logo horizontally (like login) */
   align-items: center;
+  width: 100%;
+  padding-right: 0;
 
   h1 {
     margin: 0;
@@ -41,8 +63,8 @@
     font-weight: 100;
     font-size: 5.8rem;
     line-height: 60px;
-    text-align: center;
-    margin-right: 15px;
+    text-align: center; /* center title lines */
+    margin-right: 10px;
   }
 
   img {

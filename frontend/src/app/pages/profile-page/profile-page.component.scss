@@ -1,0 +1,207 @@
+.profile-wrapper {
+  max-width: 375px; /* match mobile design width */
+  width: 100%;
+  margin: 0 auto;
+  padding: 16px;
+  padding-top: 16px;
+  min-height: auto; /* removed fixed min-height to prevent unwanted scroll on short viewports */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch; /* let children take full width */
+  justify-content: flex-start; /* place content top-to-bottom naturally so actions sit under form */
+}
+
+.profile-header {
+  display: flex;
+  flex-direction: column; /* stack avatar and title */
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #ede8d8;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block; /* remove inline-gap */
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto; /* center horizontally */
+  flex: 0 0 auto; /* do not stretch; keep actions right below the form */
+}
+
+@media (max-width: 768px) {
+  .profile-wrapper {
+    max-width: 375px;
+    width: 100%;
+    min-height: auto; /* removed fixed min-height on mobile to prevent white space + scroll */
+    overflow-x: hidden; /* prevent accidental horizontal scroll on small screens */
+  }
+  .profile-form {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
+.profile-form .p-inputgroup {
+  position: relative;
+}
+
+/* Make the edit button appear inside the input, with an oval/circular background */
+.edit-btn {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  width: 36px; /* circle */
+  height: 36px; /* circle */
+  border-radius: 9999px; /* full round */
+  background: #7DC600;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  padding: 0; /* remove addon padding */
+  min-width: 0; /* override p-inputgroup-addon min-width on mobile */
+}
+.edit-btn i {
+  font-size: 16px;
+  color: #000000; /* black, solid icon */
+}
+.edit-btn svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+/* Force filled black icon regardless of global SVG/icon styles */
+.edit-btn svg, .edit-btn svg *, .edit-btn svg path, .edit-btn svg g {
+  fill: #000000 !important;
+  stroke: none !important;
+}
+
+/* Give the input extra right padding so text doesn't sit under the button */
+.profile-form .p-inputgroup input.p-inputtext,
+.profile-form input.p-inputtext {
+  padding-right: 48px; /* space for circular 36px button */
+}
+
+@media (max-width: 390px) {
+  .edit-btn {
+    right: 6px;
+    width: 32px;
+    height: 32px;
+  }
+  .edit-btn i {
+    font-size: 14px;
+  }
+  .edit-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+  .profile-form .p-inputgroup input.p-inputtext,
+  .profile-form input.p-inputtext {
+    padding-right: 48px; /* match circular size on small screens */
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 0;
+  padding-top: 8px; /* minimal spacing from form */
+}
+
+.manage-groups.p-button {
+  width: 100%;
+  max-width: 480px;
+  height: 60px;
+  background-color: #B8DE70;
+  border: none;
+  border-radius: 20px;
+  color: #1a1a1a;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  font-size: 1.1rem;
+}
+
+
+/* Title spacing */
+.profile-wrapper > h2 {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  text-align: center;
+  font-size: 2.2rem; /* increased size as requested */
+}
+
+
+/* Ensure profile inputs align full-width like login/register */
+.profile-form .p-floatlabel,
+.profile-form p-floatlabel {
+  display: block;
+  width: 100%;
+}
+
+.profile-form .p-inputgroup {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+}
+
+.profile-form .p-inputgroup input.p-inputtext,
+.profile-form input.p-inputtext {
+  flex: 1 1 auto;
+  width: 100%;
+}
+
+@media (max-width: 390px) {
+  .profile-wrapper {
+    padding: 12px;
+  }
+  .profile-header {
+    margin-top: 6px;
+    margin-bottom: 12px;
+  }
+  .avatar {
+    width: 64px;
+    height: 64px;
+  }
+  .profile-wrapper > h2 {
+    font-size: 2rem;
+    margin-top: 6px;
+    margin-bottom: 6px;
+  }
+  .profile-form {
+    gap: 10px;
+  }
+  .profile-form .p-inputgroup .p-inputgroup-addon {
+    min-width: 44px; /* comfortable tap target; keeps input width stable */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .actions {
+    margin-top: 16px;
+  }
+  .manage-groups.p-button {
+    height: 56px;
+    font-size: 1rem;
+  }
+}

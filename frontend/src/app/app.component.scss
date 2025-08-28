@@ -1,10 +1,17 @@
 main {
   height: 100%;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
+
 div {
-  height: calc(100vh - calc(25vh + 60px));
+  /* Fill the remaining space between the header and the fixed bottom navbar */
+  flex: 1 1 auto;
+  min-height: 0; /* allow inner scroll areas to size correctly */
   overflow: auto;
+  padding-bottom: 50px; /* prevent content being hidden behind fixed navbar */
 }
 
 @media screen and (min-width: 800px) {
@@ -12,9 +19,42 @@ div {
     display: flex;
     flex-direction: row-reverse;
     justify-content: flex-end;
+    min-height: 100vh;
   }
   div {
     height: 100%;
     overflow: auto;
+    padding-bottom: 0; /* navbar is a sidebar on desktop */
   }
+}
+
+/* Mobile frame: align the whole app to 375 x 760 on small screens */
+@media screen and (max-width: 768px) {
+  main {
+    max-width: 375px;
+    width: 100%;
+    min-height: 760px;
+    margin: 0 auto; /* center horizontally */
+  }
+}
+
+.top-right-login {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: #ede8d8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1a1a1a;
+  text-decoration: none;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  z-index: 1000;
+}
+.top-right-login i {
+  font-size: 22px;
+  line-height: 1;
 }

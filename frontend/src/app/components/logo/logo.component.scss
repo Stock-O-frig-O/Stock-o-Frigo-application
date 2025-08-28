@@ -2,15 +2,16 @@ header {
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start; /* keep header content at the top, not centered */
   align-items: center;
-  height: 25vh;
+  height: auto; /* remove big fixed height to avoid large white space */
   padding: 10px;
-  gap: 10px;
-  margin-bottom: 10px;
+  gap: 6px; /* slightly tighter spacing */
+  margin-bottom: 8px; /* reduce bottom space a bit */
 }
-.p-inputtext {
-  border: 0px solid black !important;
+/* Scope the input look to the search bar inside the header only (avoid global leak) */
+.search-bar .p-inputtext {
+  border: 0px solid transparent !important;
   box-shadow: none !important;
   background-color: #ede8d8 !important;
 }
@@ -27,19 +28,60 @@ header {
   background-color: #ede8d8;
 }
 
-.header-move-to {
+/* Single top bar: arrow (left), centered title/logo, user button (right) */
+.top-bar {
+  position: relative;
   width: 100%;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: center; /* center the title-wrap */
+  min-height: 56px; /* accommodate buttons */
+  /* Reserve space so the centered title never collides with side buttons */
+  padding: 0 56px; /* slightly slimmer than before to give more room to the center */
 }
 
-.header-title {
+.title-wrap {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   gap: 10px;
+  margin: 0 auto;
+}
+
+/* Stack title lines vertically to the left of the logo */
+.title-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center; /* vertically center the two lines relative to the logo */
+  line-height: 0.85;
+}
+
+/* Position left/right controls while keeping center perfectly centered */
+.back-btn,
+.user-btn {
+  position: absolute;
+}
+.back-btn {
+  top: 0;
+  left: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: none;
+  z-index: 10;
+}
+.back-btn i {
+  font-size: 16px;
+}
+.user-btn {
+  top: 0;
+  right: 0;
+  transform: none;
+  z-index: 10;
 }
 
 .header-action {
@@ -53,8 +95,8 @@ header {
 }
 
 .header-button-action {
-  width: 50px;
-  height: 50px;
+  width: 56px;
+  height: 56px;
   border-radius: 50px;
   border: unset;
   background-color: #ede8d8;
@@ -65,8 +107,19 @@ header {
 
   i {
     font-weight: 900;
+    font-size: 28px; /* make the user icon a bit larger */
+    color: #1a1a1a;  /* keep high contrast */
+    line-height: 1;
+  }
+
+  img.avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
   }
 }
+
 
 a {
   text-decoration: none;
@@ -77,16 +130,76 @@ a:hover {
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
 }
 
+/* Base title styles for stacked lines */
 h1 {
   margin: 0;
   font-family: "Road Rage", sans-serif;
   font-weight: 100;
-  font-size: 4rem;
-  line-height: 60px;
-  text-align: center;
-  margin-right: 15px;
+  font-size: clamp(3rem, 89vw, 4rem);
+  line-height: 0.85; /* tighter for stacked look */
+  text-align: left;
+  margin-right: 0;
+  white-space: normal;
 }
 
 img {
-  height: 50px;
+  height: clamp(32px, 7.5vw, 40px);
+}
+
+/* Bigger branding on profile page */
+header.profile {
+  margin-bottom: 24px; /* increase spacing below large header to keep page text away from logo */
+  .title-wrap img {
+    height: clamp(56px, 84vw, 84px);
+    margin-left: 6px; /* nudge logo slightly to the right on profile header */
+  }
+  /* Title text clamp per request */
+  h1 {
+    font-size: clamp(3rem, 89vw, 4rem);
+  }
+}
+
+/* Mobile tweaks for the 375 x 760 frame */
+@media screen and (max-width: 768px) {
+  /* Larger branding while keeping controls aligned within 375x760 */
+  .top-bar {
+    padding: 0 44px; /* keep side reserve to avoid overlap */
+  }
+  .header-button-action.user-button {
+    width: 44px;
+    height: 44px;
+  }
+  .header-button-action i {
+    font-size: 24px;
+  }
+  .title-wrap {
+    gap: 4px; /* tighter gap to make room for larger title/logo */
+  }
+  h1 {
+    font-size: clamp(3rem, 89vw, 4rem);
+    line-height: 0.9;
+  }
+  img {
+    height: clamp(46px, 11vw, 56px); /* larger logo on mobile */
+  }
+}
+
+/* Extra-tight phones */
+@media screen and (max-width: 360px) {
+  .top-bar {
+    padding: 0 40px;
+  }
+  .header-button-action.user-button {
+    width: 36px;
+    height: 36px;
+  }
+  .header-button-action i {
+    font-size: 20px;
+  }
+  h1 {
+    font-size: clamp(3rem, 89vw, 4rem);
+  }
+  img {
+    height: clamp(26px, 8.5vw, 34px);
+  }
 }

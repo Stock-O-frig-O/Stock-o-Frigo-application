@@ -75,10 +75,16 @@ export class LoginPageComponent implements OnInit, OnDestroy {
             summary: 'Erreur',
             detail: err.error,
             key: 'br',
-            life: 3000,
+            life: 6000,
+            closable: true,
           });
         },
       });
+  }
+
+  // Allow template button to dismiss the error toast explicitly
+  public onToastClose(): void {
+    this.messageService.clear('br');
   }
 
   ngOnDestroy() {

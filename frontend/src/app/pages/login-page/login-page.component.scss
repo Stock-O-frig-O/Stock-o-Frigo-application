@@ -1,12 +1,20 @@
 .page-content {
+  position: absolute; /* center this block relative to the viewport */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+  max-width: 376px; /* target design width */
   padding: 0 10px;
 
   h2 {
     font-size: 2.4rem;
     font-weight: 400;
+    transform: translateY(-34px); /* per request: move heading higher */
   }
 
   form {
@@ -32,8 +40,10 @@
 .logo {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: center; /* center the title+logo horizontally */
   align-items: center;
+  width: 100%;
+  padding-right: 0;
 
   h1 {
     margin: 0;
@@ -41,12 +51,22 @@
     font-weight: 100;
     font-size: 5.8rem;
     line-height: 60px;
-    text-align: center;
-    margin-right: 15px;
+    text-align: center; /* center title lines */
+    margin-right: 10px;
   }
 
   img {
     height: 140px;
     filter: drop-shadow(0 3px 3px rgb(165, 190, 145));
   }
+}
+
+:host {
+  position: relative;       /* anchor absolute centering for .page-content */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* keep logo unaffected at top */
+  align-items: center;         /* center horizontally */
+  min-height: 100dvh;          /* match 760h viewport on mobile */
+  padding: 0;                  /* no extra padding */
 }
