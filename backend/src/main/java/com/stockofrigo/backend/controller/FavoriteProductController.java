@@ -18,7 +18,7 @@ public class FavoriteProductController {
     this.favoriteProductService = favoriteProductService;
   }
 
-  // Supprimer un favori
+  // Delete favorite product from home
   @DeleteMapping("/{homeId}/favorites/{productId}")
   public ResponseEntity<Void> removeFavoriteProduct(
       @PathVariable Long homeId, @PathVariable Long productId) {
@@ -26,7 +26,7 @@ public class FavoriteProductController {
     return ResponseEntity.noContent().build();
   }
 
-  // Ajouter un favori
+  // Add favorite product to home
   @PostMapping("/{homeId}/favorites")
   public ResponseEntity<FavoriteProductDTO> addFavoriteProduct(
       @PathVariable Long homeId, @RequestBody AddFavoriteProductDTO addFavoriteProductDTO) {
@@ -39,7 +39,7 @@ public class FavoriteProductController {
     return ResponseEntity.status(HttpStatus.CREATED).body(dto);
   }
 
-  // Lister tous les favoris d'un home
+  // List all favorite products for a home
   @GetMapping("/{homeId}/favorites")
   public ResponseEntity<List<FavoriteProductDTO>> getFavoritesProducts(@PathVariable Long homeId) {
     List<FavoriteProductDTO> favorites = favoriteProductService.getFavoriteProducts(homeId);
