@@ -22,7 +22,6 @@ import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { Popover } from 'primeng/popover';
 import { MenuModule } from 'primeng/menu';
-import { DrawerModule } from 'primeng/drawer';
 import { Toast } from 'primeng/toast';
 
 // Local imports
@@ -45,7 +44,6 @@ import { MenuItem, MessageService } from 'primeng/api';
     InputGroupModule,
     InputGroupAddonModule,
     MenuModule,
-    DrawerModule,
     Toast,
   ],
   encapsulation: ViewEncapsulation.None,
@@ -101,7 +99,7 @@ export class SearchBarComponent implements OnInit, OnDestroy {
       {
         label: 'Suprimer les éléments cochés',
         icon: 'pi pi-trash',
-        command: () => this.removeSotckProductCheck(),
+        command: () => this.removeStockProductCheck(),
       },
     ];
   }
@@ -128,7 +126,7 @@ export class SearchBarComponent implements OnInit, OnDestroy {
   // handle product selection
   onProductSelected(event: { value: Product }) {
     this.sendProductToStock(event.value);
-    this.selectedProduct = null!; // Vider le champ de saisie
+    this.selectedProduct = null!;
   }
 
   // change all products check to true
@@ -143,12 +141,12 @@ export class SearchBarComponent implements OnInit, OnDestroy {
     this.filterService.removeAllProductChecklist();
   }
 
-  removeSotckProductCheck() {
+  removeStockProductCheck() {
     const productIds: number[] = [];
 
     this.filterService
       .productCheckList()
-      .map((product) => productIds.push(product.id));
+      .forEach((product) => productIds.push(product.id));
 
     if (this.home && productIds.length > 0) {
       this.productService
