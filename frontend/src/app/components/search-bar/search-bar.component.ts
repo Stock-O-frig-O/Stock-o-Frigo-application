@@ -126,7 +126,7 @@ export class SearchBarComponent implements OnInit, OnDestroy {
   // handle product selection
   onProductSelected(event: { value: Product }) {
     this.sendProductToStock(event.value);
-    this.selectedProduct = null!;
+    this.selectedProduct = null;
   }
 
   // change all products check to true
