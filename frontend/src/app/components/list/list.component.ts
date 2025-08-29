@@ -68,7 +68,9 @@ export class ListComponent implements OnInit {
             (p) => p.id === product.id,
           );
 
-          product.isCheck = productToCheck!.isCheck;
+          if (productToCheck) {
+            product.isCheck = productToCheck.isCheck;
+          }
         });
       }
     });
