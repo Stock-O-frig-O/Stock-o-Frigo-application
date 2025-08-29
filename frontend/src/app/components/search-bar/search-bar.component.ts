@@ -5,6 +5,7 @@ import { Subject, takeUntil } from 'rxjs';
 import {
   Component,
   inject,
+  input,
   OnDestroy,
   OnInit,
   output,
@@ -22,6 +23,7 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { Popover } from 'primeng/popover';
 import { MenuModule } from 'primeng/menu';
 import { DrawerModule } from 'primeng/drawer';
+import { Toast } from 'primeng/toast';
 
 // Local imports
 import { ProductService } from '../../core/services/product.service';
@@ -30,7 +32,7 @@ import { HomeService } from '../../core/services/home.service';
 // Model imports
 import Product from '../../core/model/Product.model';
 import { FilterService } from '../../core/services/filter.service';
-import { MenuItem } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-search-bar',
@@ -44,15 +46,19 @@ import { MenuItem } from 'primeng/api';
     InputGroupAddonModule,
     MenuModule,
     DrawerModule,
+    Toast,
   ],
   encapsulation: ViewEncapsulation.None,
   templateUrl: './search-bar.component.html',
   styleUrl: './search-bar.component.scss',
+  providers: [MessageService],
 })
 export class SearchBarComponent implements OnInit, OnDestroy {
   private readonly apiProduct: ProductService = inject(ProductService);
   private readonly homeService: HomeService = inject(HomeService);
   private readonly filterService: FilterService = inject(FilterService);
+  private readonly productService: ProductService = inject(ProductService);
+  private readonly messageService: MessageService = inject(MessageService);
 
   @ViewChild('op') op!: Popover;
   // Use to unsubscribe
@@ -64,28 +70,22 @@ export class SearchBarComponent implements OnInit, OnDestroy {
   // get home id
   home!: string | null;
 
-  // get allProductCheck
-  check!: boolean;
-
-  test = true;
+  // signals
+  products = input.required<Product[]>();
+  addedProduct = output<Product>();
 
   // properties for product management
-  products: Product[] = [];
   selectedProduct!: Product;
   filteredProducts: Product[] = [];
 
-  // signals
-  addedProduct = output<Product>();
-
   ngOnInit() {
     this.home = this.homeService.getHomeId();
-    this.check = this.filterService.allcheck();
 
     this.items = [
       {
         label: "Cocher l'ensemble des produits",
         icon: 'pi pi-circle-fill',
-        command: () => this.setCheckToTrue(),
+        command: () => this.addAllProductToChecklist(),
       },
       {
         separator: true,
@@ -93,7 +93,7 @@ export class SearchBarComponent implements OnInit, OnDestroy {
       {
         label: "Décocher l'ensemble des produits",
         icon: 'pi pi-circle',
-        command: () => this.setCheckToFalse(),
+        command: () => this.removeAllProductToChecklist(),
       },
       {
         separator: true,
@@ -101,7 +101,7 @@ export class SearchBarComponent implements OnInit, OnDestroy {
       {
         label: 'Suprimer les éléments cochés',
         icon: 'pi pi-trash',
-        command: () => this.setCheckToFalse(),
+        command: () => this.removeSotckProductCheck(),
       },
     ];
   }
@@ -120,6 +120,7 @@ export class SearchBarComponent implements OnInit, OnDestroy {
       });
   }
 
+  // Add product to the stock
   sendProductToStock(product: Product) {
     this.addedProduct.emit(product);
   }
@@ -127,13 +128,59 @@ export class SearchBarComponent implements OnInit, OnDestroy {
   // handle product selection
   onProductSelected(event: { value: Product }) {
     this.sendProductToStock(event.value);
+    this.selectedProduct = null!; // Vider le champ de saisie
   }
 
-  setCheckToTrue() {
-    this.filterService.changeCkeckeToTrue();
+  // change all products check to true
+  addAllProductToChecklist() {
+    this.products().forEach((prod) => (prod.isCheck = true));
+    this.filterService.addAllProductToChecklist(this.products());
   }
-  setCheckToFalse() {
-    this.filterService.changeCheckeToFalse();
+
+  // change all products check to false
+  removeAllProductToChecklist() {
+    this.products().forEach((prod) => (prod.isCheck = false));
+    this.filterService.removeAllProductChecklist();
+  }
+
+  removeSotckProductCheck() {
+    const productIds: number[] = [];
+
+    this.filterService
+      .productCheckList()
+      .map((product) => productIds.push(product.id));
+
+    if (this.home && productIds.length > 0) {
+      this.productService
+        .removeStockProduct(this.home, productIds)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: () => {
+            this.homeService.notifyProductAdded();
+            this.filterService.removeAllProductChecklist();
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Les produits ont bien été supprimés',
+            });
+          },
+          error: (error) => {
+            console.error('Error response:', error);
+            this.messageService.add({
+              severity: 'error',
+              summary: 'error',
+              detail:
+                "Un problème est survenu, les produits n'ont pas pu être supprimés",
+            });
+          },
+        });
+    } else {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'warn',
+        detail: 'Aucun produit à supprimer',
+      });
+    }
   }
 
   ngOnDestroy() {

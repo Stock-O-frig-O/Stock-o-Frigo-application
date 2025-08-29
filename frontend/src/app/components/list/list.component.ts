@@ -48,40 +48,39 @@ export class ListComponent implements OnInit {
   private readonly filterService: FilterService = inject(FilterService);
 
   private homeId!: string | null;
+  // Used to sort products when displaying the list
+  categoryList: string[] = [];
 
   // Receive the product from parent
-  products = input<Product[]>({} as Product[]);
-  productChecked: Product[] = [];
+  products = input.required<Product[]>();
 
   constructor() {
     effect(() => {
-      const check = this.filterService.allcheck();
+      const productCheckList = this.filterService.productCheckList();
 
       if (this.products()) {
         this.findCategory();
       }
-      if (check) {
-        this.filterService.changeCkeckeToTrue();
-        this.toggleCheck(check);
-      } else {
-        this.filterService.changeCheckeToFalse();
-        this.toggleCheck(check);
+
+      if (productCheckList) {
+        productCheckList.forEach((product) => {
+          const productToCheck = this.products().find(
+            (p) => p.id === product.id,
+          );
+
+          product.isCheck = productToCheck!.isCheck;
+        });
       }
     });
   }
-  // Used to sort products when displaying the list
-  categoryList: string[] = [];
 
   ngOnInit(): void {
     this.findCategory();
     this.homeId = this.homeService.getHomeId();
   }
 
-  toggleCheck(check: boolean) {
-    this.products().forEach((product) => (product.isCheck = check));
-  }
-
   findCategory() {
+    this.categoryList = [];
     for (const product of this.products()) {
       if (!this.categoryList.includes(product.category)) {
         this.categoryList.push(product.category);
@@ -91,12 +90,9 @@ export class ListComponent implements OnInit {
 
   onProductCheck(product: Product) {
     if (product.isCheck) {
-      this.productChecked.push(product);
-      console.log(this.productChecked);
+      this.filterService.addOneProductToChecklist(product);
     } else {
-      const indexToRemove = this.productChecked.indexOf(product);
-      this.productChecked.splice(indexToRemove, 1);
-      console.log(this.productChecked);
+      this.filterService.removeOneProductFromChecklist(product);
     }
   }
 

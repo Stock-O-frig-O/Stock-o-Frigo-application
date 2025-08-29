@@ -17,4 +17,10 @@
     </button>
   </div>
   <p-menu #menu [popup]="true" [model]="items" appendTo="body" />
+  <p-toast
+    position="top-center"
+    [breakpoints]="{
+      '920px': { width: '90%' },
+    }"
+  />
 </section>

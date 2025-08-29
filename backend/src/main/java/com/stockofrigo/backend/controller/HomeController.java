@@ -68,10 +68,10 @@ public class HomeController {
     return ResponseEntity.ok(homeDTO);
   }
 
-  @DeleteMapping("/{homeId}/products/{stockProductId}")
+  @DeleteMapping("/{homeId}/products/query")
   public ResponseEntity<HomeDTO> deleteProductFromStock(
-      @PathVariable Long homeId, @PathVariable Long stockProductId) {
-    HomeDTO homeDTO = homeService.deleteProductFromStock(homeId, stockProductId);
+      @PathVariable Long homeId, @RequestParam List<Long> productIds) {
+    HomeDTO homeDTO = homeService.deleteProductFromStock(homeId, productIds);
     return ResponseEntity.ok(homeDTO);
   }
 
