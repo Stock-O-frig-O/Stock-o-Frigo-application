@@ -20,8 +20,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { Popover } from 'primeng/popover';
-import { Checkbox } from 'primeng/checkbox';
-import { Button } from 'primeng/button';
+import { MenuModule } from 'primeng/menu';
+import { DrawerModule } from 'primeng/drawer';
 
 // Local imports
 import { ProductService } from '../../core/services/product.service';
@@ -29,6 +29,8 @@ import { HomeService } from '../../core/services/home.service';
 
 // Model imports
 import Product from '../../core/model/Product.model';
+import { FilterService } from '../../core/services/filter.service';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-search-bar',
@@ -40,9 +42,8 @@ import Product from '../../core/model/Product.model';
     AutoCompleteModule,
     InputGroupModule,
     InputGroupAddonModule,
-    Popover,
-    Checkbox,
-    Button,
+    MenuModule,
+    DrawerModule,
   ],
   encapsulation: ViewEncapsulation.None,
   templateUrl: './search-bar.component.html',
@@ -51,24 +52,58 @@ import Product from '../../core/model/Product.model';
 export class SearchBarComponent implements OnInit, OnDestroy {
   private readonly apiProduct: ProductService = inject(ProductService);
   private readonly homeService: HomeService = inject(HomeService);
+  private readonly filterService: FilterService = inject(FilterService);
 
   @ViewChild('op') op!: Popover;
   // Use to unsubscribe
   destroy$ = new Subject<void>();
 
+  items: MenuItem[] | undefined;
+  visible = false;
+
   // get home id
   home!: string | null;
+
+  // get allProductCheck
+  check!: boolean;
+
+  test = true;
 
   // properties for product management
   products: Product[] = [];
   selectedProduct!: Product;
   filteredProducts: Product[] = [];
 
-  // signal
+  // signals
   addedProduct = output<Product>();
 
   ngOnInit() {
     this.home = this.homeService.getHomeId();
+    this.check = this.filterService.allcheck();
+
+    this.items = [
+      {
+        label: "Cocher l'ensemble des produits",
+        icon: 'pi pi-circle-fill',
+        command: () => this.setCheckToTrue(),
+      },
+      {
+        separator: true,
+      },
+      {
+        label: "Décocher l'ensemble des produits",
+        icon: 'pi pi-circle',
+        command: () => this.setCheckToFalse(),
+      },
+      {
+        separator: true,
+      },
+      {
+        label: 'Suprimer les éléments cochés',
+        icon: 'pi pi-trash',
+        command: () => this.setCheckToFalse(),
+      },
+    ];
   }
 
   // fetch product data on autocomplete component
@@ -89,13 +124,16 @@ export class SearchBarComponent implements OnInit, OnDestroy {
     this.addedProduct.emit(product);
   }
 
-  displayMenu(event: Event) {
-    this.op.show(event);
-  }
-
   // handle product selection
   onProductSelected(event: { value: Product }) {
     this.sendProductToStock(event.value);
+  }
+
+  setCheckToTrue() {
+    this.filterService.changeCkeckeToTrue();
+  }
+  setCheckToFalse() {
+    this.filterService.changeCheckeToFalse();
   }
 
   ngOnDestroy() {

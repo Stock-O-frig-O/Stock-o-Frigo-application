@@ -1,11 +1,10 @@
 // Angular imports
 import {
   Component,
+  effect,
   inject,
   input,
-  OnChanges,
   OnInit,
-  SimpleChanges,
   ViewEncapsulation,
 } from '@angular/core';
 
@@ -24,6 +23,7 @@ import Product from '../../core/model/Product.model';
 import { ProductService } from '../../core/services/product.service';
 import { HomeService } from '../../core/services/home.service';
 import { MessageService } from 'primeng/api';
+import { FilterService } from '../../core/services/filter.service';
 
 @Component({
   selector: 'app-list',
@@ -40,23 +40,35 @@ import { MessageService } from 'primeng/api';
   styleUrl: './list.component.scss',
   providers: [MessageService],
 })
-export class ListComponent implements OnInit, OnChanges {
+export class ListComponent implements OnInit {
   // Service injection
-  private productService = inject(ProductService);
-  private homeService = inject(HomeService);
-  private messageService = inject(MessageService);
+  private readonly productService: ProductService = inject(ProductService);
+  private readonly homeService: HomeService = inject(HomeService);
+  private readonly messageService: MessageService = inject(MessageService);
+  private readonly filterService: FilterService = inject(FilterService);
 
   private homeId!: string | null;
 
   // Receive the product from parent
   products = input<Product[]>({} as Product[]);
+  productChecked: Product[] = [];
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['products']) {
-      this.findCategory();
-    }
+  constructor() {
+    effect(() => {
+      const check = this.filterService.allcheck();
+
+      if (this.products()) {
+        this.findCategory();
+      }
+      if (check) {
+        this.filterService.changeCkeckeToTrue();
+        this.toggleCheck(check);
+      } else {
+        this.filterService.changeCheckeToFalse();
+        this.toggleCheck(check);
+      }
+    });
   }
-
   // Used to sort products when displaying the list
   categoryList: string[] = [];
 
@@ -65,11 +77,26 @@ export class ListComponent implements OnInit, OnChanges {
     this.homeId = this.homeService.getHomeId();
   }
 
+  toggleCheck(check: boolean) {
+    this.products().forEach((product) => (product.isCheck = check));
+  }
+
   findCategory() {
     for (const product of this.products()) {
       if (!this.categoryList.includes(product.category)) {
         this.categoryList.push(product.category);
       }
+    }
+  }
+
+  onProductCheck(product: Product) {
+    if (product.isCheck) {
+      this.productChecked.push(product);
+      console.log(this.productChecked);
+    } else {
+      const indexToRemove = this.productChecked.indexOf(product);
+      this.productChecked.splice(indexToRemove, 1);
+      console.log(this.productChecked);
     }
   }
 

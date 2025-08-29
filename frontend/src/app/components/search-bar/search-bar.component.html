@@ -12,15 +12,9 @@
         placeholder="Rechercher un produit"
       />
     </i>
-    <button class="search-button-action" (click)="displayMenu($event)">
+    <button class="search-button-action" (click)="menu.toggle($event)">
       <i class="pi pi-ellipsis-v"></i>
     </button>
   </div>
-  <p-popover #op>
-    <p-button>
-      <p-checkbox [binary]="true" />
-      coché tous les produits
-    </p-button>
-    <p>trop cool le popover</p>
-  </p-popover>
+  <p-menu #menu [popup]="true" [model]="items" appendTo="body" />
 </section>
