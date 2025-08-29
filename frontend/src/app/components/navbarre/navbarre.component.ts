@@ -6,9 +6,6 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-// Local imports
-import { AuthService } from '../../core/services/auth.service';
-
 @Component({
   selector: 'app-navbarre',
   imports: [CommonModule],
@@ -18,7 +15,6 @@ import { AuthService } from '../../core/services/auth.service';
 export class NavbarreComponent implements OnInit, OnDestroy {
   // Service injection
   private route: Router = inject(Router);
-  private authService: AuthService = inject(AuthService);
 
   // Use to unsubscribe
   destroy$ = new Subject<void>();

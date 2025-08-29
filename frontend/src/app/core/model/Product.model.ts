@@ -7,4 +7,5 @@ export default interface Product {
   unit: string;
   category: string;
   isFavorit: boolean;
+  isCheck: boolean;
 }

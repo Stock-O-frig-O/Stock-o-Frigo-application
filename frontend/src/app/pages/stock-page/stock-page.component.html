@@ -1,4 +1,7 @@
-<app-search-bar (addedProduct)="handleSelectedProduct($event)" />
+<app-search-bar
+  [products]="products"
+  (addedProduct)="handleSelectedProduct($event)"
+/>
 @if (products) {
   <app-list [products]="products" />
 } @else {

@@ -148,18 +148,20 @@ public class HomeService {
     return homeMapper.convertToHomeDto(home);
   }
 
-  public HomeDTO deleteProductFromStock(Long homeId, Long stockProductId) {
+  public HomeDTO deleteProductFromStock(Long homeId, List<Long> stockProductId) {
+
     Home home =
         homeRepository
             .findById(homeId)
             .orElseThrow(() -> new EntityNotFoundException("Ce home est introuvable."));
 
-    StockProduct stockProduct =
-        stockProductRepository
-            .findById(stockProductId)
-            .orElseThrow(() -> new EntityNotFoundException("Ce produit stocké est introuvable."));
+    List<StockProduct> stockProduct = stockProductRepository.findAllById(stockProductId);
 
-    stockProductRepository.delete(stockProduct);
+    if (stockProduct.isEmpty()) {
+      throw new EntityNotFoundException("Aucun produits trouvé");
+    }
+
+    stockProductRepository.deleteAll(stockProduct);
     return homeMapper.convertToHomeDto(home);
   }
 
@@ -199,6 +201,7 @@ public class HomeService {
         homeRepository
             .findById(homeId)
             .orElseThrow(() -> new EntityNotFoundException("Ce home est introuvable."));
+
     List<StockProduct> stockProducts = stockProductRepository.findAllByHome(home);
     if (stockProducts.isEmpty()) {
       return Collections.emptyList();
