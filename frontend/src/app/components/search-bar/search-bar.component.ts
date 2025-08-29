@@ -97,7 +97,7 @@ export class SearchBarComponent implements OnInit, OnDestroy {
         separator: true,
       },
       {
-        label: 'Suprimer les éléments cochés',
+        label: 'Supprimer les éléments cochés',
         icon: 'pi pi-trash',
         command: () => this.removeStockProductCheck(),
       },
