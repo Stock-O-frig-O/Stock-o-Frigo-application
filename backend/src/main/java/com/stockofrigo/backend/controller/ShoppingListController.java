@@ -75,10 +75,12 @@ public class ShoppingListController {
                 addShoppingListProductDTO.isChecked()));
   }
 
-  @DeleteMapping("/{homeId}/shopping-lists/{shoppingListId}/products/{productId}")
+  @DeleteMapping("/{homeId}/shopping-lists/{shoppingListId}/products/query")
   public ResponseEntity<Void> removeProductFromList(
-      @PathVariable Long homeId, @PathVariable Long shoppingListId, @PathVariable Long productId) {
-    shoppingListService.removeProductFromList(homeId, shoppingListId, productId);
+      @PathVariable Long homeId,
+      @PathVariable Long shoppingListId,
+      @RequestParam List<Long> productIds) {
+    shoppingListService.removeProductFromList(homeId, shoppingListId, productIds);
     return ResponseEntity.noContent().build();
   }
 }

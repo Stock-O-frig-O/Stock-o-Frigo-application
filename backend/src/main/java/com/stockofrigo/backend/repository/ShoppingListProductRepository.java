@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 public interface ShoppingListProductRepository extends JpaRepository<ShoppingListProduct, Long> {
   List<ShoppingListProduct> findAllByShoppingList(ShoppingList shoppingList);
 
-  void deleteByShoppingListAndProduct(ShoppingList shoppingList, Product product);
-
   ShoppingListProduct findByShoppingListAndProduct(ShoppingList list, Product product);
+
+  void deleteAllByProductIdIn(List<Long> productIds);
 }

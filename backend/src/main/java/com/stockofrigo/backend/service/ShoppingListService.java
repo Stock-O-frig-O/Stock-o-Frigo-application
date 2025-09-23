@@ -121,18 +121,13 @@ public class ShoppingListService {
   }
 
   @Transactional
-  public void removeProductFromList(Long homeId, Long shoppingListId, Long productId) {
+  public void removeProductFromList(Long homeId, Long shoppingListId, List<Long> productIds) {
     homeRepository
         .findById(homeId)
         .orElseThrow(() -> new EntityNotFoundException("Home non trouvé"));
-    ShoppingList shoppingList =
-        shoppingListRepository
-            .findById(shoppingListId)
-            .orElseThrow(() -> new EntityNotFoundException("Liste non trouvée"));
-    Product product =
-        productRepository
-            .findById(productId)
-            .orElseThrow(() -> new EntityNotFoundException("Produit non trouvé"));
-    shoppingListProductRepository.deleteByShoppingListAndProduct(shoppingList, product);
+    shoppingListRepository
+        .findById(shoppingListId)
+        .orElseThrow(() -> new EntityNotFoundException("Liste non trouvée"));
+    shoppingListProductRepository.deleteAllByProductIdIn(productIds);
   }
 }
