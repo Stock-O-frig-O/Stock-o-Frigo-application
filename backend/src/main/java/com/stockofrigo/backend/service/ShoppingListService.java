@@ -100,16 +100,17 @@ public class ShoppingListService {
         productRepository
             .findById(productId)
             .orElseThrow(() -> new EntityNotFoundException("Produit non trouvé"));
-    List<ShoppingListProduct> existingListProducts =
-        shoppingListProductRepository.findByShoppingListId(shoppingListId);
-    for (ShoppingListProduct existingListProduct : existingListProducts) {
-      if (existingListProduct.getProduct().getId().equals(product.getId())) {
-        existingListProduct.setQuantity(quantity);
-        existingListProduct.setChecked(checked);
-        shoppingListProductRepository.save(existingListProduct);
-        return ShoppingListMapper.convertShoppingListProductToDto(existingListProduct);
-      }
+
+    ShoppingListProduct existingListProduct =
+        shoppingListProductRepository.findByShoppingListAndProduct(list, product);
+
+    if (existingListProduct != null) {
+      existingListProduct.setQuantity(quantity);
+      existingListProduct.setChecked(checked);
+      shoppingListProductRepository.save(existingListProduct);
+      return ShoppingListMapper.convertShoppingListProductToDto(existingListProduct);
     }
+
     ShoppingListProduct slp = new ShoppingListProduct();
     slp.setShoppingList(list);
     slp.setProduct(product);
@@ -124,12 +125,14 @@ public class ShoppingListService {
     homeRepository
         .findById(homeId)
         .orElseThrow(() -> new EntityNotFoundException("Home non trouvé"));
-    shoppingListRepository
-        .findById(shoppingListId)
-        .orElseThrow(() -> new EntityNotFoundException("Liste non trouvée"));
-    productRepository
-        .findById(productId)
-        .orElseThrow(() -> new EntityNotFoundException("Produit non trouvé"));
-    shoppingListProductRepository.deleteByProductId(productId);
+    ShoppingList shoppingList =
+        shoppingListRepository
+            .findById(shoppingListId)
+            .orElseThrow(() -> new EntityNotFoundException("Liste non trouvée"));
+    Product product =
+        productRepository
+            .findById(productId)
+            .orElseThrow(() -> new EntityNotFoundException("Produit non trouvé"));
+    shoppingListProductRepository.deleteByShoppingListAndProduct(shoppingList, product);
   }
 }
