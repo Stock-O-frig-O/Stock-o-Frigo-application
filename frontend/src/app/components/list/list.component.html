@@ -10,7 +10,11 @@
             @if (product.category === category) {
               <tr>
                 <td class="td-small-item">
-                  <p-checkbox [(ngModel)]="product.isChecked" [binary]="true" />
+                  <p-checkbox
+                    [(ngModel)]="product.isCheck"
+                    (ngModelChange)="onProductCheck(product)"
+                    [binary]="true"
+                  />
                 </td>
                 <td class="td-designation">{{ product.name }}</td>
                 <td class="btn-change-stock">

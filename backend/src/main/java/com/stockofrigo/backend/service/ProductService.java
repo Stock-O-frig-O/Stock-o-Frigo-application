@@ -73,6 +73,7 @@ public class ProductService {
     updatedProduct.setImageUrl(product.getImageUrl());
     updatedProduct.setIngredient(product.isIngredient());
     updatedProduct.setUpdatedAt(LocalDateTime.now());
+
     if (product.getCategory() != null) {
       Category category = categoryRepository.findById(product.getCategory().getId()).orElse(null);
       if (category == null) {

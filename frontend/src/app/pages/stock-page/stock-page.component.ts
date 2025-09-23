@@ -10,13 +10,14 @@ import { ListComponent } from '../../components/list/list.component';
 import { HomeService } from '../../core/services/home.service';
 import Product from '../../core/model/Product.model';
 import { MessageService } from 'primeng/api';
+import { FilterService } from '../../core/services/filter.service';
 
 @Component({
   selector: 'app-stock-page',
   imports: [ListComponent, SearchBarComponent],
   templateUrl: './stock-page.component.html',
   styleUrl: './stock-page.component.scss',
-  providers: [MessageService],
+  providers: [MessageService, FilterService],
 })
 export class StockPageComponent implements OnInit, OnDestroy {
   // Service injection
@@ -25,7 +26,6 @@ export class StockPageComponent implements OnInit, OnDestroy {
 
   private homeId!: string | null;
   products!: Product[];
-  allChecked!: boolean;
 
   // Use to unsubscribe
   private destroy$ = new Subject<void>();

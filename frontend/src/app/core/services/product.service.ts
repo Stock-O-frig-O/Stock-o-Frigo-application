@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import Product from '../model/Product.model';
+import { Home } from '../model/Home.model';
 
 @Injectable({
   providedIn: 'root',
@@ -38,6 +39,12 @@ export class ProductService {
       {
         quantity,
       },
+    );
+  }
+
+  removeStockProduct(homeId: string, productIds: number[]): Observable<Home> {
+    return this.http.delete<Home>(
+      `${this.apiUrl}/home/${homeId}/products/query?productIds=${productIds}`,
     );
   }
 }
