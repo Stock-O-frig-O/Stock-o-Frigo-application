@@ -152,7 +152,8 @@ export class ListComponent implements OnInit, OnDestroy {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
-            detail: 'Échec de l\'ajout du produit aux favoris. Veuillez réessayer.',
+            detail:
+              "Échec de l'ajout du produit aux favoris. Veuillez réessayer.",
           });
         },
       });
