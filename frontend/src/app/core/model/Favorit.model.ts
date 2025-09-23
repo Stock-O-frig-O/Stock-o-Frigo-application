@@ -1,11 +1,11 @@
-export default interface Product {
+export default interface Favorit {
   id: number;
-  quantity: number;
   productId: number;
   name: string;
   brand: string;
   unit: string;
   category: string;
-  favorite: boolean;
+  limit: number;
   isCheck: boolean;
+  favorite: boolean;
 }

@@ -1,1 +1,14 @@
-<p>favorit-page works!</p>
+<app-search-bar
+  [products]="products"
+  (addedProduct)="handleSelectedProduct($event)"
+  (removeProduct)="handleRemoveClickedFavorit()"
+/>
+@if (products) {
+  <app-list
+    [products]="products"
+    (notifyFavorit)="handleNotifyFavorit($event)"
+    [activePage]="activePage"
+  ></app-list>
+} @else {
+  <p>Vous n'avez pas de produit en favoris.</p>
+}

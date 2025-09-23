@@ -4,7 +4,9 @@ import {
   effect,
   inject,
   input,
+  OnDestroy,
   OnInit,
+  output,
   ViewEncapsulation,
 } from '@angular/core';
 
@@ -24,6 +26,10 @@ import { ProductService } from '../../core/services/product.service';
 import { HomeService } from '../../core/services/home.service';
 import { MessageService } from 'primeng/api';
 import { FilterService } from '../../core/services/filter.service';
+import { FavoritService } from '../../core/services/favorit.service';
+import { Subject, takeUntil } from 'rxjs';
+import Favorit from '../../core/model/Favorit.model';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-list',
@@ -38,21 +44,30 @@ import { FilterService } from '../../core/services/filter.service';
   encapsulation: ViewEncapsulation.None,
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss',
-  providers: [MessageService],
+  providers: [MessageService, CommonModule],
 })
-export class ListComponent implements OnInit {
+export class ListComponent implements OnInit, OnDestroy {
   // Service injection
   private readonly productService: ProductService = inject(ProductService);
   private readonly homeService: HomeService = inject(HomeService);
   private readonly messageService: MessageService = inject(MessageService);
   private readonly filterService: FilterService = inject(FilterService);
+  private readonly favoritService: FavoritService = inject(FavoritService);
 
   private homeId!: string | null;
+
   // Used to sort products when displaying the list
   categoryList: string[] = [];
 
   // Receive the product from parent
-  products = input.required<Product[]>();
+  products = input.required<(Product | Favorit)[]>();
+
+  activePage = input.required<string>();
+
+  notifyFavorit = output<number>();
+
+  // Use to unsubscribe
+  private destroy$ = new Subject<void>();
 
   constructor() {
     effect(() => {
@@ -101,6 +116,7 @@ export class ListComponent implements OnInit {
   updateStockQuantity(product: Product) {
     this.productService
       .updateStockQuantity(this.homeId!, product.id, product.quantity)
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () =>
           this.messageService.add({
@@ -116,5 +132,73 @@ export class ListComponent implements OnInit {
               "Un problème est survenu, la quantité n'a pas pu être mis-à-jour",
           }),
       });
+  }
+  // add product to favorites
+  AddProductToFavorit = (productId: number) => {
+    this.favoritService
+      .addFavorit(productId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Product added to favorites.',
+          });
+        },
+        error: (error) => {
+          console.error('Failed to add product to favorites:', error);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to add product to favorites. Please try again.',
+          });
+        },
+      });
+  };
+
+  // remove product from favorites
+  removeProductFromFavorit(favoritId: number[]) {
+    this.favoritService
+      .removeProductFromFavorit(favoritId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Product removed from favorites.',
+          });
+        },
+        error: (error) => {
+          console.error('Failed to remove product from favorites:', error);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail:
+              'Failed to remove product from favorites. Please try again.',
+          });
+        },
+      });
+  }
+
+  toggleFavorit(productId: number) {
+    const product = this.products().find((p) => p.productId === productId);
+
+    if (!product) return;
+
+    if (product.favorite) {
+      // Si c'est un Favorit, on le retire des favoris
+      this.removeProductFromFavorit([productId]);
+    } else {
+      // Sinon, on l'ajoute aux favoris
+      this.AddProductToFavorit(productId);
+    }
+    this.notifyFavorit.emit(productId);
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
