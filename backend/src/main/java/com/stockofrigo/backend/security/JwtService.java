@@ -37,9 +37,7 @@ public class JwtService {
   private void initSigningKey() {
     byte[] keyBytes;
     if (secretKey == null || secretKey.isBlank()) {
-      // Generate a secure random key if none provided
-      signingKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-      return;
+      throw new IllegalStateException("JWT secret key is missing. Please set 'security.jwt.secret-key' (env var JWT_SECRET_KEY) in your configuration.");
     }
     try {
       // Prefer Base64-encoded secrets

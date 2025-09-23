@@ -70,12 +70,11 @@ public class ProfileController {
       if (updateDTO.getNewPassword() == null || !updateDTO.getNewPassword().equals(updateDTO.getConfirmNewPassword())) {
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La confirmation du mot de passe ne correspond pas");
       }
-      // Allow password change even if current password is not provided, per UX requirement
+      // Require current password for password change
       if (updateDTO.getCurrentPassword() == null || updateDTO.getCurrentPassword().isBlank()) {
-        userService.setPasswordWithoutCurrent(user, updateDTO.getNewPassword());
-      } else {
-        userService.changePassword(user, updateDTO.getCurrentPassword(), updateDTO.getNewPassword());
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Le mot de passe actuel est requis pour changer le mot de passe");
       }
+      userService.changePassword(user, updateDTO.getCurrentPassword(), updateDTO.getNewPassword());
       // Refresh user after password change in case of any updates
       user = userService.getByEmailOrThrow(email);
     }

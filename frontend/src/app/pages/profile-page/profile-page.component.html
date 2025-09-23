@@ -1,3 +1,4 @@
+<p-toast position="bottom-center" key="br"></p-toast>
 <div class="page-content">
   <h2>Mon profil</h2>
 
@@ -16,7 +17,7 @@
 
     <div class="with-pen">
       <p-floatlabel variant="in">
-        <input pInputText formControlName="firstname" class="fieldset" id="firstname" autocomplete="off" />
+        <input pInputText formControlName="firstname" class="fieldset" id="firstname" #firstnameInput autocomplete="off" />
         <label for="firstname">Prénom</label>
       </p-floatlabel>
       <button type="button" class="edit-pen-btn" (click)="toggleEdit('firstname')" aria-label="Modifier prénom">
@@ -26,7 +27,7 @@
 
     <div class="with-pen">
       <p-floatlabel variant="in">
-        <input pInputText formControlName="lastname" class="fieldset" id="lastname" autocomplete="off" />
+        <input pInputText formControlName="lastname" class="fieldset" id="lastname" #lastnameInput autocomplete="off" />
         <label for="lastname">Nom</label>
       </p-floatlabel>
       <button type="button" class="edit-pen-btn" (click)="toggleEdit('lastname')" aria-label="Modifier nom">
@@ -36,7 +37,7 @@
 
     <div class="with-pen">
       <p-floatlabel variant="in">
-        <input pInputText formControlName="email" class="fieldset" id="email" autocomplete="off" />
+        <input pInputText formControlName="email" class="fieldset" id="email" #emailInput autocomplete="off" />
         <label for="email">Email</label>
       </p-floatlabel>
       <button type="button" class="edit-pen-btn" (click)="toggleEdit('email')" aria-label="Modifier email">
@@ -46,7 +47,7 @@
 
     <div class="with-pen">
       <p-floatlabel variant="in" class="input-full-width">
-        <p-password formControlName="password" id="password" inputStyleClass="input-full-width" [feedback]="true" />
+        <p-password formControlName="password" id="password" inputStyleClass="input-full-width" [feedback]="true" #passwordInput />
         <label for="password">Nouveau mot de passe</label>
       </p-floatlabel>
       <button type="button" class="edit-pen-btn" (click)="toggleEdit('password')" aria-label="Modifier mot de passe">

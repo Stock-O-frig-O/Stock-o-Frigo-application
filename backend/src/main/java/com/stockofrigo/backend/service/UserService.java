@@ -60,9 +60,14 @@ public class UserService {
 
   /**
    * Directly sets a new password for the user without verifying the current password.
-   * Warning: Use only if the business requirement is to allow password change without current password.
+   * Restricted to admin users only.
    */
   public void setPasswordWithoutCurrent(User user, String newPassword) {
+    // Only allow admins to change password without current password verification
+    if (!Boolean.TRUE.equals(user.getIs_superuser())) {
+      throw new ResponseStatusException(
+          HttpStatus.FORBIDDEN, "Seuls les administrateurs peuvent changer le mot de passe sans vérification.");
+    }
     validateNewPasswordOrThrow(newPassword);
     user.setPassword(passwordEncoder.encode(normalize(newPassword)));
     user.setModifiedAt(LocalDateTime.now());

@@ -1,14 +1,17 @@
-import { Component, ViewEncapsulation, OnInit } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 
 // PrimeNG imports to match login/register forms
 import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabel } from 'primeng/floatlabel';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
+import { MessageService } from 'primeng/api';
+import { Toast } from 'primeng/toast';
 
 @Component({
   selector: 'app-profile-page',
@@ -20,12 +23,14 @@ import { ButtonModule } from 'primeng/button';
     FloatLabel,
     PasswordModule,
     ButtonModule,
+    Toast,
   ],
   templateUrl: './profile-page.component.html',
   styleUrl: './profile-page.component.scss',
   encapsulation: ViewEncapsulation.None,
+  providers: [MessageService],
 })
-export class ProfilePageComponent implements OnInit {
+export class ProfilePageComponent implements OnInit, OnDestroy {
   form: FormGroup;
   photoPreview: string | ArrayBuffer | null = null;
   // Keep initial values to decide when the save button should be enabled
@@ -35,7 +40,7 @@ export class ProfilePageComponent implements OnInit {
     email: '',
   };
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private messageService: MessageService) {
     this.form = this.fb.group({
       photo: [null],
       firstname: ['', [Validators.required]],
@@ -53,21 +58,45 @@ export class ProfilePageComponent implements OnInit {
     this.form.get('confirmPassword')?.disable({ emitEvent: false });
   }
 
+  // rxjs unsubscribe management
+  private destroy$ = new Subject<void>();
+
   ngOnInit(): void {
     // Prefill from backend (with safe fallback to token)
-    this.authService.getCurrentUser().subscribe((user) => {
-      const firstname = user.firstname || '';
-      const lastname = user.lastname || '';
-      const email = user.email || '';
-      this.initialValues = { firstname, lastname, email };
-      this.form.patchValue({ firstname, lastname, email });
-      // Show masked placeholder for password when read-only
-      this.form.get('password')?.setValue('********', { emitEvent: false });
-      // If avatarUrl exists, set preview
-      if (user.avatarUrl) {
-        this.photoPreview = user.avatarUrl;
-      }
-    });
+    this.authService
+      .getCurrentUser()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((user) => {
+        const firstname = user.firstname || '';
+        const lastname = user.lastname || '';
+        const email = user.email || '';
+        this.initialValues = { firstname, lastname, email };
+        this.form.patchValue({ firstname, lastname, email });
+        // Show masked placeholder for password when read-only
+        this.form.get('password')?.setValue('********', { emitEvent: false });
+        // If avatarUrl exists, set preview
+        if (user.avatarUrl) {
+          this.photoPreview = user.avatarUrl;
+        }
+      });
+  }
+
+  @ViewChild('firstnameInput') firstnameInput?: ElementRef<HTMLInputElement>;
+  @ViewChild('lastnameInput') lastnameInput?: ElementRef<HTMLInputElement>;
+  @ViewChild('emailInput') emailInput?: ElementRef<HTMLInputElement>;
+  @ViewChild('passwordInput') passwordInput?: ElementRef<HTMLInputElement>;
+
+  private focusField(field: 'firstname' | 'lastname' | 'email' | 'password') {
+    const map = {
+      firstname: this.firstnameInput,
+      lastname: this.lastnameInput,
+      email: this.emailInput,
+      password: this.passwordInput,
+    } as const;
+    const ref = map[field];
+    if (ref?.nativeElement) {
+      ref.nativeElement.focus();
+    }
   }
 
   toggleEdit(field: 'firstname' | 'lastname' | 'email' | 'password') {
@@ -84,10 +113,7 @@ export class ProfilePageComponent implements OnInit {
         c2?.setValue('', { emitEvent: false });
       }
       // Focus input after enabling
-      setTimeout(() => {
-        const el = document.getElementById(field) as HTMLInputElement | null;
-        el?.focus();
-      });
+      setTimeout(() => this.focusField(field));
     } else {
       control.disable({ emitEvent: false });
       if (field === 'password') {
@@ -159,39 +185,62 @@ export class ProfilePageComponent implements OnInit {
       update.photoFile = photoControl.value as File;
     }
 
-    this.authService.updateUserProfile(update).subscribe({
-      next: () => {
-        alert('Profil enregistré.');
-        // Re-disable fields after saving
-        this.form.get('firstname')?.disable({ emitEvent: false });
-        this.form.get('lastname')?.disable({ emitEvent: false });
-        this.form.get('email')?.disable({ emitEvent: false });
-        this.form.get('password')?.disable({ emitEvent: false });
-        // Clear photo selection
-        this.form.get('photo')?.reset(null);
-        // Refresh profile data and reset initial values
-        this.authService.getUserProfile().subscribe((user) => {
-          // Preserve existing values if backend omits some fields (common after email change)
-          const currentFirstname = this.form.get('firstname')?.value || this.initialValues.firstname || '';
-          const currentLastname = this.form.get('lastname')?.value || this.initialValues.lastname || '';
-          const currentEmail = this.form.get('email')?.value || this.initialValues.email || '';
+    this.authService
+      .updateUserProfile(update)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Succès',
+            detail: 'Profil enregistré.',
+            key: 'br',
+            life: 3000,
+          });
+          // Re-disable fields after saving
+          this.form.get('firstname')?.disable({ emitEvent: false });
+          this.form.get('lastname')?.disable({ emitEvent: false });
+          this.form.get('email')?.disable({ emitEvent: false });
+          this.form.get('password')?.disable({ emitEvent: false });
+          // Clear photo selection
+          this.form.get('photo')?.reset(null);
+          // Refresh profile data and reset initial values
+          this.authService
+            .getUserProfile()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((user) => {
+              // Preserve existing values if backend omits some fields (common after email change)
+              const currentFirstname = this.form.get('firstname')?.value || this.initialValues.firstname || '';
+              const currentLastname = this.form.get('lastname')?.value || this.initialValues.lastname || '';
+              const currentEmail = this.form.get('email')?.value || this.initialValues.email || '';
 
-          const firstname = (user.firstname ?? currentFirstname) || '';
-          const lastname = (user.lastname ?? currentLastname) || '';
-          const email = (user.email ?? currentEmail) || '';
+              const firstname = (user.firstname ?? currentFirstname) || '';
+              const lastname = (user.lastname ?? currentLastname) || '';
+              const email = (user.email ?? currentEmail) || '';
 
-          this.initialValues = { firstname, lastname, email };
-          this.form.patchValue({ firstname, lastname, email });
-          if (user.avatarUrl) {
-            this.photoPreview = user.avatarUrl;
-          }
-        });
-      },
-      error: (err) => {
-        console.error('Update profile error:', err);
-        alert("Une erreur est survenue lors de l'enregistrement du profil.");
-      },
-    });
+              this.initialValues = { firstname, lastname, email };
+              this.form.patchValue({ firstname, lastname, email });
+              if (user.avatarUrl) {
+                this.photoPreview = user.avatarUrl;
+              }
+            });
+        },
+        error: (err) => {
+          console.error('Update profile error:', err);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Erreur',
+            detail: "Une erreur est survenue lors de l'enregistrement du profil.",
+            key: 'br',
+            life: 3000,
+          });
+        },
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   // Same password security rules as registration

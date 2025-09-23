@@ -31,6 +31,9 @@ public class AuthController {
   private final com.stockofrigo.backend.security.CustomUserDetailsService userDetailsService;
   private final JwtService jwtService;
 
+  @org.springframework.beans.factory.annotation.Value("${security.cookie.secure:true}")
+  private boolean cookieSecure;
+
   public AuthController(UserService userService, AuthenticationService authenticationService, com.stockofrigo.backend.security.CustomUserDetailsService userDetailsService, JwtService jwtService) {
     this.userService = userService;
     this.authenticationService = authenticationService;
@@ -59,7 +62,7 @@ public class AuthController {
     String refreshToken = jwtService.generateRefreshToken(userDetails);
     Cookie cookie = new Cookie("refreshToken", refreshToken);
     cookie.setHttpOnly(true);
-    cookie.setSecure(false); // set true if serving over HTTPS
+    cookie.setSecure(cookieSecure);
     cookie.setPath("/auth");
     cookie.setMaxAge((int) java.util.concurrent.TimeUnit.DAYS.toSeconds(30));
     response.addCookie(cookie);
@@ -108,7 +111,7 @@ public class AuthController {
     String newRefresh = jwtService.generateRefreshToken(userDetails);
     Cookie cookie = new Cookie("refreshToken", newRefresh);
     cookie.setHttpOnly(true);
-    cookie.setSecure(false); // set true if serving over HTTPS
+    cookie.setSecure(cookieSecure);
     cookie.setPath("/auth");
     cookie.setMaxAge((int) java.util.concurrent.TimeUnit.DAYS.toSeconds(30));
     response.addCookie(cookie);

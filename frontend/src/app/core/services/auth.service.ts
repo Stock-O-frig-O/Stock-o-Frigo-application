@@ -11,6 +11,24 @@ import { environment } from '../../../environments/environment';
 import { jwtDecode } from 'jwt-decode';
 import { HomeService } from './home.service';
 
+export type RawUserResponse = Partial<{
+  firstName: string;
+  firstname: string;
+  lastName: string;
+  lastname: string;
+  email: string;
+  mail: string;
+  sub: string;
+  avatarUrl: string;
+}>;
+
+export interface UserProfile {
+  firstname?: string;
+  lastname?: string;
+  email?: string;
+  avatarUrl?: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -108,29 +126,30 @@ export class AuthService {
   }
 
 
-  // Fetch current user profile using backend ProfileController: prefer /api/profile with fallback to /profile
-  getUserProfile(): Observable<{ firstname?: string; lastname?: string; email?: string; avatarUrl?: string }> {
-    const jwtFallback: { firstname?: string; lastname?: string; email?: string; avatarUrl?: string } = {};
+  private normalizeUserResponse(u: unknown): UserProfile {
+    if (u && typeof u === 'object') {
+      const anyU = u as RawUserResponse;
+      const firstname = anyU.firstName ?? anyU.firstname;
+      const lastname = anyU.lastName ?? anyU.lastname;
+      const email = anyU.email ?? anyU.mail ?? anyU.sub;
+      const avatarUrl = anyU.avatarUrl;
+      return { firstname, lastname, email, avatarUrl };
+    }
+    return {};
+  }
 
-    const normalize = (u: unknown): { firstname?: string; lastname?: string; email?: string; avatarUrl?: string } => {
-      if (u && typeof u === 'object') {
-        const anyU = u as Record<string, unknown>;
-        const firstname = (anyU['firstName'] ?? anyU['firstname']) as string | undefined;
-        const lastname = (anyU['lastName'] ?? anyU['lastname']) as string | undefined;
-        const email = (anyU['email'] ?? anyU['mail'] ?? anyU['sub']) as string | undefined;
-        return { firstname, lastname, email, avatarUrl: undefined };
-      }
-      return {};
-    };
+  // Fetch current user profile using backend ProfileController: prefer /api/profile with fallback to /profile
+  getUserProfile(): Observable<UserProfile> {
+    const jwtFallback: UserProfile = {};
 
     return this.http
       .get<unknown>(`${this.apiUrl}/api/profile`)
       .pipe(
-        map((resp) => normalize(resp)),
+        map((resp) => this.normalizeUserResponse(resp)),
         catchError(() =>
           this.http
             .get<unknown>(`${this.apiUrl}/profile`)
-            .pipe(map((resp) => normalize(resp)), catchError(() => of(jwtFallback))),
+            .pipe(map((resp) => this.normalizeUserResponse(resp)), catchError(() => of(jwtFallback))),
         ),
       );
   }
