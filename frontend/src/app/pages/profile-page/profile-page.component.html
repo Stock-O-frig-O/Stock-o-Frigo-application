@@ -46,7 +46,7 @@
 
     <div class="with-pen">
       <p-floatlabel variant="in" class="input-full-width">
-        <p-password formControlName="password" id="password" inputStyleClass="input-full-width" [feedback]="false" />
+        <p-password formControlName="password" id="password" inputStyleClass="input-full-width" [feedback]="true" />
         <label for="password">Nouveau mot de passe</label>
       </p-floatlabel>
       <button type="button" class="edit-pen-btn" (click)="toggleEdit('password')" aria-label="Modifier mot de passe">
@@ -61,7 +61,7 @@
       </p-floatlabel>
     </div>
 
-    <p-button label="Gérer le groupe" styleClass="enregistrer-button" [rounded]="true" size="large" type="button" (onClick)="goToGroup()" />
+    <p-button label="Gérer le groupe" styleClass="enregistrer-button" [rounded]="true" size="large" type="button" (click)="goToGroup()" />
 
     <p-button label="Enregistrer" styleClass="enregistrer-button" [disabled]="!canSubmit()" [rounded]="true" size="large" type="submit" />
   </form>

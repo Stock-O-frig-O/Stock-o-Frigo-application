@@ -58,9 +58,13 @@ public class SecurityConfig {
                       config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                       config.setAllowedHeaders(List.of("*"));
                       config.setAllowCredentials(true);
+                      config.setExposedHeaders(List.of("Authorization"));
                       return config;
                     }))
-        .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers("/auth/login", "/auth/register", "/auth/refresh", "/docs/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+            .requestMatchers("/profile/**", "/api/profile/**", "/auth/me").authenticated()
+            .anyRequest().permitAll())
         .userDetailsService(customUserDetailsService)
         .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
