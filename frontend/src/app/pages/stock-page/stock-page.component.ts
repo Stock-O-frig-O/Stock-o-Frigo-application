@@ -63,7 +63,7 @@ export class StockPageComponent implements OnInit, OnDestroy {
       });
   }
 
-  handleFavoritChange(favoritId: number) {
+  handleFavoriteChange(favoritId: number) {
     // Handle the favorit change event
     const product = this.products.find((p) => p.productId === favoritId);
     if (product) {

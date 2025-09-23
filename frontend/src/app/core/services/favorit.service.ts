@@ -13,7 +13,7 @@ export class FavoritService {
 
   private homeId: string | null = localStorage.getItem('homeID');
 
-  getAllFavorit(): Observable<Favorit[]> {
+  getAllFavorite(): Observable<Favorit[]> {
     if (this.homeId === null) {
       throw new Error('Home ID is not set');
     }
@@ -22,7 +22,7 @@ export class FavoritService {
     );
   }
 
-  addFavorit(productId: number): Observable<Favorit> {
+  addFavorite(productId: number): Observable<Favorit> {
     if (this.homeId === null) {
       throw new Error('Home ID is not set');
     }
@@ -33,7 +33,7 @@ export class FavoritService {
     );
   }
 
-  removeProductFromFavorit(favoritIds: number[]): Observable<void> {
+  removeProductFromFavorite(favoritIds: number[]): Observable<void> {
     if (this.homeId === null) {
       throw new Error('Home ID is not set');
     }

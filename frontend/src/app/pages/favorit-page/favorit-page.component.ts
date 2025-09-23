@@ -35,7 +35,7 @@ export class FavoritPageComponent implements OnInit, OnDestroy {
 
   loadProduct() {
     this.favoritService
-      .getAllFavorit()
+      .getAllFavorite()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data: Favorit[]) => {
@@ -60,19 +60,19 @@ export class FavoritPageComponent implements OnInit, OnDestroy {
   }
 
   handleSelectedProduct(productId: number) {
-    this.addProductToFavorit(productId);
+    this.addProductToFavorite(productId);
   }
 
   handleRemoveClickedFavorit() {
     this.removeProductFromFavorites();
   }
 
-  addProductToFavorit(productId: number) {
-    this.favoritService.addFavorit(productId).subscribe({
+  addProductToFavorite(productId: number) {
+    this.favoritService.addFavorite(productId).subscribe({
       next: (favorit: Favorit) => {
         this.products.push(favorit);
       },
-      error: (error) => {
+      error: (error: Error) => {
         console.error("Erreur lors de l'ajout du produit aux favoris :", error);
       },
     });
@@ -87,7 +87,7 @@ export class FavoritPageComponent implements OnInit, OnDestroy {
 
     if (this.homeId && favoritId.length > 0) {
       this.favoritService
-        .removeProductFromFavorit(favoritId)
+        .removeProductFromFavorite(favoritId)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: () => {

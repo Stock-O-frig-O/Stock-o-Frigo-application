@@ -64,7 +64,7 @@ export class ListComponent implements OnInit, OnDestroy {
 
   activePage = input.required<string>();
 
-  notifyFavorit = output<number>();
+  notifyFavorite = output<number>();
 
   // Use to unsubscribe
   private destroy$ = new Subject<void>();
@@ -134,9 +134,9 @@ export class ListComponent implements OnInit, OnDestroy {
       });
   }
   // add product to favorites
-  AddProductToFavorit = (productId: number) => {
+  addProductToFavorite = (productId: number) => {
     this.favoritService
-      .addFavorit(productId)
+      .addFavorite(productId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
@@ -146,7 +146,7 @@ export class ListComponent implements OnInit, OnDestroy {
             detail: 'Product added to favorites.',
           });
         },
-        error: (error) => {
+        error: (error: Error) => {
           console.error('Failed to add product to favorites:', error);
           this.messageService.add({
             severity: 'error',
@@ -158,9 +158,9 @@ export class ListComponent implements OnInit, OnDestroy {
   };
 
   // remove product from favorites
-  removeProductFromFavorit(favoritId: number[]) {
+  removeProductFromFavorite(favoriteId: number[]) {
     this.favoritService
-      .removeProductFromFavorit(favoritId)
+      .removeProductFromFavorite(favoriteId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
@@ -170,7 +170,7 @@ export class ListComponent implements OnInit, OnDestroy {
             detail: 'Product removed from favorites.',
           });
         },
-        error: (error) => {
+        error: (error: Error) => {
           console.error('Failed to remove product from favorites:', error);
           this.messageService.add({
             severity: 'error',
@@ -182,19 +182,19 @@ export class ListComponent implements OnInit, OnDestroy {
       });
   }
 
-  toggleFavorit(productId: number) {
+  toggleFavorite(productId: number) {
     const product = this.products().find((p) => p.productId === productId);
 
     if (!product) return;
 
     if (product.favorite) {
       // Si c'est un Favorit, on le retire des favoris
-      this.removeProductFromFavorit([productId]);
+      this.removeProductFromFavorite([productId]);
     } else {
       // Sinon, on l'ajoute aux favoris
-      this.AddProductToFavorit(productId);
+      this.addProductToFavorite(productId);
     }
-    this.notifyFavorit.emit(productId);
+    this.notifyFavorite.emit(productId);
   }
 
   ngOnDestroy() {

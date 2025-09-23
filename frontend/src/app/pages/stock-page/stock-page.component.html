@@ -6,7 +6,7 @@
 @if (products) {
   <app-list
     [products]="products"
-    (notifyFavorit)="handleFavoritChange($event)"
+    (notifyFavorite)="handleFavoriteChange($event)"
     [activePage]="activePage"
   />
 } @else {
