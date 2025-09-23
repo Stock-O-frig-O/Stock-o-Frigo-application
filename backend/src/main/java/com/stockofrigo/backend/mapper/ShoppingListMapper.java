@@ -18,7 +18,6 @@ public interface ShoppingListMapper {
     shoppingListProductDTO.setChecked(shoppingListProduct.isChecked());
     shoppingListProductDTO.setProductId(shoppingListProduct.getProduct().getId());
     shoppingListProductDTO.setProductName(shoppingListProduct.getProduct().getName());
-    shoppingListProductDTO.setQuantity(shoppingListProduct.getQuantity());
     return shoppingListProductDTO;
   }
 
