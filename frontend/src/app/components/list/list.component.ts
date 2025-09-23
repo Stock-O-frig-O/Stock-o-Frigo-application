@@ -40,11 +40,12 @@ import { CommonModule } from '@angular/common';
     FormsModule,
     InputNumberModule,
     Toast,
+    CommonModule,
   ],
   encapsulation: ViewEncapsulation.None,
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss',
-  providers: [MessageService, CommonModule],
+  providers: [MessageService],
 })
 export class ListComponent implements OnInit, OnDestroy {
   // Service injection
@@ -143,7 +144,7 @@ export class ListComponent implements OnInit, OnDestroy {
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
-            detail: 'Product added to favorites.',
+            detail: 'Produit ajouté aux favoris.',
           });
         },
         error: (error: Error) => {
@@ -151,7 +152,7 @@ export class ListComponent implements OnInit, OnDestroy {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
-            detail: 'Failed to add product to favorites. Please try again.',
+            detail: 'Échec de l\'ajout du produit aux favoris. Veuillez réessayer.',
           });
         },
       });
@@ -167,7 +168,7 @@ export class ListComponent implements OnInit, OnDestroy {
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
-            detail: 'Product removed from favorites.',
+            detail: 'Produit retiré des favoris.',
           });
         },
         error: (error: Error) => {
@@ -176,7 +177,7 @@ export class ListComponent implements OnInit, OnDestroy {
             severity: 'error',
             summary: 'Error',
             detail:
-              'Failed to remove product from favorites. Please try again.',
+              'Échec de la suppression du produit des favoris. Veuillez réessayer.',
           });
         },
       });

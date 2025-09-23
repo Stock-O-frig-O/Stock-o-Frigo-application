@@ -94,7 +94,7 @@ export class FavoritPageComponent implements OnInit, OnDestroy {
             this.messageService.add({
               severity: 'success',
               summary: 'Success',
-              detail: 'Product removed from favorites.',
+              detail: 'produit(s) retiré(s) des favoris.',
             });
             this.products = this.products.filter(
               (product) => !favoritId.includes(product.productId),
@@ -107,7 +107,7 @@ export class FavoritPageComponent implements OnInit, OnDestroy {
               severity: 'error',
               summary: 'Error',
               detail:
-                'Failed to remove product from favorites. Please try again.',
+                'Échec de la suppression du produit des favoris. Veuillez réessayer.',
             });
           },
         });

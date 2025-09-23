@@ -89,7 +89,7 @@ export class StockPageComponent implements OnInit, OnDestroy {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
-            detail: 'Failed to add product to stock. Please try again.',
+            detail: 'Échec de l\'ajout du produit. Veuillez réessayer.',
           });
         },
       });
