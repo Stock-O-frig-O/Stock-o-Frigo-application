@@ -55,12 +55,13 @@ public class FavoriteProductService {
     return FavoriteProductMapper.convertToFavoriteProductDto(saved);
   }
 
-  public void removeFavoriteProductByHomeAndProduct(Long homeId, Long productId) {
-    FavoriteProduct product = favoriteProductRepository.findByHomeIdAndProductId(homeId, productId);
-    if (product == null) {
-      throw new EntityNotFoundException("Ce favori n'existe pas pour ce home et ce produit.");
+  public void removeFavoriteProductByHomeAndProducts(Long homeId, List<Long> productIds) {
+    List<FavoriteProduct> products =
+        favoriteProductRepository.findAllByHomeIdAndProductIdIn(homeId, productIds);
+    if (products.isEmpty()) {
+      throw new EntityNotFoundException("Aucun favori n'existe pour ce home et ces produits.");
     }
-    favoriteProductRepository.delete(product);
+    favoriteProductRepository.deleteAll(products);
   }
 
   public List<FavoriteProductDTO> getFavoriteProducts(Long homeId) {

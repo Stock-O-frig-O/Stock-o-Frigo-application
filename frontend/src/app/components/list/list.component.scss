@@ -1,11 +1,19 @@
 .accordion {
   margin-top: 10px;
 }
-.panel-category {
+.panel-category-stock {
   background-color: #b8de70 !important;
   height: 10px;
 }
+.panel-category-favorit {
+  background-color: #ffca2b !important;
+  height: 10px;
+}
 
+.panel-category-cart {
+  background-color: #fd873f !important;
+  height: 10px;
+}
 .p-accordioncontent-content {
   padding: 0 !important;
 }

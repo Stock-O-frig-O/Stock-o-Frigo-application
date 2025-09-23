@@ -1,7 +1,7 @@
 <p-accordion value="0" [multiple]="true" class="accordion">
   @for (category of categoryList; track $index) {
     <p-accordion-panel [value]="category">
-      <p-accordion-header class="panel-category">
+      <p-accordion-header [class]="'panel-category-' + activePage()">
         {{ category }}
       </p-accordion-header>
       <p-accordion-content>
@@ -44,8 +44,11 @@
                 </td>
                 <td class="td-small-item">{{ product.unit }}</td>
                 <td class="td-small-item">
-                  <button class="btn-favorit">
-                    @if (product.isFavorit) {
+                  <button
+                    (click)="toggleFavorite(product.productId)"
+                    class="btn-favorit"
+                  >
+                    @if (product.favorite) {
                       <i class="pi pi-heart-fill"></i>
                     } @else {
                       <i class="pi pi-heart"></i>
