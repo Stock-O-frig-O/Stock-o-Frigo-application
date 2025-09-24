@@ -32,6 +32,7 @@ import { HomeService } from '../../core/services/home.service';
 import Product from '../../core/model/Product.model';
 import { FilterService } from '../../core/services/filter.service';
 import { MenuItem, MessageService } from 'primeng/api';
+import Favorit from '../../core/model/Favorit.model';
 
 @Component({
   selector: 'app-search-bar',
@@ -69,8 +70,10 @@ export class SearchBarComponent implements OnInit, OnDestroy {
   home!: string | null;
 
   // signals
-  products = input.required<Product[]>();
-  addedProduct = output<Product>();
+  products = input.required<(Product | Favorit)[]>();
+  addedProduct = output<number>();
+
+  removeProduct = output();
 
   // properties for product management
   selectedProduct!: Product;
@@ -119,14 +122,14 @@ export class SearchBarComponent implements OnInit, OnDestroy {
   }
 
   // Add product to the stock
-  sendProductToStock(product: Product) {
-    this.addedProduct.emit(product);
+  sendProduct(productId: number) {
+    this.addedProduct.emit(productId);
   }
 
   // handle product selection
   onProductSelected(event: { value: Product }) {
-    this.sendProductToStock(event.value);
-    this.selectedProduct = null;
+    this.sendProduct(event.value.id);
+    this.selectedProduct = event.value;
   }
 
   // change all products check to true
@@ -142,43 +145,7 @@ export class SearchBarComponent implements OnInit, OnDestroy {
   }
 
   removeStockProductCheck() {
-    const productIds: number[] = [];
-
-    this.filterService
-      .productCheckList()
-      .forEach((product) => productIds.push(product.id));
-
-    if (this.home && productIds.length > 0) {
-      this.productService
-        .removeStockProduct(this.home, productIds)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: () => {
-            this.homeService.notifyProductAdded();
-            this.filterService.removeAllProductChecklist();
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Success',
-              detail: 'Les produits ont bien été supprimés',
-            });
-          },
-          error: (error) => {
-            console.error('Error response:', error);
-            this.messageService.add({
-              severity: 'error',
-              summary: 'error',
-              detail:
-                "Un problème est survenu, les produits n'ont pas pu être supprimés",
-            });
-          },
-        });
-    } else {
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'warn',
-        detail: 'Aucun produit à supprimer',
-      });
-    }
+    this.removeProduct.emit();
   }
 
   ngOnDestroy() {

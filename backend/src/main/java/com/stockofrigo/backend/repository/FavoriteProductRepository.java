@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 public interface FavoriteProductRepository extends JpaRepository<FavoriteProduct, Long> {
   List<FavoriteProduct> findByHomeId(Long homeId);
 
-  FavoriteProduct findByHomeIdAndProductId(Long homeId, Long productId);
+  List<FavoriteProduct> findAllByHomeIdAndProductIdIn(Long homeId, List<Long> productIds);
 
   boolean existsByHomeIdAndProductId(Long homeId, Long productId);
 }

@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class HomeService {
 
-  private final StockProductMapper stockProductMapper;
   private final FavoriteProductRepository favoriteProductRepository;
   private final HomeRepository homeRepository;
   private final UserHomeRepository userHomeRepository;
@@ -39,7 +38,6 @@ public class HomeService {
       ProductRepository productRepository,
       StockProductRepository stockProductRepository,
       HomeMapper homeMapper,
-      StockProductMapper stockProductMapper,
       FavoriteProductRepository favoriteProductRepository) {
     this.homeRepository = homeRepository;
     this.userHomeRepository = userHomeRepository;
@@ -47,7 +45,6 @@ public class HomeService {
     this.productRepository = productRepository;
     this.stockProductRepository = stockProductRepository;
     this.homeMapper = homeMapper;
-    this.stockProductMapper = stockProductMapper;
     this.favoriteProductRepository = favoriteProductRepository;
   }
 

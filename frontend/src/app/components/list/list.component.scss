@@ -1,35 +1,43 @@
 .accordion {
   margin-top: 10px;
 }
-.panel-category {
+.panel-category-stock {
   background-color: #b8de70 !important;
   height: 10px;
 }
+.panel-category-favorit {
+  background-color: #ffca2b !important;
+  height: 10px;
+}
 
+.panel-category-cart {
+  background-color: #fd873f !important;
+  height: 10px;
+}
 .p-accordioncontent-content {
   padding: 0 !important;
 }
 
 .td-small-item {
   padding: 0.5rem !important;
+  width: 10% !important;
+  text-align: center !important;
 }
 
 .td-designation {
   padding: 0.5rem !important;
-  width: 10rem !important;
+}
+
+.btn-change-stock {
+  width: 10% !important;
 }
 
 .btn-change-stock {
   padding: 0.5rem !important;
-}
+  width: 10% !important;
+  text-align: center !important;
 
-.tb-btn {
-  padding: 0.5rem !important;
-  width: unset !important;
-}
-
-.btn-change-stock {
-  .test-but {
+  .button-container {
     border: 1px solid black;
     border-radius: 10px;
     background-color: #ede8d8;
