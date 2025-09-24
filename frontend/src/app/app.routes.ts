@@ -12,6 +12,7 @@ import { StockPageComponent } from './pages/stock-page/stock-page.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { authGuard } from './core/guard/auth.guard';
 import { SettingsHomePageComponent } from './pages/settings-home-page/settings-home-page.component';
+import { CartListPageComponent } from './pages/cart-list-page/cart-list-page.component';
 
 export const routes: Routes = [
   { path: '', component: HomePageComponent, canActivate: [authGuard] },
@@ -24,9 +25,13 @@ export const routes: Routes = [
     path: 'login',
     component: LoginPageComponent,
   },
-
   {
-    path: 'cart',
+    path: 'cart-list',
+    component: CartListPageComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'cart/:id',
     component: CartPageComponent,
     canActivate: [authGuard],
   },

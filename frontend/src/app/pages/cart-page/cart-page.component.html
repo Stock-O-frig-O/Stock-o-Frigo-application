@@ -1,1 +1,14 @@
-<p>cart-page works!</p>
+<app-search-bar
+  [products]="products"
+  (addedProduct)="handleSelectedProduct($event)"
+  (removeProduct)="handleRemoveClickedProduct()"
+/>
+@if (products) {
+  <app-list
+    [products]="products"
+    (notifyFavorite)="handleFavoriteChange($event)"
+    [activePage]="activePage"
+  />
+} @else {
+  <p>Vous n'avez pas de produit en stock.</p>
+}
