@@ -3,9 +3,12 @@ package com.stockofrigo.backend.service;
 import com.stockofrigo.backend.model.User;
 import com.stockofrigo.backend.repository.UserRepository;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.regex.Pattern;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -19,6 +22,14 @@ public class UserService {
   public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
+  }
+
+  public UserDetails toUserDetails(User user) {
+    return org.springframework.security.core.userdetails.User.builder()
+            .username(user.getEmail())
+            .password(user.getPassword())
+            .authorities(Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")))
+            .build();
   }
 
   private static final Pattern SIMPLE_EMAIL_REGEX =

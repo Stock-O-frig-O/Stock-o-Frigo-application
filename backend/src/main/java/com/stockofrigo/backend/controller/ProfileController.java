@@ -3,14 +3,18 @@ package com.stockofrigo.backend.controller;
 import com.stockofrigo.backend.dto.PasswordChangeDTO;
 import com.stockofrigo.backend.dto.UserProfileDTO;
 import com.stockofrigo.backend.dto.UserProfileUpdateDTO;
+import com.stockofrigo.backend.mapper.UserProfileMapper;
 import com.stockofrigo.backend.model.User;
+import com.stockofrigo.backend.repository.UserRepository;
 import com.stockofrigo.backend.security.JwtService;
 import com.stockofrigo.backend.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +28,12 @@ public class ProfileController {
 
   private final UserService userService;
   private final JwtService jwtService;
+
+  @Autowired
+  private UserProfileMapper mapper;
+
+  @Autowired
+  private UserRepository userRepository;
 
   public ProfileController(UserService userService, JwtService jwtService) {
     this.userService = userService;
@@ -62,35 +72,12 @@ public class ProfileController {
 
   @PutMapping("/me")
   public ResponseEntity<UserProfileDTO> update(@RequestBody UserProfileUpdateDTO updateDTO) {
-    String email = getCurrentEmail();
-    User user = userService.getByEmailOrThrow(email);
+    User user = userService.getByEmailOrThrow(getCurrentEmail());
 
-    // If password fields are provided, handle password change in the same request
-    if (updateDTO.getNewPassword() != null || updateDTO.getConfirmNewPassword() != null || updateDTO.getCurrentPassword() != null) {
-      if (updateDTO.getNewPassword() == null || !updateDTO.getNewPassword().equals(updateDTO.getConfirmNewPassword())) {
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La confirmation du mot de passe ne correspond pas");
-      }
-      // Require current password for password change
-      if (updateDTO.getCurrentPassword() == null || updateDTO.getCurrentPassword().isBlank()) {
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Le mot de passe actuel est requis pour changer le mot de passe");
-      }
-      userService.changePassword(user, updateDTO.getCurrentPassword(), updateDTO.getNewPassword());
-      // Refresh user after password change in case of any updates
-      user = userService.getByEmailOrThrow(email);
-    }
+    mapper.updateEntityFromDto(updateDTO, user);
+    userRepository.save(user);
 
-    String oldEmail = user.getEmail();
-    User updated =
-        userService.updateProfile(user, updateDTO.getFirstName(), updateDTO.getLastName(), updateDTO.getEmail());
-
-    boolean emailChanged = oldEmail != null && !oldEmail.equals(updated.getEmail());
-    if (emailChanged) {
-      String newToken = jwtService.generateAccessToken(updated);
-      return ResponseEntity.ok()
-          .header(HttpHeaders.AUTHORIZATION, "Bearer " + newToken)
-          .body(toDto(updated));
-    }
-    return ResponseEntity.ok(toDto(updated));
+    return ResponseEntity.ok(mapper.toDto(user));
   }
 
   // Alias for PUT /profile or PUT /api/profile without /me

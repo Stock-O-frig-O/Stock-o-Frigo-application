@@ -5,8 +5,11 @@
   <form [formGroup]="form" (ngSubmit)="submit()">
     <div class="photo-section">
       <div class="photo-preview" [class.has-photo]="photoPreview">
-        <img *ngIf="photoPreview" [src]="photoPreview.toString() || ''" alt="Photo de profil" />
-        <i *ngIf="!photoPreview" class="pi pi-user"></i>
+        @if (photoPreview) {
+          <img [src]="photoPreview.toString() || ''" alt="Photo de profil" />
+        } @else {
+          <i class="pi pi-user"></i>
+        }
 
         <input id="photoInput" type="file" accept="image/*" (change)="onPhotoSelected($event)" hidden />
         <label class="add-photo-btn" for="photoInput" aria-label="Ajouter une photo">
@@ -55,12 +58,14 @@
       </button>
     </div>
 
-    <div *ngIf="form.get('password')?.enabled" class="with-pen">
-      <p-floatlabel variant="in" class="input-full-width">
-        <p-password formControlName="confirmPassword" id="confirmPassword" inputStyleClass="input-full-width" [feedback]="false" />
-        <label for="confirmPassword">Confirmer le nouveau mot de passe</label>
-      </p-floatlabel>
-    </div>
+    @if (form.get('password')?.enabled) {
+      <div class="with-pen">
+        <p-floatlabel variant="in" class="input-full-width">
+          <p-password formControlName="confirmPassword" id="confirmPassword" inputStyleClass="input-full-width" [feedback]="false" />
+          <label for="confirmPassword">Confirmer le nouveau mot de passe</label>
+        </p-floatlabel>
+      </div>
+    }
 
     <p-button label="Gérer le groupe" styleClass="enregistrer-button" [rounded]="true" size="large" type="button" (click)="goToGroup()" />
 
