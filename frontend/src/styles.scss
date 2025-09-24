@@ -7,3 +7,35 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+@media screen and (min-width: 800px) {
+
+  main > div {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+  }
+
+  
+  .card, .component-box {
+    width: 300px;
+    margin: 10px;
+    font-size: 1rem;
+  }
+
+  h1, h2, h3 {
+    font-size: calc(1.2 * var(--mobile-font-size));
+  }
+
+  .component-content {
+    padding: 20px;
+  }
+
+  .page-content {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    height: 100vh; 
+    width: 100vw; 
+  }
+}
