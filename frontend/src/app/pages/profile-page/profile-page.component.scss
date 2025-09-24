@@ -1,0 +1,154 @@
+.page-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 10px;
+
+  h2 {
+    font-size: 2.4rem;
+    font-weight: 400;
+    margin-bottom: 16px;
+  }
+
+  form {
+    max-width: 500px;
+    width: 100%;
+  }
+}
+
+/* Avatar + add (+) overlay */
+.photo-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 8px;
+  margin-bottom: 30px;
+}
+
+.photo-preview {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  border: 1px solid #ddd;
+  position: relative;
+}
+
+.photo-preview i {
+  font-size: 2.2rem;
+  color: #888;
+}
+
+.photo-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.add-photo-btn {
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #B8DE70;
+  color: #fff; /* default text/icon color; overridden for the plus icon below */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none; /* remove white entourage */
+  cursor: pointer;
+  z-index: 2;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.add-photo-btn i {
+  font-size: 1.1rem;
+  color: rgba(0, 0, 0, 0.71);
+}
+
+.add-photo-btn:hover {
+  background: #B8DE70;
+}
+
+/* Align with login/register form widths */
+.fieldset,
+.p-password {
+  width: 100%;
+  margin: 6px 0;
+}
+
+.input-full-width {
+  width: 100%;
+  display: block;
+}
+
+.p-button {
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* Brand color for the Enregistrer button */
+.p-button.enregistrer-button,
+.p-button.enregistrer-button:enabled:hover,
+.p-button.enregistrer-button:enabled:focus,
+.p-button.enregistrer-button:enabled:active {
+  background: #B8DE70;
+  border-color: #B8DE70;
+  color: #000; /* readable on light green */
+}
+
+/* Edit pen button inside inputs */
+.with-pen {
+  position: relative;
+}
+.with-pen .p-inputtext {
+  padding-right: 44px; /* space for the pen */
+}
+.with-pen .p-password input.p-inputtext {
+  padding-right: 44px;
+}
+.edit-pen-btn {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #B8DE70;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  z-index: 3;
+}
+.edit-pen-btn i {
+  color: rgba(0, 0, 0, 0.71);
+  font-size: 0.95rem;
+}
+.edit-pen-btn:hover {
+  background: #B8DE70;
+}
+
+
+/* Reduce spacing between stacked buttons on Profile page */
+.page-content form .p-button + .p-button {
+  margin-top: 8px;
+}
+
+/* Small helper text below inputs */
+.field-hint {
+  display: block;
+  margin-top: 6px;
+  color: #666;
+  font-size: 0.85rem;
+}
