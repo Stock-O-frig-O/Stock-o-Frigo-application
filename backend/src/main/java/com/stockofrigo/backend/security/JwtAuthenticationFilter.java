@@ -31,12 +31,28 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     if (authHeader != null && authHeader.startsWith("Bearer ")) {
       String jwt = authHeader.substring(7);
-      String username = jwtService.extractClaims(jwt).getSubject();
+
+      // Try to reuse claims if already parsed earlier in the chain
+      Object cached = request.getAttribute("JWT_CLAIMS");
+      io.jsonwebtoken.Claims claims;
+      if (cached instanceof io.jsonwebtoken.Claims) {
+        claims = (io.jsonwebtoken.Claims) cached;
+      } else {
+        // Validate and parse once
+        if (!jwtService.validateJwtToken(jwt)) {
+          filterChain.doFilter(request, response);
+          return;
+        }
+        claims = jwtService.extractClaims(jwt);
+        request.setAttribute("JWT_CLAIMS", claims);
+      }
+
+      String username = claims.getSubject();
+      Date expiration = claims.getExpiration();
 
       if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        if (jwtService.extractClaims(jwt).getExpiration().after(new Date())) {
-
+        if (expiration != null && expiration.after(new Date())) {
           UsernamePasswordAuthenticationToken authentication =
               new UsernamePasswordAuthenticationToken(
                   userDetails, null, userDetails.getAuthorities());

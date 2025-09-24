@@ -1,7 +1,21 @@
 <header>
   <div class="header-move-to">
     <a [routerLink]="['/']"><i class="pi pi-arrow-left"></i></a>
-    <button (click)="logout()"><i class="pi pi-user"></i></button>
+
+    <div class="user-menu-wrapper">
+      <button
+        class="user-btn"
+        (click)="toggleMenu()"
+        aria-haspopup="true"
+        [attr.aria-expanded]="menuOpen"
+      >
+        <i class="pi pi-user"></i>
+      </button>
+      <div class="user-menu" *ngIf="menuOpen">
+        <button class="profile-btn" (click)="goToProfile()">Mon profil</button>
+        <button class="logout-btn" (click)="logout()">Déconnexion</button>
+      </div>
+    </div>
   </div>
   <div class="header-title">
     <h1>Stock'O Frig'O</h1>
