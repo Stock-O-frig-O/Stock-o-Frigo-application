@@ -220,7 +220,7 @@ export class ListComponent implements OnInit, OnDestroy {
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
-            detail: 'Quantitée ajustée',
+            detail: 'Quantité ajustée',
           });
         },
         error: (error: Error) => console.error(error),
