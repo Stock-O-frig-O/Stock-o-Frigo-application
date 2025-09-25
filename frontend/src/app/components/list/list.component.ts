@@ -210,7 +210,7 @@ export class ListComponent implements OnInit, OnDestroy {
 
   updateCartQuantity(product: Product) {
     if (!this.shoppingListId) {
-      throw new Error('Aucun liste de course utilisée');
+      throw new Error('Aucune liste de course utilisée');
     }
     this.cartService
       .updateCartProduct(this.shoppingListId, product)
