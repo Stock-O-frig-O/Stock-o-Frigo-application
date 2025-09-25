@@ -5,7 +5,10 @@ import java.math.BigDecimal;
 public class ShoppingListProductDTO {
   private Long id;
   private Long productId;
-  private String productName;
+  private String name;
+  private String brand;
+  private String unit;
+  private String category;
   private BigDecimal quantity;
   private boolean checked;
 
@@ -25,12 +28,36 @@ public class ShoppingListProductDTO {
     this.productId = productId;
   }
 
-  public String getProductName() {
-    return productName;
+  public String getName() {
+    return name;
   }
 
-  public void setProductName(String productName) {
-    this.productName = productName;
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getBrand() {
+    return brand;
+  }
+
+  public void setBrand(String brand) {
+    this.brand = brand;
+  }
+
+  public String getUnit() {
+    return unit;
+  }
+
+  public void setUnit(String unit) {
+    this.unit = unit;
+  }
+
+  public String getCategory() {
+    return category;
+  }
+
+  public void setCategory(String category) {
+    this.category = category;
   }
 
   public BigDecimal getQuantity() {

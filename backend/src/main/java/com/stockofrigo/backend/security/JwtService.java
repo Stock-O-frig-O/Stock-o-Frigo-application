@@ -4,21 +4,19 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
-
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
-import jakarta.annotation.PostConstruct;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
-import java.util.stream.Collectors;
 
 @Service
 public class JwtService {
@@ -34,10 +32,12 @@ public class JwtService {
   private Key signingKey;
 
   @PostConstruct
+  @SuppressWarnings("PMD.UnusedPrivateMethod")
   private void initSigningKey() {
     byte[] keyBytes;
     if (secretKey == null || secretKey.isBlank()) {
-      throw new IllegalStateException("JWT secret key is missing. Please set 'security.jwt.secret-key' (env var JWT_SECRET_KEY) in your configuration.");
+      throw new IllegalStateException(
+          "JWT secret key is missing. Please set 'security.jwt.secret-key' (env var JWT_SECRET_KEY) in your configuration.");
     }
     try {
       // Prefer Base64-encoded secrets
@@ -52,14 +52,15 @@ public class JwtService {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         keyBytes = digest.digest(keyBytes);
       } catch (NoSuchAlgorithmException e) {
-        throw new IllegalStateException("SHA-256 algorithm not available for JWT key derivation", e);
+        throw new IllegalStateException(
+            "SHA-256 algorithm not available for JWT key derivation", e);
       }
     }
     signingKey = Keys.hmacShaKeyFor(keyBytes);
   }
 
   public String generateAccessToken(UserDetails userDetails) {
-    long expMillis = (jwtExpiration != null ? jwtExpiration : 3600_000L);
+    long expMillis = jwtExpiration != null ? jwtExpiration : 3600_000L;
     return Jwts.builder()
         .setSubject(userDetails.getUsername())
         .claim(
@@ -75,7 +76,7 @@ public class JwtService {
   }
 
   public String generateRefreshToken(UserDetails userDetails) {
-    long expMillis = (refreshExpiration != null ? refreshExpiration : 30L * 24 * 3600_000L);
+    long expMillis = refreshExpiration != null ? refreshExpiration : 30L * 24 * 3600_000L;
     return Jwts.builder()
         .setSubject(userDetails.getUsername())
         .claim("tokenType", "refresh")

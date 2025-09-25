@@ -1,6 +1,18 @@
-import { Component, ViewEncapsulation, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  ViewEncapsulation,
+  OnInit,
+  OnDestroy,
+  ElementRef,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
@@ -34,13 +46,22 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   form: FormGroup;
   photoPreview: string | ArrayBuffer | null = null;
   // Keep initial values to decide when the save button should be enabled
-  private initialValues: { firstname: string; lastname: string; email: string } = {
+  private initialValues: {
+    firstname: string;
+    lastname: string;
+    email: string;
+  } = {
     firstname: '',
     lastname: '',
     email: '',
   };
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private messageService: MessageService) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+    private messageService: MessageService,
+  ) {
     this.form = this.fb.group({
       photo: [null],
       firstname: ['', [Validators.required]],
@@ -142,7 +163,9 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   canSubmit(): boolean {
     const photoSelected = !!this.form.get('photo')?.value;
 
-    const enabledControls = (['firstname', 'lastname', 'email', 'password', 'confirmPassword'] as const)
+    const enabledControls = (
+      ['firstname', 'lastname', 'email', 'password', 'confirmPassword'] as const
+    )
       .map((key) => this.form.get(key))
       .filter((c): c is NonNullable<typeof c> => !!c && c.enabled);
 
@@ -150,9 +173,14 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     const passwordCtrl = this.form.get('password');
     const confirmCtrl = this.form.get('confirmPassword');
     const passwordMode = !!passwordCtrl && passwordCtrl.enabled;
-    const passwordsMatch = !passwordMode || (passwordCtrl?.value && confirmCtrl?.value && passwordCtrl.value === confirmCtrl.value);
+    const passwordsMatch =
+      !passwordMode ||
+      (passwordCtrl?.value &&
+        confirmCtrl?.value &&
+        passwordCtrl.value === confirmCtrl.value);
 
-    const allEnabledValid = enabledControls.every((c) => c.valid) && passwordsMatch;
+    const allEnabledValid =
+      enabledControls.every((c) => c.valid) && passwordsMatch;
 
     return (photoSelected || enabledControls.length > 0) && allEnabledValid;
   }
@@ -167,10 +195,19 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     }
 
     // Build update payload with only enabled fields
-    type UpdatableKey = 'firstname' | 'lastname' | 'email' | 'password' | 'confirmPassword';
-    const update: Partial<Record<UpdatableKey, string>> & { photoFile?: File | null } = {};
+    type UpdatableKey =
+      | 'firstname'
+      | 'lastname'
+      | 'email'
+      | 'password'
+      | 'confirmPassword';
+    const update: Partial<Record<UpdatableKey, string>> & {
+      photoFile?: File | null;
+    } = {};
 
-    (['firstname', 'lastname', 'email', 'password', 'confirmPassword'] as const).forEach((key) => {
+    (
+      ['firstname', 'lastname', 'email', 'password', 'confirmPassword'] as const
+    ).forEach((key) => {
       const control = this.form.get(key);
       if (control && control.enabled) {
         const value = control.value as string;
@@ -210,9 +247,16 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe((user) => {
               // Preserve existing values if backend omits some fields (common after email change)
-              const currentFirstname = this.form.get('firstname')?.value || this.initialValues.firstname || '';
-              const currentLastname = this.form.get('lastname')?.value || this.initialValues.lastname || '';
-              const currentEmail = this.form.get('email')?.value || this.initialValues.email || '';
+              const currentFirstname =
+                this.form.get('firstname')?.value ||
+                this.initialValues.firstname ||
+                '';
+              const currentLastname =
+                this.form.get('lastname')?.value ||
+                this.initialValues.lastname ||
+                '';
+              const currentEmail =
+                this.form.get('email')?.value || this.initialValues.email || '';
 
               const firstname = (user.firstname ?? currentFirstname) || '';
               const lastname = (user.lastname ?? currentLastname) || '';
@@ -230,7 +274,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           this.messageService.add({
             severity: 'error',
             summary: 'Erreur',
-            detail: "Une erreur est survenue lors de l'enregistrement du profil.",
+            detail:
+              "Une erreur est survenue lors de l'enregistrement du profil.",
             key: 'br',
             life: 3000,
           });
@@ -245,7 +290,9 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   // Same password security rules as registration
   private securePasswordValidator() {
-    return (control: import('@angular/forms').AbstractControl): import('@angular/forms').ValidationErrors | null => {
+    return (
+      control: import('@angular/forms').AbstractControl,
+    ): import('@angular/forms').ValidationErrors | null => {
       const value = control.value || '';
       if (value === '********') {
         // Placeholder when field is disabled; do not invalidate
@@ -256,7 +303,12 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       const hasNumber = /\d/.test(value);
       const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(value);
       const isValidLength = value.length >= 8;
-      const passwordValid = hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar && isValidLength;
+      const passwordValid =
+        hasUpperCase &&
+        hasLowerCase &&
+        hasNumber &&
+        hasSpecialChar &&
+        isValidLength;
       return passwordValid ? null : { securePassword: true };
     };
   }

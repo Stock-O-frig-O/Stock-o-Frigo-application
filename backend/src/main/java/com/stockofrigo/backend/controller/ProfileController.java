@@ -9,12 +9,10 @@ import com.stockofrigo.backend.repository.UserRepository;
 import com.stockofrigo.backend.security.JwtService;
 import com.stockofrigo.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,11 +27,9 @@ public class ProfileController {
   private final UserService userService;
   private final JwtService jwtService;
 
-  @Autowired
-  private UserProfileMapper mapper;
+  @Autowired private UserProfileMapper mapper;
 
-  @Autowired
-  private UserRepository userRepository;
+  @Autowired private UserRepository userRepository;
 
   public ProfileController(UserService userService, JwtService jwtService) {
     this.userService = userService;
@@ -89,7 +85,8 @@ public class ProfileController {
   @PutMapping("/password")
   public ResponseEntity<Void> changePassword(@RequestBody PasswordChangeDTO dto) {
     if (dto.getNewPassword() == null || !dto.getNewPassword().equals(dto.getConfirmNewPassword())) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La confirmation du mot de passe ne correspond pas");
+      throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST, "La confirmation du mot de passe ne correspond pas");
     }
     String email = getCurrentEmail();
     User user = userService.getByEmailOrThrow(email);
