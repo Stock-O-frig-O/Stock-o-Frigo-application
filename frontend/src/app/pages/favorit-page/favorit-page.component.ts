@@ -21,7 +21,7 @@ export class FavoritPageComponent implements OnInit, OnDestroy {
   private readonly messageService = inject(MessageService);
 
   products!: Favorit[];
-  private homeId!: string | null;
+  private homeId = this.homeService.getHomeId();
 
   // Use to unsubscribe
   private destroy$ = new Subject<void>();
@@ -30,7 +30,6 @@ export class FavoritPageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadProduct();
-    this.homeId = this.homeService.getHomeId();
   }
 
   loadProduct() {
@@ -69,8 +68,8 @@ export class FavoritPageComponent implements OnInit, OnDestroy {
 
   addProductToFavorite(productId: number) {
     this.favoritService.addFavorite(productId).subscribe({
-      next: (favorit: Favorit) => {
-        this.products.push(favorit);
+      next: () => {
+        this.loadProduct();
       },
       error: (error: Error) => {
         console.error("Erreur lors de l'ajout du produit aux favoris :", error);

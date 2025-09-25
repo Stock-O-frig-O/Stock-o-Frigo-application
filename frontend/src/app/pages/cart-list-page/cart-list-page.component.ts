@@ -1,11 +1,20 @@
+// Angular imports
 import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
-import { AddButtonComponent } from '../../components/add-button/add-button.component';
-import { RouterLink } from '@angular/router';
-import { CartListService } from '../../core/services/cart-list.service';
-import ShoppingList from '../../core/model/ShoppingList.model';
-import { Subject, takeUntil } from 'rxjs';
-import { DialogModule } from 'primeng/dialog';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
+
+// RXJS imports
+import { Subject, takeUntil } from 'rxjs';
+
+// Components import
+import { AddButtonComponent } from '../../components/add-button/add-button.component';
+import { CartListService } from '../../core/services/cart-list.service';
+
+// Models import
+import ShoppingList from '../../core/model/ShoppingList.model';
+
+// PrimeNg import
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'app-cart-list-page',
@@ -14,15 +23,16 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './cart-list-page.component.scss',
 })
 export class CartListPageComponent implements OnInit, OnDestroy {
+  // Services Injection
   private readonly cartListService: CartListService = inject(CartListService);
-
-  shoppingLists = signal<ShoppingList[]>([]);
 
   // Use to unsubscribe
   private destroy$ = new Subject<void>();
 
-  newName = '';
+  // Signals
+  shoppingLists = signal<ShoppingList[]>([]);
 
+  newName = '';
   visible = false;
 
   ngOnInit() {
@@ -35,9 +45,7 @@ export class CartListPageComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data) => {
-          // Mise à jour du signal - déclenche automatiquement l'effect
           this.shoppingLists.set(data);
-          console.log(data);
         },
         error: (error: Error) => console.error(error),
       });
@@ -69,6 +77,7 @@ export class CartListPageComponent implements OnInit, OnDestroy {
   showDialog() {
     this.visible = true;
   }
+
   saveNewShoppingList() {
     this.createNewShoppingList(this.newName);
     this.resetNewShoppingList();

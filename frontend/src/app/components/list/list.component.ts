@@ -30,6 +30,8 @@ import { FavoritService } from '../../core/services/favorit.service';
 import { Subject, takeUntil } from 'rxjs';
 import Favorit from '../../core/model/Favorit.model';
 import { CommonModule } from '@angular/common';
+import { CartService } from '../../core/services/cart.service';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 
 @Component({
   selector: 'app-list',
@@ -54,6 +56,8 @@ export class ListComponent implements OnInit, OnDestroy {
   private readonly messageService: MessageService = inject(MessageService);
   private readonly filterService: FilterService = inject(FilterService);
   private readonly favoritService: FavoritService = inject(FavoritService);
+  private readonly cartService: CartService = inject(CartService);
+  private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
   private homeId!: string | null;
 
@@ -66,6 +70,8 @@ export class ListComponent implements OnInit, OnDestroy {
   activePage = input.required<string>();
 
   notifyFavorite = output<number>();
+
+  shoppingListId?: number;
 
   // Use to unsubscribe
   private destroy$ = new Subject<void>();
@@ -95,6 +101,9 @@ export class ListComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.findCategory();
     this.homeId = this.homeService.getHomeId();
+    this.route.paramMap.subscribe((param: ParamMap) => {
+      this.shoppingListId = Number(param.get('id'));
+    });
   }
 
   findCategory() {
@@ -197,6 +206,25 @@ export class ListComponent implements OnInit, OnDestroy {
       this.addProductToFavorite(productId);
     }
     this.notifyFavorite.emit(productId);
+  }
+
+  updateCartQuantity(product: Product) {
+    if (!this.shoppingListId) {
+      throw new Error('Aucun liste de course utilisée');
+    }
+    this.cartService
+      .updateCartProduct(this.shoppingListId, product)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Quantitée ajustée',
+          });
+        },
+        error: (error: Error) => console.error(error),
+      });
   }
 
   ngOnDestroy() {
