@@ -69,7 +69,7 @@ export class CartPageComponent implements OnInit, OnDestroy {
             severity: 'error',
             summary: 'error',
             detail:
-              "Un problème est survenu, les produits n'ont pas pu être supprimés",
+              "Un problème est survenu, les produits n'ont pas pu être ajoutés",
           });
         },
       });
