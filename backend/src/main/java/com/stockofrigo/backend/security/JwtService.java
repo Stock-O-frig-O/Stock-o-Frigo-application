@@ -32,7 +32,7 @@ public class JwtService {
   private Key signingKey;
 
   @PostConstruct
-  @SuppressWarnings("PMD.UnusedPrivateMethod") // Used by @PostConstruct
+  @SuppressWarnings("PMD.UnusedPrivateMethod")
   private void initSigningKey() {
     byte[] keyBytes;
     if (secretKey == null || secretKey.isBlank()) {
