@@ -19,7 +19,14 @@ public class UserProfileUpdateDTO {
   @JsonAlias({"new_password", "password", "passwordNew", "newPassword", "haslo", "hhaslo"})
   private String newPassword;
 
-  @JsonAlias({"confirm_new_password", "confirmPassword", "passwordConfirm", "password_confirmation", "confirm", "confirmPasswordNew"})
+  @JsonAlias({
+    "confirm_new_password",
+    "confirmPassword",
+    "passwordConfirm",
+    "password_confirmation",
+    "confirm",
+    "confirmPasswordNew"
+  })
   private String confirmNewPassword;
 
   public String getFirstName() {

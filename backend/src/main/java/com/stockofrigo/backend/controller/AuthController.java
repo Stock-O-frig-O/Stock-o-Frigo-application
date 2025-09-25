@@ -34,7 +34,11 @@ public class AuthController {
   @org.springframework.beans.factory.annotation.Value("${security.cookie.secure:true}")
   private boolean cookieSecure;
 
-  public AuthController(UserService userService, AuthenticationService authenticationService, com.stockofrigo.backend.security.CustomUserDetailsService userDetailsService, JwtService jwtService) {
+  public AuthController(
+      UserService userService,
+      AuthenticationService authenticationService,
+      com.stockofrigo.backend.security.CustomUserDetailsService userDetailsService,
+      JwtService jwtService) {
     this.userService = userService;
     this.authenticationService = authenticationService;
     this.userDetailsService = userDetailsService;
@@ -53,11 +57,13 @@ public class AuthController {
   }
 
   @PostMapping("/login")
-  public ResponseEntity<String> authenticate(@RequestBody UserLoginDTO UserLoginDTO, HttpServletResponse response) {
+  public ResponseEntity<String> authenticate(
+      @RequestBody UserLoginDTO UserLoginDTO, HttpServletResponse response) {
     String token =
         authenticationService.authenticate(UserLoginDTO.getEmail(), UserLoginDTO.getPassword());
 
-    // Also issue a refresh token as HttpOnly cookie to introduce refresh mechanism without breaking response body format
+    // Also issue a refresh token as HttpOnly cookie to introduce refresh mechanism without breaking
+    // response body format
     UserDetails userDetails = userDetailsService.loadUserByUsername(UserLoginDTO.getEmail());
     String refreshToken = jwtService.generateRefreshToken(userDetails);
     Cookie cookie = new Cookie("refreshToken", refreshToken);

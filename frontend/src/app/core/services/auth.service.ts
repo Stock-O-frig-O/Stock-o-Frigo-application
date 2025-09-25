@@ -125,7 +125,6 @@ export class AuthService {
     }
   }
 
-
   private normalizeUserResponse(u: unknown): UserProfile {
     if (u && typeof u === 'object') {
       const anyU = u as RawUserResponse;
@@ -142,16 +141,15 @@ export class AuthService {
   getUserProfile(): Observable<UserProfile> {
     const jwtFallback: UserProfile = {};
 
-    return this.http
-      .get<unknown>(`${this.apiUrl}/api/profile`)
-      .pipe(
-        map((resp) => this.normalizeUserResponse(resp)),
-        catchError(() =>
-          this.http
-            .get<unknown>(`${this.apiUrl}/profile`)
-            .pipe(map((resp) => this.normalizeUserResponse(resp)), catchError(() => of(jwtFallback))),
+    return this.http.get<unknown>(`${this.apiUrl}/api/profile`).pipe(
+      map((resp) => this.normalizeUserResponse(resp)),
+      catchError(() =>
+        this.http.get<unknown>(`${this.apiUrl}/profile`).pipe(
+          map((resp) => this.normalizeUserResponse(resp)),
+          catchError(() => of(jwtFallback)),
         ),
-      );
+      ),
+    );
   }
 
   // Update current user profile using backend ProfileController with a single DTO and minimal fallbacks
@@ -172,17 +170,16 @@ export class AuthService {
     if (update.password && update.password.length > 0) {
       dto['newPassword'] = update.password;
       dto['confirmNewPassword'] = update.confirmPassword ?? update.password;
-      if (update.currentPassword != null) dto['currentPassword'] = update.currentPassword;
+      if (update.currentPassword != null)
+        dto['currentPassword'] = update.currentPassword;
     }
     if (Object.keys(dto).length === 0) return of(null);
 
     const put = (url: string) =>
-      this.http
-        .put(url, dto, { observe: 'response' as const })
-        .pipe(
-          tap((resp) => this.saveTokenFromAuthHeader(resp)),
-          map((resp) => resp.body as unknown),
-        );
+      this.http.put(url, dto, { observe: 'response' as const }).pipe(
+        tap((resp) => this.saveTokenFromAuthHeader(resp)),
+        map((resp) => resp.body as unknown),
+      );
 
     return put(`${this.apiUrl}/api/profile`).pipe(
       catchError(() => put(`${this.apiUrl}/profile`)),
@@ -202,7 +199,13 @@ export class AuthService {
       // Case 2: object with common token keys
       if (typeof resp === 'object') {
         const anyResp = resp as Record<string, unknown>;
-        const possibleKeys = ['token', 'accessToken', 'jwt', 'id_token', 'access_token'];
+        const possibleKeys = [
+          'token',
+          'accessToken',
+          'jwt',
+          'id_token',
+          'access_token',
+        ];
         for (const k of possibleKeys) {
           const val = anyResp[k];
           if (typeof val === 'string' && val.split('.').length === 3) {
@@ -230,11 +233,17 @@ export class AuthService {
 
   private saveTokenFromAuthHeader(resp: unknown): void {
     try {
-      const r = resp as { headers?: { get: (name: string) => string | null } } | undefined;
+      const r = resp as
+        | { headers?: { get: (name: string) => string | null } }
+        | undefined;
       if (!r || !r.headers || typeof r.headers.get !== 'function') return;
-      const authHeader = r.headers.get('Authorization') || r.headers.get('authorization');
+      const authHeader =
+        r.headers.get('Authorization') || r.headers.get('authorization');
       if (!authHeader) return;
-      const m = /^Bearer\s+([A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+)$/.exec(authHeader.trim());
+      const m =
+        /^Bearer\s+([A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+)$/.exec(
+          authHeader.trim(),
+        );
       if (m && m[1]) {
         this.saveToken(m[1]);
       }
@@ -244,7 +253,12 @@ export class AuthService {
   }
 
   // Backward-compatible method kept for existing calls in ProfilePage
-  getCurrentUser(): Observable<{ firstname?: string; lastname?: string; email?: string; avatarUrl?: string }> {
+  getCurrentUser(): Observable<{
+    firstname?: string;
+    lastname?: string;
+    email?: string;
+    avatarUrl?: string;
+  }> {
     return this.getUserProfile();
   }
 }
