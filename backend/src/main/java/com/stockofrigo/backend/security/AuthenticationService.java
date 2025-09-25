@@ -23,7 +23,7 @@ public class AuthenticationService {
       Authentication authentication =
           authenticationManager.authenticate(
               new UsernamePasswordAuthenticationToken(email, password));
-      return jwtService.generateAccessToken((UserDetails) authentication.getPrincipal());
+      return jwtService.generateToken((UserDetails) authentication.getPrincipal());
     } catch (BadCredentialsException ex) {
       throw new InvalidCredentialsException("Email ou mot de passe incorrect");
     }

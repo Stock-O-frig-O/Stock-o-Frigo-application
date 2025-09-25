@@ -4,7 +4,6 @@ import { Subject } from 'rxjs';
 // Angular imports
 import { Component, inject, ViewEncapsulation } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
 
 // Local imports
 import { HomeService } from '../../core/services/home.service';
@@ -15,7 +14,7 @@ import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-logo',
-  imports: [RouterModule, CommonModule],
+  imports: [RouterModule],
   encapsulation: ViewEncapsulation.None,
   templateUrl: './logo.component.html',
   styleUrl: './logo.component.scss',
@@ -40,20 +39,7 @@ export class LogoComponent {
 
   currentProductPage: Product[] = [];
 
-  // user menu toggle
-  menuOpen = false;
-
-  toggleMenu() {
-    this.menuOpen = !this.menuOpen;
-  }
-
-  goToProfile() {
-    this.menuOpen = false;
-    this.router.navigate(['/profile']);
-  }
-
   logout() {
-    this.menuOpen = false;
     this.homeService.removeHomeId();
     this.authService.clearToken();
     this.router.navigate(['/login']);
