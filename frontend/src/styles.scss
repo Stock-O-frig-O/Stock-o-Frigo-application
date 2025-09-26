@@ -31,15 +31,30 @@
     padding: 20px;
   }
 
-  .page-content {
+  .logo {
     position: absolute;
-    top: 50%;
+    top: 20%;
     left: 50%;
     transform: translate(-50%, -50%);
     display: flex;
     justify-content: center; 
     align-items: center; 
-    height: 100vh; 
-    width: 100vw; 
+    height: auto;       /* zamiast 100vh */
+    width: auto;        /* zamiast 100vw */
+    max-width: 90%;     /* dopasowanie do szerokości ekranu */
+    max-height: 80vh;   /* dopasowanie do wysokości ekranu */
   }
+  
+  .page-content {
+    position: absolute;
+    top: calc(10% + 200px); /* 10% od góry + wysokość logo */
+    left: 50%;
+    transform: translateX(-50%); /* tylko poziome centrowanie */
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    width: 90%;
+    max-width: 1200px;
+  }
+  
 }
