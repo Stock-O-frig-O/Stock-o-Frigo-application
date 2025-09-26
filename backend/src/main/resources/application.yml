@@ -1,48 +1,54 @@
 spring:
-    application:
-        name: backend
+  application:
+    name: backend
 
-    config:
-        import: 'optional:file:.env[.properties]'
+  config:
+    import: 'optional:file:.env[.properties]'
 
-    # Database configuration
-    datasource:
-        url: ${SPRING_DATASOURCE_URL}
-        username: ${DB_USER}
-        password: ${DB_PASSWORD}
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local}
 
-    # JPA and Hibernate configuration
-    jpa:
-        hibernate:
-            ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
-        show-sql: true
-        properties:
-            hibernate:
-                format_sql: true
-        defer-datasource-initialization: true
+  # Database configuration
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
 
-    # SQL script initialization
-    sql:
-        init:
-            data-locations: 'classpath:data.sql'
-            mode: always
-            continue-on-error: true
+  # JPA and Hibernate configuration
+  jpa:
+    hibernate:
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    defer-datasource-initialization: true
+
+  # SQL script initialization
+  sql:
+    init:
+      data-locations: 'classpath:data.sql'
+      mode: always
+      continue-on-error: true
 
 # JWT Security configuration
 security:
-    jwt:
-        secret-key: ${JWT_SECRET_KEY}
-        expiration-time: ${JWT_EXPIRATION_TIME}
+  jwt:
+    secret-key: ${JWT_SECRET_KEY}
+    expiration-time: ${JWT_EXPIRATION_TIME}
+    refresh-expiration-time: ${JWT_REFRESH_EXPIRATION_TIME:2592000000}
+  cookie:
+    secure: ${COOKIE_SECURE:true}
 
 # OpenAPI/Swagger documentation configuration
 springdoc:
-    api-docs:
-        path: /docs
-        enabled: true
-    swagger-ui:
-        path: /docs/swagger.html
-        enabled: true
+  api-docs:
+    path: /docs
+    enabled: true
+  swagger-ui:
+    path: /docs/swagger.html
+    enabled: true
 
 # CORS configuration
 cors:
-    allowed-origin: ${CORS_ALLOWED_ORIGIN}
+  allowed-origin: ${CORS_ALLOWED_ORIGIN}
