@@ -38,8 +38,11 @@
   <li class="navbare_link">
     <button
       class="navbare_button"
-      [ngClass]="{ active: isRouteActive === '/cart' }"
-      (click)="goToPage('/cart')"
+      [ngClass]="{
+        active:
+          isRouteActive === '/cart-list' || isRouteActive.startsWith('/cart'),
+      }"
+      (click)="goToPage('/cart-list')"
     >
       <i class="pi pi-cart-arrow-down"></i>
       <h3>Liste de course</h3>

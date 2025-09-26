@@ -3,7 +3,12 @@
     <a [routerLink]="['/']"><i class="pi pi-arrow-left"></i></a>
 
     <div class="user-menu-wrapper">
-      <button class="user-btn" (click)="toggleMenu()" aria-haspopup="true" [attr.aria-expanded]="menuOpen">
+      <button
+        class="user-btn"
+        (click)="toggleMenu()"
+        aria-haspopup="true"
+        [attr.aria-expanded]="menuOpen"
+      >
         <i class="pi pi-user"></i>
       </button>
       <div class="user-menu" *ngIf="menuOpen">

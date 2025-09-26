@@ -9,7 +9,12 @@ public class PasswordChangeDTO {
   @JsonAlias({"new_password", "password", "passwordNew"})
   private String newPassword;
 
-  @JsonAlias({"confirm_new_password", "confirmPassword", "passwordConfirm", "password_confirmation"})
+  @JsonAlias({
+    "confirm_new_password",
+    "confirmPassword",
+    "passwordConfirm",
+    "password_confirmation"
+  })
   private String confirmNewPassword;
 
   public String getCurrentPassword() {

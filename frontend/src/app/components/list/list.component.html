@@ -1,5 +1,5 @@
-<p-accordion value="0" [multiple]="true" class="accordion">
-  @for (category of categoryList; track $index) {
+<p-accordion [value]="categoryList" [multiple]="true" class="accordion">
+  @for (category of categoryList; track category) {
     <p-accordion-panel [value]="category">
       <p-accordion-header [class]="'panel-category-' + activePage()">
         {{ category }}
@@ -23,7 +23,42 @@
                     '920px': { width: '90%' },
                   }"
                 />
-                @if (activePage() !== "favorit") {
+                @if (activePage() !== "cart") {
+                  @if (activePage() !== "favorit") {
+                    <td class="btn-change-stock">
+                      <p-inputnumber
+                        class="button-container"
+                        [(ngModel)]="product.quantity"
+                        [showButtons]="true"
+                        buttonLayout="horizontal"
+                        spinnerMode="horizontal"
+                        inputId="horizontal"
+                        [inputStyle]="{ width: '2rem' }"
+                        (ngModelChange)="updateStockQuantity(product)"
+                      >
+                        <ng-template #incrementbuttonicon>
+                          <span class="pi pi-plus"></span>
+                        </ng-template>
+                        <ng-template #decrementbuttonicon>
+                          <span class="pi pi-minus"></span>
+                        </ng-template>
+                      </p-inputnumber>
+                    </td>
+                    <td class="td-small-item">{{ product.unit }}</td>
+                  }
+                  <td class="td-small-item">
+                    <button
+                      (click)="toggleFavorite(product.productId)"
+                      class="btn-favorit"
+                    >
+                      @if (product.favorite) {
+                        <i class="pi pi-heart-fill"></i>
+                      } @else {
+                        <i class="pi pi-heart"></i>
+                      }
+                    </button>
+                  </td>
+                } @else {
                   <td class="btn-change-stock">
                     <p-inputnumber
                       class="button-container"
@@ -33,7 +68,7 @@
                       spinnerMode="horizontal"
                       inputId="horizontal"
                       [inputStyle]="{ width: '2rem' }"
-                      (ngModelChange)="updateStockQuantity(product)"
+                      (ngModelChange)="updateCartQuantity(product)"
                     >
                       <ng-template #incrementbuttonicon>
                         <span class="pi pi-plus"></span>
@@ -43,20 +78,7 @@
                       </ng-template>
                     </p-inputnumber>
                   </td>
-                  <td class="td-small-item">{{ product.unit }}</td>
                 }
-                <td class="td-small-item">
-                  <button
-                    (click)="toggleFavorite(product.productId)"
-                    class="btn-favorit"
-                  >
-                    @if (product.favorite) {
-                      <i class="pi pi-heart-fill"></i>
-                    } @else {
-                      <i class="pi pi-heart"></i>
-                    }
-                  </button>
-                </td>
               </tr>
             }
           </ng-template>

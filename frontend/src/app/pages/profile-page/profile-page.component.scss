@@ -57,7 +57,7 @@
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  background: #B8DE70;
+  background: #b8de70;
   color: #fff; /* default text/icon color; overridden for the plus icon below */
   display: flex;
   align-items: center;
@@ -74,7 +74,7 @@
 }
 
 .add-photo-btn:hover {
-  background: #B8DE70;
+  background: #b8de70;
 }
 
 /* Align with login/register form widths */
@@ -99,8 +99,8 @@
 .p-button.enregistrer-button:enabled:hover,
 .p-button.enregistrer-button:enabled:focus,
 .p-button.enregistrer-button:enabled:active {
-  background: #B8DE70;
-  border-color: #B8DE70;
+  background: #b8de70;
+  border-color: #b8de70;
   color: #000; /* readable on light green */
 }
 
@@ -122,7 +122,7 @@
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: #B8DE70;
+  background: #b8de70;
   border: none;
   display: inline-flex;
   align-items: center;
@@ -136,9 +136,8 @@
   font-size: 0.95rem;
 }
 .edit-pen-btn:hover {
-  background: #B8DE70;
+  background: #b8de70;
 }
-
 
 /* Reduce spacing between stacked buttons on Profile page */
 .page-content form .p-button + .p-button {

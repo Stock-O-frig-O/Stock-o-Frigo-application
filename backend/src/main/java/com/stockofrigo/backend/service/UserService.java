@@ -26,10 +26,10 @@ public class UserService {
 
   public UserDetails toUserDetails(User user) {
     return org.springframework.security.core.userdetails.User.builder()
-            .username(user.getEmail())
-            .password(user.getPassword())
-            .authorities(Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")))
-            .build();
+        .username(user.getEmail())
+        .password(user.getPassword())
+        .authorities(Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")))
+        .build();
   }
 
   private static final Pattern SIMPLE_EMAIL_REGEX =
@@ -60,24 +60,27 @@ public class UserService {
   private void validateNewPasswordOrThrow(String newPasswordRaw) {
     String newPassword = normalize(newPasswordRaw);
     if (newPassword == null || newPassword.isBlank()) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Le nouveau mot de passe ne peut pas être vide");
+      throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST, "Le nouveau mot de passe ne peut pas être vide");
     }
     if (newPassword.length() < 8) {
       throw new ResponseStatusException(
           HttpStatus.BAD_REQUEST, "Le nouveau mot de passe doit contenir au moins 8 caractères");
     }
-    // If you later add more registration constraints (uppercase/digit/special), enforce them here too.
+    // If you later add more registration constraints (uppercase/digit/special), enforce them here
+    // too.
   }
 
   /**
-   * Directly sets a new password for the user without verifying the current password.
-   * Restricted to admin users only.
+   * Directly sets a new password for the user without verifying the current password. Restricted to
+   * admin users only.
    */
   public void setPasswordWithoutCurrent(User user, String newPassword) {
     // Only allow admins to change password without current password verification
     if (!Boolean.TRUE.equals(user.getIs_superuser())) {
       throw new ResponseStatusException(
-          HttpStatus.FORBIDDEN, "Seuls les administrateurs peuvent changer le mot de passe sans vérification.");
+          HttpStatus.FORBIDDEN,
+          "Seuls les administrateurs peuvent changer le mot de passe sans vérification.");
     }
     validateNewPasswordOrThrow(newPassword);
     user.setPassword(passwordEncoder.encode(normalize(newPassword)));
@@ -106,10 +109,12 @@ public class UserService {
   public User getByEmailOrThrow(String email) {
     return userRepository
         .findByEmail(email)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
+        .orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
   }
 
-  public User updateProfile(User user, String newFirstNameRaw, String newLastNameRaw, String newEmailRaw) {
+  public User updateProfile(
+      User user, String newFirstNameRaw, String newLastNameRaw, String newEmailRaw) {
     String newEmail = normalize(newEmailRaw);
     String newFirstName = normalize(newFirstNameRaw);
     String newLastName = normalize(newLastNameRaw);
@@ -135,10 +140,12 @@ public class UserService {
 
   public void changePassword(User user, String currentPassword, String newPassword) {
     if (currentPassword == null || currentPassword.isBlank()) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Le mot de passe actuel est requis");
+      throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST, "Le mot de passe actuel est requis");
     }
     if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Le mot de passe actuel est incorrect");
+      throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST, "Le mot de passe actuel est incorrect");
     }
     validateNewPasswordOrThrow(newPassword);
     user.setPassword(passwordEncoder.encode(normalize(newPassword)));

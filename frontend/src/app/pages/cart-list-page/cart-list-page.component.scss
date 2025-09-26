@@ -1,0 +1,95 @@
+.cart-list-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 30px;
+  padding: 10px;
+}
+
+.cart-list-item {
+  display: flex;
+  width: 40%;
+  min-height: 70px;
+  max-width: 400px;
+  border-radius: 20px;
+  padding: 10px;
+  background: #ede8d8;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+
+  section {
+    width: 100%;
+  }
+
+  i {
+    margin-right: 15px;
+    font-size: 3rem;
+  }
+
+  .cart-list-item-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  .cart-list-item-content {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .list-quantity {
+    display: flex;
+    align-items: center;
+  }
+
+  .chips {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: 25px;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 50%;
+    background: transparent;
+    border: 1px solid black;
+  }
+}
+
+.dialog-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.dialog-input {
+  font-size: 1.25rem;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.dialog-button-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 10px;
+}
+
+.dialog-button {
+  width: 100px;
+  height: 50px;
+  border-radius: 5px;
+  border: 1px solid black;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+h3 {
+  margin-top: 50%;
+}
+
+@media (max-width: 500px) {
+  .cart-list-item {
+    width: 100%;
+  }
+}
