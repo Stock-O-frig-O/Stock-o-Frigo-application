@@ -20,14 +20,17 @@ public class ProductService {
   private final ProductRepository productRepository;
   private final UnitRepository unitRepository;
   private final CategoryRepository categoryRepository;
+  private final ProductMapper productMapper;
 
   public ProductService(
       ProductRepository productRepository,
       UnitRepository unitRepository,
-      CategoryRepository categoryRepository) {
+      CategoryRepository categoryRepository,
+      ProductMapper productMapper) {
     this.productRepository = productRepository;
     this.unitRepository = unitRepository;
     this.categoryRepository = categoryRepository;
+    this.productMapper = productMapper;
   }
 
   public List<ProductDTO> getAllProduct() {
@@ -35,7 +38,7 @@ public class ProductService {
     if (products.isEmpty()) {
       return Collections.emptyList();
     }
-    return products.stream().map(ProductMapper.INSTANCE::convertToDto).collect(Collectors.toList());
+    return products.stream().map(productMapper::convertToDto).collect(Collectors.toList());
   }
 
   public ProductDTO getProductById(Long id) {
@@ -43,7 +46,7 @@ public class ProductService {
     if (product == null) {
       return null;
     }
-    return ProductMapper.INSTANCE.convertToDto(product);
+    return productMapper.convertToDto(product);
   }
 
   public List<ProductDTO> getProductsFiltered(String query) {
@@ -57,9 +60,7 @@ public class ProductService {
       return Collections.emptyList();
     }
 
-    return filteredProducts.stream()
-        .map(ProductMapper.INSTANCE::convertToDto)
-        .collect(Collectors.toList());
+    return filteredProducts.stream().map(productMapper::convertToDto).collect(Collectors.toList());
   }
 
   public ProductDTO updateProduct(Long id, Product product) {
@@ -89,7 +90,7 @@ public class ProductService {
       updatedProduct.setUnit(unit);
     }
     Product savedProduct = productRepository.save(updatedProduct);
-    return ProductMapper.INSTANCE.convertToDto(savedProduct);
+    return productMapper.convertToDto(savedProduct);
   }
 
   public ProductDTO createProduct(Product product) {
@@ -119,6 +120,6 @@ public class ProductService {
 
     Product newProduct = productRepository.save(savedProduct);
 
-    return ProductMapper.INSTANCE.convertToDto(newProduct);
+    return productMapper.convertToDto(newProduct);
   }
 }
