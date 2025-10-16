@@ -168,17 +168,17 @@ jobs:
       - name: 🔐 Setup SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.VPS_SSH_KEY }}" > ~/stockofrigo
-          chmod 600 ~/stockofrigo
+          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/stockofrigo
+          chmod 600 ~/.ssh/stockofrigo
           ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
 
       - name: 📤 Deploy to VPS
         run: |
           # Copier les fichiers sur le VPS
-          scp -i ~/stockofrigo -r deploy/* ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/home/${{ secrets.VPS_USER }}/${{ secrets.PROJECT_NAME }}/
+          scp -i ~/.ssh/stockofrigo -r deploy/* ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/home/${{ secrets.VPS_USER }}/${{ secrets.PROJECT_NAME }}/
           
           # Déployer avec Docker Compose ou Docker
-          ssh -i ~/stockofrigo ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "
+          ssh -i ~/.ssh/stockofrigo ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "
             cd /home/${{ secrets.VPS_USER }}/${{ secrets.PROJECT_NAME }} &&
             
             # Arrêter les conteneurs existants
