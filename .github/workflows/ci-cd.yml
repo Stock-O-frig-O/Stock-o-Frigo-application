@@ -120,13 +120,6 @@ jobs:
   deploy:
     name: 🚀 Deploy to VPS
     needs: [changes, backend-build-test, frontend-build-test]
-    if: |
-      always() && 
-      github.ref == 'refs/heads/main' && 
-      (
-        (needs.changes.outputs.backend == 'true' && needs.backend-build-test.result == 'success') ||
-        (needs.changes.outputs.frontend == 'true' && needs.frontend-build-test.result == 'success')
-      )
     runs-on: ubuntu-latest
 
     steps:
