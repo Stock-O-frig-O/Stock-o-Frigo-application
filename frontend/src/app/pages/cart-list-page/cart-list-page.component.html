@@ -1,0 +1,53 @@
+<section class="cart-list-container">
+  @if (shoppingLists()) {
+    @for (shoppingList of shoppingLists(); track shoppingList.id) {
+      <a class="cart-list-item" [routerLink]="['/cart', shoppingList.id]">
+        <i class="pi pi-shopping-cart"></i>
+
+        <section>
+          <span class="cart-list-item-title"> {{ shoppingList.name }} </span>
+
+          <div class="cart-list-item-content">
+            <span class="list-quantity">Quantité de produit</span>
+
+            <span class="chips">
+              {{ getNumberOfProduct(shoppingList) }}
+            </span>
+          </div>
+        </section>
+      </a>
+    }
+  } @else {
+    <h3>Vous n'avez pas de liste de course</h3>
+  }
+
+  <app-add-button (addButtonClick)="handleAddButtonClicked()"></app-add-button>
+</section>
+
+<p-dialog
+  header="Nouvelle liste de course"
+  [modal]="true"
+  [(visible)]="visible"
+  [style]="{ width: '25rem' }"
+>
+  <span>Choisissez le nom de votre liste de course</span>
+  <div class="dialog-input-container">
+    <label for="name">Nom</label>
+    <input
+      class="dialog-input"
+      [(ngModel)]="newName"
+      id="name"
+      autocomplete="off"
+      maxlength="20"
+    />
+  </div>
+
+  <div class="dialog-button-container">
+    <button class="dialog-button" (click)="saveNewShoppingList()">
+      Sauvegarder
+    </button>
+    <button class="dialog-button" (click)="resetNewShoppingList()">
+      Annuler
+    </button>
+  </div>
+</p-dialog>

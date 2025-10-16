@@ -1,0 +1,30 @@
+@if (!homeData) {
+  <div class="setting-content">
+    <button (click)="showDialog()" class="create-home">
+      <i class="pi pi-plus"></i> Créer un groupe
+    </button>
+
+    <p-dialog header="Créer votre groupe " [modal]="true" [(visible)]="visible">
+      <div class="">
+        <label for="homeName" class="">Nom du groupe</label>
+        <input
+          pInputText
+          id="homeName"
+          class=""
+          autocomplete="off"
+          [(ngModel)]="chosenName"
+        />
+      </div>
+      <div class="">
+        <p-button
+          label="Cancel"
+          severity="secondary"
+          (click)="visible = false"
+        />
+        <p-button label="Save" (click)="save()" />
+      </div>
+    </p-dialog>
+  </div>
+} @else {
+  <h3>settings du home à mettre en place</h3>
+}

@@ -1,0 +1,26 @@
+<section id="search-bar">
+  <div class="search-action">
+    <i class="pi pi-search search-bar">
+      <p-autoComplete
+        [(ngModel)]="selectedProduct"
+        [suggestions]="filteredProducts"
+        [delay]="1000"
+        (completeMethod)="findProduct($event)"
+        (onSelect)="onProductSelected($event)"
+        field="name"
+        autocomplete="off"
+        placeholder="Rechercher un produit"
+      />
+    </i>
+    <button class="search-button-action" (click)="menu.toggle($event)">
+      <i class="pi pi-ellipsis-v"></i>
+    </button>
+  </div>
+  <p-menu #menu [popup]="true" [model]="items" appendTo="body" />
+  <p-toast
+    position="top-center"
+    [breakpoints]="{
+      '920px': { width: '90%' },
+    }"
+  />
+</section>

@@ -1,0 +1,47 @@
+services:
+    app:
+        container_name: Backend
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - '8080:8080'
+        environment:
+            SPRING_PROFILES_ACTIVE: docker
+            DB_USER: ${DB_USER}
+            DB_PASSWORD: ${DB_PASSWORD}
+            DB_NAME: ${DB_NAME}
+            SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+            SPRING_JPA_HIBERNATE_DDL_AUTO: update
+            JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+            JWT_EXPIRATION_TIME: ${JWT_EXPIRATION_TIME:-86400000}
+            CORS_ALLOWED_ORIGIN: ${CORS_ALLOWED_ORIGIN:-http://localhost:4200}
+        depends_on:
+            db:
+                condition: service_healthy
+
+    db:
+        container_name: stocko_frigo_db
+        image: mysql:8
+        ports:
+            - '3306:3306'
+        environment:
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_DATABASE: ${DB_NAME}
+            MYSQL_USER: ${DB_USER}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+        healthcheck:
+            test: ['CMD-SHELL', 'mysqladmin ping -h 127.0.0.1 -u${DB_USER} -p${DB_PASSWORD} --silent']
+            interval: 5s
+            timeout: 5s
+            retries: 20
+        volumes:
+            - db-data:/var/lib/mysql
+    adminer:
+        image: adminer:latest
+        restart: always
+        ports:
+            - '8081:8080'
+
+volumes:
+    db-data:

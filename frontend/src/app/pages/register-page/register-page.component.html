@@ -1,0 +1,88 @@
+<div class="logo">
+  <h1 class="title">Stock'O<br />Frig'O</h1>
+  <img src="/imgs/logo.png" alt="Logo stock'o frig'o" />
+</div>
+
+<div class="page-content">
+  <h2>Créer votre compte</h2>
+
+  <form
+    [formGroup]="registerForm"
+    (ngSubmit)="registerForm.valid && onSubmit()"
+  >
+    <p-floatlabel variant="in">
+      <input
+        pInputText
+        formControlName="firstname"
+        class="fieldset"
+        id="firstname"
+        autocomplete="off"
+      />
+      <label for="firstname">Prénom</label>
+    </p-floatlabel>
+
+    <p-floatlabel variant="in">
+      <input
+        pInputText
+        formControlName="lastname"
+        class="fieldset"
+        id="lastname"
+        autocomplete="off"
+      />
+      <label for="lastname">Nom</label>
+    </p-floatlabel>
+
+    <p-floatlabel variant="in">
+      <input
+        pInputText
+        formControlName="email"
+        class="fieldset"
+        id="email"
+        autocomplete="off"
+      />
+      <label for="email">Email</label>
+    </p-floatlabel>
+
+    <span formGroupName="passwords">
+      <p-floatlabel variant="in" class="input-full-width">
+        <p-password
+          formControlName="password"
+          id="password"
+          inputStyleClass="input-full-width"
+        />
+        <label for="password">Mot de passe</label>
+      </p-floatlabel>
+
+      <p-floatlabel variant="in" class="input-full-width">
+        <p-password
+          formControlName="confirmPassword"
+          id="confirm-password"
+          inputStyleClass="input-full-width"
+        />
+        <label for="confirm-password">Confirmation du mot de passe</label>
+      </p-floatlabel>
+    </span>
+
+    <p-checkbox formControlName="legals" [binary]="true" inputId="ny" />
+    <label for="ny" class="ml-2">
+      Je déclare accepter les
+      <a routerLink="/legals">Conditions d'Utilisation</a> et
+      <a routerLink="/legals">Politique de Confidentialité</a></label
+    >
+
+    <p-button
+      label="Créer votre compte"
+      [disabled]="registerForm.invalid"
+      [rounded]="true"
+      size="large"
+      type="submit"
+    />
+  </form>
+
+  <p>Vous avez déjà un compte ? <a routerLink="/login">Se connecter</a></p>
+</div>
+<p-toast
+  position="bottom-center"
+  key="br"
+  [breakpoints]="{ '920px': { width: '90%' } }"
+/>

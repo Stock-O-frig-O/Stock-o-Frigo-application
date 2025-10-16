@@ -1,0 +1,20 @@
+# Se placer dans la racine Git du projet (peu importe où on lance la commande)
+cd "$(git rev-parse --show-toplevel)" || exit 1
+
+# Frontend: Format et lint
+cd frontend || exit 1
+npm run format
+npm run lint
+
+# Backend: Apply spotless formatting
+cd ../backend || exit 1
+./mvnw spotless:apply 
+git update-index --again
+./mvnw pmd:check
+
+# Retourner à la racine et ajouter les fichiers modifiés
+cd "$(git rev-parse --show-toplevel)"
+
+# Ajouter tous les fichiers trackés qui ont été modifiés
+git add -u
+ 
