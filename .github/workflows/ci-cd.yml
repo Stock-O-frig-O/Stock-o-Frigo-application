@@ -1,4 +1,4 @@
-name: CI/CD Angular
+name: CI/CD Monorepo
 
 on:
   push:
@@ -12,75 +12,192 @@ on:
       - dev
 
 jobs:
-  build-and-test:
-    name: 🔧 Build and test
+  # Détection des changements
+  changes:
+    name: 🔍 Detect changes
     runs-on: ubuntu-latest
+    outputs:
+      backend: ${{ steps.changes.outputs.backend }}
+      frontend: ${{ steps.changes.outputs.frontend }}
+    steps:
+      - name: 📥 Checkout du code
+        uses: actions/checkout@v4
+
+      - name: 🔍 Detect changes
+        uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            backend:
+              - 'backend/**'
+            frontend:
+              - 'frontend/**'
+
+  # Build et test du backend Spring Boot
+  backend-build-test:
+    name: 🔧 Backend - Build and test
+    runs-on: ubuntu-latest
+    needs: changes
+    if: needs.changes.outputs.backend == 'true'
+    defaults:
+      run:
+        working-directory: ./backend
 
     steps:
       - name: 📥 Checkout du code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: ⚙️ Installer Node.js
-        uses: actions/setup-node@v3
+      - name: ☕ Setup JDK 21
+        uses: actions/setup-java@v4
         with:
-          node-version: 18
+          java-version: '21'
+          distribution: 'temurin'
 
-      - name: 📦 Installer les dépendances
-        run: npm ci
+      - name: �️ Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
 
-  deploy:
-    name: 🚀 Déploiement sur le VPS
-    needs: build-and-test
-    if: github.ref == 'refs/heads/main'
+      - name: 🧪 Run tests
+        run: ./mvnw test
+
+      - name: 🔧 Build application
+        run: ./mvnw clean package -DskipTests
+
+      - name: 📦 Upload backend artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: backend-jar
+          path: backend/target/*.jar
+
+  # Build et test du frontend Angular
+  frontend-build-test:
+    name: 🔧 Frontend - Build and test
     runs-on: ubuntu-latest
+    needs: changes
+    if: needs.changes.outputs.frontend == 'true'
+    defaults:
+      run:
+        working-directory: ./frontend
 
     steps:
       - name: 📥 Checkout du code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: ⚙️ Installer Node.js
-        uses: actions/setup-node@v3
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
 
-      - name: 📦 Installer Angular CLI
-        run: npm install -g @angular/cli
-
-      - name: 📦 Installer les dépendances
+      - name: 📦 Install dependencies
         run: npm ci
 
-      - name: 🧱 Build Angular (production)
+      - name: 🧪 Run tests
+        run: npm run test -- --watch=false --browsers=ChromeHeadless
+
+      - name: 🔍 Run linting
+        run: npm run lint
+
+      - name: � Check formatting
+        run: npm run check-format
+
+      - name: 🔧 Build application
         run: npm run build -- --configuration production
 
-      - name: 🗂️ Préparer les fichiers à transférer
-        run: |
-          mkdir -p deploy/browser
-          cp -r dist/frontend/browser/* deploy/browser/
-          cp nginx.conf Dockerfile deploy/
+      - name: � Upload frontend artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: frontend-dist
+          path: frontend/dist/
 
-      - name: 🔐 Ajouter la clé SSH
+  # Déploiement sur le VPS
+  deploy:
+    name: 🚀 Deploy to VPS
+    needs: [changes, backend-build-test, frontend-build-test]
+    if: github.ref == 'refs/heads/main' && (needs.changes.outputs.backend == 'true' || needs.changes.outputs.frontend == 'true')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout du code
+        uses: actions/checkout@v4
+
+      - name: 📦 Download backend artifact
+        if: needs.changes.outputs.backend == 'true'
+        uses: actions/download-artifact@v3
+        with:
+          name: backend-jar
+          path: ./deploy/backend/
+
+      - name: 📦 Download frontend artifact
+        if: needs.changes.outputs.frontend == 'true'
+        uses: actions/download-artifact@v3
+        with:
+          name: frontend-dist
+          path: ./deploy/frontend/
+
+      - name: 🗂️ Prepare deployment files
+        run: |
+          mkdir -p deploy
+          
+          # Copier les Dockerfiles
+          if [ -f backend/Dockerfile ]; then
+            cp backend/Dockerfile deploy/backend/
+          fi
+          if [ -f frontend/Dockerfile ]; then
+            cp frontend/Dockerfile deploy/frontend/
+          fi
+          if [ -f frontend/nginx.conf ]; then
+            cp frontend/nginx.conf deploy/frontend/
+          fi
+          
+          # Copier docker-compose si disponible
+          if [ -f backend/docker-compose.yml ]; then
+            cp backend/docker-compose.yml deploy/
+          fi
+
+      - name: 🔐 Setup SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_ed25519_${{ secrets.PROJECT_NAME }}
-          chmod 600 ~/.ssh/id_ed25519_${{ secrets.PROJECT_NAME }}
+          echo "${{ secrets.VPS_SSH_KEY }}" > ~/stockofrigo
+          chmod 600 ~/stockofrigo
           ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
 
-      - name: 📤 Copier les fichiers sur le VPS
-        uses: appleboy/scp-action@v0.1.4
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          source: "deploy/**"
-          strip_components: 1
-          target: /home/${{ secrets.VPS_USER }}/${{ secrets.PROJECT_NAME }}/
-
-      - name: 🐳 Build et run le conteneur sur le VPS
+      - name: 📤 Deploy to VPS
         run: |
-          ssh -i ~/.ssh/id_ed25519_${{ secrets.PROJECT_NAME }} -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "
+          # Copier les fichiers sur le VPS
+          scp -i ~/stockofrigo -r deploy/* ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/home/${{ secrets.VPS_USER }}/${{ secrets.PROJECT_NAME }}/
+          
+          # Déployer avec Docker Compose ou Docker
+          ssh -i ~stockofrigo ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "
             cd /home/${{ secrets.VPS_USER }}/${{ secrets.PROJECT_NAME }} &&
-            docker stop ${{ secrets.PROJECT_NAME }} || true &&
-            docker rm ${{ secrets.PROJECT_NAME }} || true &&
-            docker build -t ${{ secrets.PROJECT_NAME }} . &&
-            docker run -d --name ${{ secrets.PROJECT_NAME }} -p 80:80 ${{ secrets.PROJECT_NAME }}
+            
+            # Arrêter les conteneurs existants
+            docker-compose down || true
+            docker stop ${{ secrets.PROJECT_NAME }}-backend ${{ secrets.PROJECT_NAME }}-frontend || true
+            docker rm ${{ secrets.PROJECT_NAME }}-backend ${{ secrets.PROJECT_NAME }}-frontend || true
+            
+            # Démarrer avec docker-compose si disponible, sinon avec docker run
+            if [ -f docker-compose.yml ]; then
+              docker-compose up -d --build
+            else
+              # Build et run backend
+              if [ -d backend ]; then
+                cd backend
+                docker build -t ${{ secrets.PROJECT_NAME }}-backend .
+                docker run -d --name ${{ secrets.PROJECT_NAME }}-backend -p 8080:8080 ${{ secrets.PROJECT_NAME }}-backend
+                cd ..
+              fi
+              
+              # Build et run frontend
+              if [ -d frontend ]; then
+                cd frontend
+                docker build -t ${{ secrets.PROJECT_NAME }}-frontend .
+                docker run -d --name ${{ secrets.PROJECT_NAME }}-frontend -p 80:80 ${{ secrets.PROJECT_NAME }}-frontend
+                cd ..
+              fi
+            fi
           "
