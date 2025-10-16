@@ -169,7 +169,7 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.VPS_SSH_KEY }}" > ~/home/runner/stockofrigo
-          chmod 600 ~/home/runner/stockofrigo
+          chmod 600 ~/stockofrigo
           ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
 
       - name: 📤 Deploy to VPS
