@@ -126,6 +126,11 @@ jobs:
       - name: 📥 Checkout du code
         uses: actions/checkout@v4
 
+      - name: �️ Prepare deployment directories
+        run: |
+          mkdir -p deploy/backend
+          mkdir -p deploy/frontend
+
       - name: 📦 Download backend artifact
         if: needs.changes.outputs.backend == 'true'
         uses: actions/download-artifact@v4
