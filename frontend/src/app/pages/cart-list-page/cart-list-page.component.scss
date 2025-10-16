@@ -1,6 +1,6 @@
 .cart-list-container {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: wrap;
   justify-content: center;
   gap: 15px;
@@ -8,9 +8,10 @@
   padding: 10px;
 }
 
+
 .cart-list-item {
   display: flex;
-  width: 40%;
+  width: 100%;
   min-height: 70px;
   max-width: 400px;
   border-radius: 20px;
@@ -88,8 +89,77 @@ h3 {
   margin-top: 50%;
 }
 
-@media (max-width: 500px) {
+@media screen and (min-width: 800px) {
+  .cart-list-container {
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; 
+    gap: 20px;
+    width: 80%;
+    max-width: 1200px;
+  }
+
   .cart-list-item {
-    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%; 
+    max-width: 600px;
+    border-radius: 20px;
+    padding: 15px;
+    background: #ede8d8;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+
+    section {
+      width: 100%;
+    }
+
+    i {
+      margin-right: 15px;
+      font-size: 3rem;
+    }
+
+    .cart-list-item-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .cart-list-item-content {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .list-quantity {
+      display: flex;
+      align-items: center;
+    }
+
+    .chips {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 25px;
+      height: 25px;
+      font-size: 20px;
+      font-weight: bold;
+      border-radius: 50%;
+      background: transparent;
+      border: 1px solid black;
+    }
+  }
+
+  app-add-button {
+    position: absolute;
+    top: calc(35% + 0px);
+    left: 65%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center; 
+    align-items: center;
   }
 }

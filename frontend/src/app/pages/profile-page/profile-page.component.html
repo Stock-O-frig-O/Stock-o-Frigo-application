@@ -1,28 +1,22 @@
 <p-toast position="bottom-center" key="br"></p-toast>
-<div class="page-content">
+
+<div class="titre-pages">
   <h2>Mon profil</h2>
+</div>
+
+<div class="page-content">
 
   <form [formGroup]="form" (ngSubmit)="submit()">
     <div class="photo-section">
       <div class="photo-preview" [class.has-photo]="photoPreview">
         @if (photoPreview) {
-          <img [src]="photoPreview.toString() || ''" alt="Photo de profil" />
+        <img [src]="photoPreview.toString() || ''" alt="Photo de profil" />
         } @else {
-          <i class="pi pi-user"></i>
+        <i class="pi pi-user"></i>
         }
 
-        <input
-          id="photoInput"
-          type="file"
-          accept="image/*"
-          (change)="onPhotoSelected($event)"
-          hidden
-        />
-        <label
-          class="add-photo-btn"
-          for="photoInput"
-          aria-label="Ajouter une photo"
-        >
+        <input id="photoInput" type="file" accept="image/*" (change)="onPhotoSelected($event)" hidden />
+        <label class="add-photo-btn" for="photoInput" aria-label="Ajouter une photo">
           <i class="pi pi-plus"></i>
         </label>
       </div>
@@ -30,121 +24,60 @@
 
     <div class="with-pen">
       <p-floatlabel variant="in">
-        <input
-          pInputText
-          formControlName="firstname"
-          class="fieldset"
-          id="firstname"
-          #firstnameInput
-          autocomplete="off"
-        />
+        <input pInputText formControlName="firstname" class="fieldset" id="firstname" #firstnameInput
+          autocomplete="off" />
         <label for="firstname">Prénom</label>
       </p-floatlabel>
-      <button
-        type="button"
-        class="edit-pen-btn"
-        (click)="toggleEdit('firstname')"
-        aria-label="Modifier prénom"
-      >
+      <button type="button" class="edit-pen-btn" (click)="toggleEdit('firstname')" aria-label="Modifier prénom">
         <i class="pi pi-pencil"></i>
       </button>
     </div>
 
     <div class="with-pen">
       <p-floatlabel variant="in">
-        <input
-          pInputText
-          formControlName="lastname"
-          class="fieldset"
-          id="lastname"
-          #lastnameInput
-          autocomplete="off"
-        />
+        <input pInputText formControlName="lastname" class="fieldset" id="lastname" #lastnameInput autocomplete="off" />
         <label for="lastname">Nom</label>
       </p-floatlabel>
-      <button
-        type="button"
-        class="edit-pen-btn"
-        (click)="toggleEdit('lastname')"
-        aria-label="Modifier nom"
-      >
+      <button type="button" class="edit-pen-btn" (click)="toggleEdit('lastname')" aria-label="Modifier nom">
         <i class="pi pi-pencil"></i>
       </button>
     </div>
 
     <div class="with-pen">
       <p-floatlabel variant="in">
-        <input
-          pInputText
-          formControlName="email"
-          class="fieldset"
-          id="email"
-          #emailInput
-          autocomplete="off"
-        />
+        <input pInputText formControlName="email" class="fieldset" id="email" #emailInput autocomplete="off" />
         <label for="email">Email</label>
       </p-floatlabel>
-      <button
-        type="button"
-        class="edit-pen-btn"
-        (click)="toggleEdit('email')"
-        aria-label="Modifier email"
-      >
+      <button type="button" class="edit-pen-btn" (click)="toggleEdit('email')" aria-label="Modifier email">
         <i class="pi pi-pencil"></i>
       </button>
     </div>
 
     <div class="with-pen">
       <p-floatlabel variant="in" class="input-full-width">
-        <p-password
-          formControlName="password"
-          id="password"
-          inputStyleClass="input-full-width"
-          [feedback]="true"
-          #passwordInput
-        />
+        <p-password formControlName="password" id="password" inputStyleClass="input-full-width" [feedback]="true"
+          #passwordInput />
         <label for="password">Nouveau mot de passe</label>
       </p-floatlabel>
-      <button
-        type="button"
-        class="edit-pen-btn"
-        (click)="toggleEdit('password')"
-        aria-label="Modifier mot de passe"
-      >
+      <button type="button" class="edit-pen-btn" (click)="toggleEdit('password')" aria-label="Modifier mot de passe">
         <i class="pi pi-pencil"></i>
       </button>
     </div>
 
     @if (form.get("password")?.enabled) {
-      <div class="with-pen">
-        <p-floatlabel variant="in" class="input-full-width">
-          <p-password
-            formControlName="confirmPassword"
-            id="confirmPassword"
-            inputStyleClass="input-full-width"
-            [feedback]="false"
-          />
-          <label for="confirmPassword">Confirmer le nouveau mot de passe</label>
-        </p-floatlabel>
-      </div>
+    <div class="with-pen">
+      <p-floatlabel variant="in" class="input-full-width">
+        <p-password formControlName="confirmPassword" id="confirmPassword" inputStyleClass="input-full-width"
+          [feedback]="false" />
+        <label for="confirmPassword">Confirmer le nouveau mot de passe</label>
+      </p-floatlabel>
+    </div>
     }
 
-    <p-button
-      label="Gérer le groupe"
-      styleClass="enregistrer-button"
-      [rounded]="true"
-      size="large"
-      type="button"
-      (click)="goToGroup()"
-    />
+    <p-button label="Gérer le groupe" styleClass="enregistrer-button" [rounded]="true" size="large" type="button"
+      (click)="goToGroup()" />
 
-    <p-button
-      label="Enregistrer"
-      styleClass="enregistrer-button"
-      [disabled]="!canSubmit()"
-      [rounded]="true"
-      size="large"
-      type="submit"
-    />
+    <p-button label="Enregistrer" styleClass="enregistrer-button" [disabled]="!canSubmit()" [rounded]="true"
+      size="large" type="submit" />
   </form>
 </div>
