@@ -1,5 +1,5 @@
 services:
-    app:
+    backend:
         container_name: Backend
         build:
             context: .
@@ -19,6 +19,17 @@ services:
         depends_on:
             db:
                 condition: service_healthy
+    
+    frontend:
+        container_name: Frontend
+        build:
+            context: .
+            dokerfile: Dockerfile
+        port: 80:80
+        depends_on:
+            - backend
+        
+
 
     db:
         container_name: stocko_frigo_db
