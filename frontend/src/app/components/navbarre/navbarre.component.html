@@ -1,4 +1,9 @@
 <nav id="navbare">
+  <div class="navbare-logo">
+    <img src="/imgs/logo.png" alt="Logo" />
+    <span class="logo-text">Stock'O Frig'O</span>
+  </div>
+
   <li class="navbare_link">
     <button
       class="navbare_button"
@@ -44,6 +49,7 @@
   </li>
   <li class="navbare_link">
     <button
+      id="goToStock"
       class="navbare_button"
       [ngClass]="{ active: isRouteActive === '/stock' }"
       (click)="goToPage('/stock')"
@@ -52,4 +58,23 @@
       <h3>Stock</h3>
     </button>
   </li>
+
+  <div class="navbare-user">
+    <li class="navbare_link">
+      <button
+        class="navbare_button"
+        [ngClass]="{ active: isRouteActive === '/profile' }"
+        (click)="goToPage('/profile')"
+      >
+        <i class="pi pi-user"></i>
+        <h3>Profil</h3>
+      </button>
+    </li>
+    <li class="navbare_link">
+      <button class="navbare_button" (click)="logout()">
+        <i class="pi pi-sign-out"></i>
+        <h3>Déconnexion</h3>
+      </button>
+    </li>
+  </div>
 </nav>
