@@ -1,7 +1,10 @@
 <p-toast position="bottom-center" key="br"></p-toast>
-<div class="page-content">
-  <h2>Mon profil</h2>
 
+<div class="titre-pages">
+  <h2>Mon profil</h2>
+</div>
+
+<div class="page-content">
   <form [formGroup]="form" (ngSubmit)="submit()">
     <div class="photo-section">
       <div class="photo-preview" [class.has-photo]="photoPreview">

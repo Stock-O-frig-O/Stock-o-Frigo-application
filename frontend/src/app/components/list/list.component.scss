@@ -67,3 +67,77 @@
   border: none;
   background-color: unset;
 }
+
+@media screen and (min-width: 800px) {
+  .accordion {
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 40px);
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 5;
+  }
+
+  .panel-category-stock,
+  .panel-category-favorit,
+  .panel-category-cart {
+    height: 10px;
+  }
+
+  .p-accordioncontent-content {
+    padding: 0 !important;
+  }
+
+  .td-small-item {
+    padding: 0.5rem !important;
+    width: 10% !important;
+    text-align: center !important;
+  }
+
+  .td-designation {
+    padding: 0.5rem !important;
+  }
+
+  .btn-change-stock {
+    width: 10% !important;
+    padding: 0.5rem !important;
+    text-align: center !important;
+
+    .button-container {
+      border: 1px solid black;
+      border-radius: 10px;
+      background-color: #ede8d8;
+
+      input {
+        padding: 5px;
+        border-left: 1px solid black !important;
+        border-right: 1px solid black !important;
+        text-align: center;
+      }
+    }
+
+    .p-inputText {
+      padding: 0 !important;
+      background-color: unset !important;
+      border: none !important;
+    }
+
+    .p-inputnumber-button {
+      width: 25px !important;
+      background-color: unset !important;
+      border: none !important;
+      color: black !important;
+      border-left: 1px solid black;
+      border-right: 1px solid black;
+    }
+  }
+
+  .btn-favorit {
+    border: none;
+    background-color: unset;
+  }
+}
