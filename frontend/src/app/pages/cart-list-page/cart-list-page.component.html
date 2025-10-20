@@ -1,3 +1,9 @@
+<div class="titre-pages">
+  <h2>Mes listes</h2>
+</div>
+
+<app-add-button (addButtonClick)="handleAddButtonClicked()"></app-add-button>
+
 <section class="cart-list-container">
   @if (shoppingLists()) {
     @for (shoppingList of shoppingLists(); track shoppingList.id) {
@@ -20,8 +26,6 @@
   } @else {
     <h3>Vous n'avez pas de liste de course</h3>
   }
-
-  <app-add-button (addButtonClick)="handleAddButtonClicked()"></app-add-button>
 </section>
 
 <p-dialog

@@ -8,9 +8,9 @@ npm run lint
 
 # Backend: Apply spotless formatting
 cd ../backend || exit 1
-mvn spotless:apply 
+./mvnw spotless:apply 
 git update-index --again
-mvn pmd:check
+./mvnw pmd:check
 
 # Retourner à la racine et ajouter les fichiers modifiés
 cd "$(git rev-parse --show-toplevel)"

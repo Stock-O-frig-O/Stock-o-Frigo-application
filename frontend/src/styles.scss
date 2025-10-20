@@ -7,3 +7,73 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+.titre-pages {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  font-size: 1.5rem;
+}
+
+@media screen and (min-width: 800px) {
+  main > div {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+  }
+
+  .card,
+  .component-box {
+    width: 300px;
+    margin: 10px;
+    font-size: 1rem;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-size: calc(1.2 * var(--mobile-font-size));
+  }
+
+  .titre-pages {
+    position: absolute;
+    top: calc(10% + 0px);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 4rem;
+  }
+
+  .component-content {
+    padding: 20px;
+  }
+
+  .logo {
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -80%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    width: auto;
+    max-width: 90%;
+    max-height: 80vh;
+  }
+
+  .page-content {
+    position: absolute;
+    top: calc(10% + 200px);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    max-width: 1200px;
+  }
+}
