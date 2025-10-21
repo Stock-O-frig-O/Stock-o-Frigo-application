@@ -34,8 +34,19 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: 22
           script: |
+            # Créer le répertoire s'il n'existe pas
+            sudo mkdir -p /var/www/stocko-frigo
+            sudo chown -R $USER:$USER /var/www/stocko-frigo
             cd /var/www/stocko-frigo
-            git pull
+            
+            # Cloner ou mettre à jour le repository
+            if [ ! -d ".git" ]; then
+              git clone https://github.com/Stock-O-frig-O/Stock-o-Frigo-application.git .
+            else
+              git pull
+            fi
+            
+            # Créer le fichier .env
             echo "DB_USER=${{ secrets.DB_USER }}" > .env
             echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
             echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
@@ -43,5 +54,7 @@ jobs:
             echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> .env
             echo "JWT_EXPIRATION_TIME=${{ secrets.JWT_EXPIRATION_TIME }}" >> .env
             echo "CORS_ALLOWED_ORIGIN=${{ secrets.CORS_ALLOWED_ORIGIN }}" >> .env
+            
+            # Déployer
             docker compose down
             docker compose up -d --build
