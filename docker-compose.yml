@@ -2,7 +2,7 @@ services:
     backend:
         container_name: Backend
         build:
-            context: .
+            context: ./backend
             dockerfile: Dockerfile
         ports:
             - '8080:8080'
@@ -23,7 +23,7 @@ services:
     frontend:
         container_name: Frontend
         build:
-            context: .
+            context: ./frontend
             dockerfile: Dockerfile
         ports:
             - '80:80'
