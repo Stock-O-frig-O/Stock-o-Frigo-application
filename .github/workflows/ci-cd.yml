@@ -34,17 +34,10 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: 22
           script: |
-            # Créer le répertoire s'il n'existe pas
-            sudo mkdir -p /var/www/stocko-frigo
-            sudo chown -R $USER:$USER /var/www/stocko-frigo
             cd /var/www/stocko-frigo
             
-            # Cloner ou mettre à jour le repository
-            if [ ! -d ".git" ]; then
-              git clone https://github.com/Stock-O-frig-O/Stock-o-Frigo-application.git .
-            else
-              git pull
-            fi
+            # Mettre à jour le repository
+            git pull origin main
             
             # Créer le fichier .env
             echo "DB_USER=${{ secrets.DB_USER }}" > .env
