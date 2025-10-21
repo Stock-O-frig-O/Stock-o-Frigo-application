@@ -34,7 +34,7 @@ services:
 
     db:
         container_name: stocko_frigo_db
-        image: mysql:8
+        image: mysql:5.7
         ports:
             - '3306:3306'
         environment:
