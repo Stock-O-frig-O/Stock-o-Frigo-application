@@ -47,7 +47,7 @@ export class CartService {
       {
         productId: product.productId,
         quantity: product.quantity,
-        checked: product.isCheck,
+        checked: product.checked,
       },
     );
   }

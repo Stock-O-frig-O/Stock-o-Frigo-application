@@ -8,4 +8,5 @@ export default interface Product {
   category: string;
   favorite: boolean;
   isCheck: boolean;
+  checked: boolean;
 }
