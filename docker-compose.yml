@@ -24,8 +24,9 @@ services:
         container_name: Frontend
         build:
             context: .
-            dokerfile: Dockerfile
-        port: 80:80
+            dockerfile: Dockerfile
+        ports:
+            - '80:80'
         depends_on:
             - backend
         
