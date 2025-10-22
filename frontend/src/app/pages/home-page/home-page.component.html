@@ -1,1 +1,17 @@
-<p>home-page works!</p>
+<div class="container">
+  <h2>Accueil</h2>
+  <a class="item" [routerLink]="['/favorites']">
+    <i class="pi pi-heart-fill"></i>
+    <span class="item-title"> Favoris </span>
+  </a>
+
+  <a class="item" [routerLink]="['/cart-list']">
+    <i class="pi pi-cart-arrow-down"></i>
+    <span class="item-title"> Listes de courses </span>
+  </a>
+
+  <a class="item" [routerLink]="['/stock']">
+    <i class="pi pi-list-check"></i>
+    <span class="item-title"> Stock </span>
+  </a>
+</div>
