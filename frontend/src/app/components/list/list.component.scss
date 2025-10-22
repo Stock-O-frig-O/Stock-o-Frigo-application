@@ -69,17 +69,17 @@
 }
 
 @media screen and (min-width: 800px) {
+  app-list {
+    display: flex;
+    justify-content: center;
+  }
+
   .accordion {
-    position: absolute;
-    top: 35%;
-    left: 50%;
-    transform: translateX(-50%);
     width: calc(100% - 40px);
     max-width: 1200px;
     display: flex;
     flex-direction: column;
     gap: 15px;
-    z-index: 5;
   }
 
   .panel-category-stock,

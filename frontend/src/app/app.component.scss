@@ -6,6 +6,7 @@ main {
 div {
   height: calc(100vh - calc(15vh + 50px));
   overflow: auto;
+  width: 100%;
 }
 
 @media screen and (min-width: 800px) {
@@ -15,8 +16,8 @@ div {
     justify-content: flex-end;
   }
 
-  div {
-    height: 100%;
+  #page-content {
+    height: 100vh;
     overflow: auto;
   }
 }

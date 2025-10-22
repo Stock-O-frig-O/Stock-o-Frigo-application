@@ -10,13 +10,27 @@
             @if (product.category === category) {
               <tr class="tr-list">
                 <td class="td-small-item">
-                  <p-checkbox
-                    [(ngModel)]="product.isCheck"
-                    (ngModelChange)="onProductCheck(product)"
-                    [binary]="true"
-                  />
+                  @if (activePage() === "cart") {
+                    <p-checkbox
+                      [(ngModel)]="product.checked"
+                      (ngModelChange)="updateCartQuantity(product)"
+                      [binary]="true"
+                    />
+                  } @else {
+                    <p-checkbox
+                      [(ngModel)]="product.isCheck"
+                      (ngModelChange)="onProductCheck(product)"
+                      [binary]="true"
+                    />
+                  }
                 </td>
-                <td class="td-designation">{{ product.name }}</td>
+                <td class="td-designation">
+                  @if (activePage() === "cart" && product.checked) {
+                    <del>{{ product.name }}</del>
+                  } @else {
+                    {{ product.name }}
+                  }
+                </td>
                 <p-toast
                   position="top-center"
                   [breakpoints]="{
