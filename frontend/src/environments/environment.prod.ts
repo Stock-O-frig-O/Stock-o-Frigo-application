@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://domain.com/api',
+  apiUrl: 'https://api.stockofrigo.huntcraft.fr',
 };
