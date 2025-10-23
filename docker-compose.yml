@@ -14,9 +14,9 @@ services:
             JWT_SECRET_KEY: ${JWT_SECRET_KEY}
             JWT_EXPIRATION_TIME: ${JWT_EXPIRATION_TIME:-86400000}
             CORS_ALLOWED_ORIGIN: ${CORS_ALLOWED_ORIGIN:-http://localhost:4200}
-        depends_on:
-            db:
-                condition: service_healthy
+        # depends_on:
+        #     db:
+        #         condition: service_healthy
     
     frontend:
         container_name: Frontend
